@@ -21,3 +21,19 @@ socket.on('err', function (error) {
 	location.reload();
 });
 
+socket.on("task_text", function(){
+	$('#lobby').hide();
+	$('#textTask').show();
+});
+
+$('#meme_button').click(function(){
+	$('#textTask').hide();
+	$('#nick').show();
+	$('#lobby').show();
+
+	socket.emit("TextTaskDone", {
+		room: room,
+		nick: nick,
+		answer: $('#meme_text').val()
+	});
+});

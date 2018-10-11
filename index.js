@@ -103,9 +103,16 @@ io.on('connection',function(socket){
     		}
     	}
   	});
-	/*socket.on("questions",function(data){
 
-	});*/
+	//Tasks
+	socket.on("TextTask",function (room){
+		socket.broadcast.to(room).emit("task_text");
+	});
+
+	socket.on("TextTaskDone", function(data){
+		socket.broadcast.to(data.room).emit("task_text_done",data);
+	});
+
 });
 
 
