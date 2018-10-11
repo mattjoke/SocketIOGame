@@ -7,8 +7,10 @@ let state = 0;
 
 let socket = io();
 
+let img;
+
 function preload(){
-	questions = loadStrings("otazky.txt");
+	img = loadImage("memes/1.jpg");
 }
 
 function setup(){
@@ -41,8 +43,9 @@ function draw(){
 			background(127,150,0);
 			drawRoomCode();
 			drawConnPlayers();
-			drawTitle("Trivia");
-			drawQuesiton();
+			drawTitle("Meme This!");
+			drawMeme();
+			sendTextTask();
 			noLoop();
 		break;
 	}
@@ -89,19 +92,27 @@ function drawButton(x,y,label){
 		}
 	}
 }
-function drawQuesiton(){
-	let question = choose.split(" ");
-	textSize(32);
-	text("Kategória: \n"+question[0], width/2 - textWidth(question[0])/2, height/7);
-	let h = question[1].replace(/_/g," ");
-	textSize(64);
-	text(h,width/2 - textWidth(h)/2, height/3);
-	drawTriviaButtons(question[2]);
 
-	sendQuestionsToDevice(choose);
+//MemeThis!
+function drawMeme(){
+	image(img, width/2 - img.width/4 ,height/2 - img.height/4,img.width/2,img.height/2);
+}
+function sendTextTask(){
+	let correction = codeFromServer.substring(11);
+	socket.emit("TextTask",correction);
 }
 
-function drawTriviaButtons(answers){
+let answers = [];
+
+socket.on('task_text_done',function(data){
+	console.log(data);
+	text(data.nick, width/2 - img.width/4 - 25 ,height/2 - img.height/4 - 25);
+})
+
+
+
+//Trivia
+/*function drawTriviaButtons(answers){
 	answers = answers.replace(/_/g," ");
 	let q = answers.split(" ");
 	drawDumbButton(width/3,height/2, q[0]);
@@ -109,6 +120,7 @@ function drawTriviaButtons(answers){
 	drawDumbButton(width/3,height/2 +100, q[2]);
 	drawDumbButton(width- width/2 + 100,height/2+100, q[3]);
 }
+
 function drawDumbButton(x,y,label){
 	noFill();
 	stroke(0);
@@ -117,4 +129,5 @@ function drawDumbButton(x,y,label){
 	fill(255);
 	noStroke();
 	text(label,x+5,y+5,x,y);
-}
+}*/
+
