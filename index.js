@@ -18,6 +18,18 @@ io.on('connection',function(socket){
 
 	console.log("Someone has connected: "+socket.id);
 
+	function isUserAlreadyInRoom(name,id){
+		let room = rooms[id].People;
+		let count = 0;
+
+		for (let i = 0; i < room.length; i++) {
+			if (name.split("(")[0] == room[i].name.split("(")[0]) {
+				count++;
+			}
+		}
+		return count;
+	}
+
 	function update(room, arr){ 	//updates users in room
 		io.sockets.in(room).emit('send',arr);
 	}
@@ -65,6 +77,10 @@ io.on('connection',function(socket){
 				socket.emit('err',"Room doesn't exist!");
 			}else{
 				let foundRoom = rooms[id];
+				let isUser = isUserAlreadyInRoom(data.name,id);
+				if(isUser != 0){
+					data.name += "("+isUser+")";
+				}
 				let user = {
 					name: data.name,
 					id: socket.id

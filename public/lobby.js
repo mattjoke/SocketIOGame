@@ -20,10 +20,13 @@ socket.on('err', function (error) {
 	alert(error);
 	location.reload();
 });
-
+let onlyOnce = true;
 socket.on("task_text", function(){
-	$('#lobby').hide();
-	$('#textTask').show();
+	if (onlyOnce) {
+		$('#lobby').hide();
+		$('#textTask').show();
+		onlyOnce = false;
+	}
 });
 
 $('#meme_button').click(function(){

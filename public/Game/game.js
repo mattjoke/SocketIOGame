@@ -9,6 +9,9 @@ let socket = io();
 
 let img;
 
+let answers = [];
+let endRound = false;
+
 function preload(){
 	img = loadImage("memes/1.jpg");
 }
@@ -19,7 +22,6 @@ function setup(){
 
 	socket.on('send',function (data) {
 		arr = data;
-		loop();
 	});
 	socket.on('err', function (error) {
 		alert(error);
@@ -27,10 +29,14 @@ function setup(){
 	});
 	socket.on('code',function (data){
 		codeFromServer = "Room code: " + data;
-		loop();
 	});
 }
 function draw(){
+	if (endRound) {
+		if (answers.length === (arr.length-1)) {
+			state = 2;
+		}
+	}
 	switch (state) {
 		case 0:
 			background(127);
@@ -45,8 +51,15 @@ function draw(){
 			drawConnPlayers();
 			drawTitle("Meme This!");
 			drawMeme();
+			endRound = true;
 			sendTextTask();
-			noLoop();
+		break;
+		case 2:
+			background(127,150,0);
+			drawRoomCode();
+			drawConnPlayers();
+			drawTitle("Meme This! - conclusion");
+			conclusion(img, answers);
 		break;
 	}
 }
@@ -88,7 +101,9 @@ function drawButton(x,y,label){
 	text(label,x+5,y+5,x,y);
 	if(mouseX < (x+x) && mouseX > x && mouseY > y && mouseY < y+42){
 		if(mouseIsPressed){
-			start();
+			if (arr.length != 1) {
+				state = 1;
+			}
 		}
 	}
 }
@@ -97,37 +112,23 @@ function drawButton(x,y,label){
 function drawMeme(){
 	image(img, width/2 - img.width/4 ,height/2 - img.height/4,img.width/2,img.height/2);
 }
+
 function sendTextTask(){
 	let correction = codeFromServer.substring(11);
 	socket.emit("TextTask",correction);
 }
 
-let answers = [];
-
-socket.on('task_text_done',function(data){
-	console.log(data);
-	text(data.nick, width/2 - img.width/4 - 25 ,height/2 - img.height/4 - 25);
-})
-
-
-
-//Trivia
-/*function drawTriviaButtons(answers){
-	answers = answers.replace(/_/g," ");
-	let q = answers.split(" ");
-	drawDumbButton(width/3,height/2, q[0]);
-	drawDumbButton(width - width/2 + 100,height/2, q[1]);
-	drawDumbButton(width/3,height/2 +100, q[2]);
-	drawDumbButton(width- width/2 + 100,height/2+100, q[3]);
+function conclusion(img,array){
+	text("Pick the funniest one!", width/2-(128), height/6);
+	image(img, width/2 - img.width/20,height/2 - img.height/4,img.width/8,img.height/8);
+	for (let i = 0; i < array.length; i++) {
+		text(array[i].answer, width/2 - 128, i*32+height/2);
+	}
 }
 
-function drawDumbButton(x,y,label){
-	noFill();
-	stroke(0);
-	rect(x,y,textWidth(label)+10,32+10);
-	textSize(32);
-	fill(255);
-	noStroke();
-	text(label,x+5,y+5,x,y);
-}*/
+
+
+socket.on('task_text_done',function(data){
+	answers.push(data);
+});
 
