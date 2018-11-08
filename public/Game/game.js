@@ -124,6 +124,7 @@ function conclusion(img,array){
 	for (let i = 0; i < array.length; i++) {
 		text(array[i].answer, width/2 - 128, i*32+height/2);
 	}
+	socket.emit("PickAnswerTask", answers);
 }
 
 

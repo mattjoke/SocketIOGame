@@ -129,6 +129,10 @@ io.on('connection',function(socket){
 		socket.broadcast.to(data.room).emit("task_text_done",data);
 	});
 
+	socket.on("PickAnswerTask", function(data){
+		socket.broadcast.to(data[0].room).emit("pick_answer_task",data);
+	});
+
 });
 
 

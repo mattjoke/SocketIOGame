@@ -1,4 +1,5 @@
 let socket = io();
+let allow_once = [true,true,true];
 
 $('#create').click( function(){
 	$(location).attr('href', 'Game/play.html');
@@ -20,12 +21,12 @@ socket.on('err', function (error) {
 	alert(error);
 	location.reload();
 });
-let onlyOnce = true;
+//Tasks
 socket.on("task_text", function(){
-	if (onlyOnce) {
+	if (allow_once[0]) {
 		$('#lobby').hide();
 		$('#textTask').show();
-		onlyOnce = false;
+		allow_once[0] = false;
 	}
 });
 
@@ -39,4 +40,21 @@ $('#meme_button').click(function(){
 		nick: nick,
 		answer: $('#meme_text').val()
 	});
+});
+
+socket.on("pick_answer_task", function(data){
+	if (allow_once[1]){
+		$("#lobby").hide();
+		$("#pickAnswerTask").show();
+		for(let i = 0; i < data.length;i++){
+			console.log(data[i].answer);
+			$("#answers_pick").append('<li>'+data[0].answer+'</li>');
+		}
+		allow_once[1] = false;
+	}
+
+});
+
+$("#pick_answer_task").click(function(){
+	alert($(this).text());
 });
