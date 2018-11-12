@@ -80,6 +80,7 @@ io.on('connection',function(socket){
 				let isUser = isUserAlreadyInRoom(data.name,id);
 				if(isUser != 0){
 					data.name += "("+isUser+")";
+					socket.emit("EditUserName",data.name);
 				}
 				let user = {
 					name: data.name,
@@ -131,6 +132,10 @@ io.on('connection',function(socket){
 
 	socket.on("PickAnswerTask", function(data){
 		socket.broadcast.to(data[0].room).emit("pick_answer_task",data);
+	});
+
+	socket.on("PickAnswerTaskDone", function(data){
+		socket.broadcast.to(data.room).emit("pick_answer_task_done",data);
 	});
 
 });

@@ -17,6 +17,12 @@ $('#join').click( function(){
 	$('#lobby').show();
 });
 
+socket.on('EditUserName', function(username){
+	nick = username;
+	$('#nick').empty();
+	$('#nick').append(nick);
+});
+
 socket.on('err', function (error) {
 	alert(error);
 	location.reload();
@@ -47,14 +53,26 @@ socket.on("pick_answer_task", function(data){
 		$("#lobby").hide();
 		$("#pickAnswerTask").show();
 		for(let i = 0; i < data.length;i++){
-			console.log(data[i].answer);
-			$("#answers_pick").append('<button>'+data[0].answer+'</button>');
+			console.log(data[i]);
+			if (data[i].nick != nick){
+				$("#answers_pick").append('<button>'+data[i].answer+'</button>');
+			}
 		}
 		allow_once[1] = false;
 	}
 
 });
 
-$("#pick_answer_task").click(function(){
-	alert($(this).text());
+$("#answers_pick").on("click", "button", function(){
+	let picked = $(this).text();
+
+	$("#answers_pick").hide();
+	$("#answers_pick").empty();
+
+	socket.emit("PickAnswerTaskDone", {
+		room: room,
+		nick: nick,
+		picked_answer: picked
+	});
 });
+

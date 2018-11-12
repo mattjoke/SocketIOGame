@@ -37,6 +37,12 @@ function draw(){
 			state = 2;
 		}
 	}
+	if(endround2){
+		if (picked_answers.length === (arr.length -1)) {
+			state = 3;
+		}
+	}
+
 	switch (state) {
 		case 0:
 			background(127);
@@ -58,8 +64,16 @@ function draw(){
 			background(127,150,0);
 			drawRoomCode();
 			drawConnPlayers();
-			drawTitle("Meme This! - conclusion");
+			drawTitle("Meme This! - getting answers!");
 			conclusion(img, answers);
+			endround2 = true;
+		break;
+		case 3:
+			background(127,158,0);
+			drawRoomCode();
+			drawConnPlayers();
+			drawTitle("Finale :D");
+			finale();
 		break;
 	}
 }
@@ -127,9 +141,24 @@ function conclusion(img,array){
 	socket.emit("PickAnswerTask", answers);
 }
 
+let picked_answers = [];
+let endround2 = false;
 
+socket.on('pick_answer_task_done', function(data){
+	picked_answers.push(data);
+});
 
 socket.on('task_text_done',function(data){
 	answers.push(data);
 });
+
+function finale(){
+	for (let i = 0; i < picked_answers.length; i++){
+		textSize(32);
+		text(picked_answers[i].picked_answer, width/2 - 128, i*64+height/2+3);
+		textSize(16);
+		text(picked_answers[i].nick, width/2 - 128, i*128+height/2 + 16);
+		text("-----------------------",width/2 - 128, i*64+height/2 + 32);
+	}
+}
 
