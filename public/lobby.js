@@ -48,7 +48,7 @@ socket.on("pick_answer_task", function(data){
 		$("#pickAnswerTask").show();
 		for(let i = 0; i < data.length;i++){
 			console.log(data[i].answer);
-			$("#answers_pick").append('<li>'+data[0].answer+'</li>');
+			$("#answers_pick").append('<button>'+data[0].answer+'</button>');
 		}
 		allow_once[1] = false;
 	}
