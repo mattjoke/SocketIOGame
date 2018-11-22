@@ -9,3 +9,4 @@ TODO:
 * add animations
 * Finish Maturita
 * Redifine drawing system (not state one)
+* Design overhaul
