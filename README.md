@@ -8,3 +8,4 @@ TODO:
 * add sound
 * add animations
 * Finish Maturita
+* Redifine drawing system (not state one)
