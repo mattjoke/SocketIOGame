@@ -1,36 +1,40 @@
+//Socket.IO
+let socket = io();
+//Variables that work with room
 let room;
 let nick;
 let arr = [];
 let codeFromServer = "";
 
-let state = 0;
-
-let socket = io();
-
-let img;
-
-let answers = [];
-let endRound = false;
-
+let img; //Loading image to cache
 function preload(){
 	img = loadImage("memes/1.jpg");
+	//TODO: add database integration
 }
 
 function setup(){
-	createCanvas($(window).width()-25,$(window).height()-25);
+	createCanvas($(window).width()-25,$(window).height()-25); //Creating canvas
+
 	socket.emit('createRoom');
 
 	socket.on('send',function (data) {
 		arr = data;
 	});
+
 	socket.on('err', function (error) {
 		alert(error);
 		location.reload();
 	});
+
 	socket.on('code',function (data){
 		codeFromServer = "Room code: " + data;
 	});
 }
+
+let state = 0;
+let answers = [];
+let endRound = false;
+
 function draw(){
 	if (endRound) {
 		if (answers.length === (arr.length-1)) {
@@ -77,12 +81,13 @@ function draw(){
 		break;
 	}
 }
+//Drawing title
 function drawTitle(title){
 	textSize(32);
 	noStroke();
 	text(title, width/2 - textWidth(title)/2, 32);
 }
-
+//Drawing room code
 function drawRoomCode(){
 	if (!(codeFromServer == "")) {
 		textSize(16);
@@ -91,6 +96,7 @@ function drawRoomCode(){
 		text(codeFromServer,width-150,64);
 	}
 }
+//Drawing connected players
 function drawConnPlayers(){
 	textSize(16);
 	fill(255);
@@ -105,6 +111,7 @@ function drawConnPlayers(){
 		}
 	}
 }
+//Dwrawing working button
 function drawButton(x,y,label){
 	fill(127);
 	stroke(0);
@@ -122,7 +129,7 @@ function drawButton(x,y,label){
 	}
 }
 
-//MemeThis!
+//MemeThis -> tasks
 function drawMeme(){
 	image(img, width/2 - img.width/4 ,height/2 - img.height/4,img.width/2,img.height/2);
 }
