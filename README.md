@@ -1,6 +1,7 @@
 # SimpleSocketIOGame
 
-##TODO:
+TODO:
+
 * database integration
 * clean code
 * add more games (at least 3)
