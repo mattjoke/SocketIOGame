@@ -14,9 +14,9 @@ $(document).ready(function(){
 			code: room,
 			name: nick
 		});
-		$('.start').hide();
+		$('.start').addClass('d-none');
 		$('#nick').append(nick);
-		$('#lobby').show();
+		$('#lobby').removeClass('d-none');
 	});
 
 	socket.on('EditUserName', function(username){
@@ -26,22 +26,26 @@ $(document).ready(function(){
 	});
 
 	socket.on('err', function (error) {
-		alert(error);
-		location.reload();
+		if (error == "Odpojené!") {
+			$(".modal-body").empty();
+			$(".modal-body").append("Hra skončila");
+		}
+		$("#exampleModalLabel").append(error);
+		$("#exampleModal").modal("show");
 	});
 	//Tasks
 	socket.on("task_text", function(){
 		if (allow_once[0]) {
-			$('#lobby').hide();
-			$('#textTask').show();
+			$('#lobby').addClass('d-none');
+			$('#textTask').removeClass('d-none');
 			allow_once[0] = false;
 		}
 	});
 
 	$('#meme_button').click(function(){
-		$('#textTask').hide();
-		$('#nick').show();
-		$('#lobby').show();
+		$('#textTask').addClass('d-none');
+		$('#nick').removeClass('d-none');
+		$('#lobby').removeClass('d-none');
 
 		socket.emit("TextTaskDone", {
 			room: room,
@@ -52,8 +56,8 @@ $(document).ready(function(){
 
 	socket.on("pick_answer_task", function(data){
 		if (allow_once[1]){
-			$("#lobby").hide();
-			$("#pickAnswerTask").show();
+			$("#lobby").addClass('d-none');
+			$("#pickAnswerTask").removeClass('d-none');
 			for(let i = 0; i < data.length;i++){
 				console.log(data[i]);
 				if (data[i].nick != nick){
@@ -68,7 +72,7 @@ $(document).ready(function(){
 	$(document).on("click", "#answers_pick button", function(){
 		let picked = $(this).text();
 
-		$("#answers_pick").hide();
+		$("#answers_pick").addClass('d-none');
 		$("#answers_pick").empty();
 
 		socket.emit("PickAnswerTaskDone", {

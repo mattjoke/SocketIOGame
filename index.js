@@ -63,18 +63,18 @@ io.on('connection',function(socket){
 	});
 
 	function destroyRoom(code) {
-		socket.broadcast.to(code).emit("err","Disconnected!");
+		socket.broadcast.to(code).emit("err","Odpojené!");
 		let roomId = findId(code);
 		rooms.splice(roomId,1);
 	};
 	//Join room -> Leave room
 	socket.on('joinRoom',function (data) {
 		if (rooms.length == 0) {
-			socket.emit('err',"No games are running!");
+			socket.emit('err',"Žiadne hry nie sú spustené!");
 		}else{
 			let id = findId(data.code);
 			if (id == -1) {
-				socket.emit('err',"Room doesn't exist!");
+				socket.emit('err',"Miestnosť neexistuje!");
 			}else{
 				let foundRoom = rooms[id];
 				let isUser = isUserAlreadyInRoom(data.name,id);
