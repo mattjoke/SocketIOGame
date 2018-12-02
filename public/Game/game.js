@@ -8,7 +8,7 @@ let codeFromServer = "";
 
 let img; //Loading image to cache
 function preload(){
-	img = loadImage("memes/1.jpg");
+	img = loadImage("memes/"+floor(random(1,4))+".jpg");
 	//TODO: add database integration
 }
 
