@@ -10,3 +10,9 @@ TODO:
 * Finish Maturita
 * Redifine drawing system (not state one)
 * Design overhaul
+* Decrease change of generating same room
+
+Done:
+
+* Room system
+* Meme This!
