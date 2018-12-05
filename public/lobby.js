@@ -26,6 +26,7 @@ $(document).ready(function(){
 	});
 
 	socket.on('err', function (error) {
+		$('#exampleModal').modal({backdrop: 'static', keyboard: false})
 		if (error == "Odpojené!") {
 			$(".modal-body").empty();
 			$(".modal-body").append("Hra skončila");
@@ -81,5 +82,6 @@ $(document).ready(function(){
 			picked_answer: picked
 		});
 	});
+
 
 });

@@ -7,13 +7,18 @@ let arr = [];
 let codeFromServer = "";
 
 let img; //Loading image to cache
+let bg;
 function preload(){
 	img = loadImage("memes/"+floor(random(1,4))+".jpg");
+	bg = createVideo("memes/The ULTIMATE Stock Video Site!.mp4");
+	bg.size($(window).width());
+	bg.volume(0);
+	bg.hide();
 	//TODO: add database integration
 }
 
 function setup(){
-	createCanvas($(window).width()-25,$(window).height()-25); //Creating canvas
+	createCanvas($(window).width()-4,$(window).height()-4); //Creating canvas
 
 	socket.emit('createRoom');
 
@@ -50,6 +55,7 @@ function draw(){
 	switch (state) {
 		case 0:
 			background(127);
+			image(bg,0,0);
 			drawRoomCode();
 			drawConnPlayers();
 			drawTitle("Game Lobby");
@@ -122,6 +128,7 @@ function drawButton(x,y,label){
 	text(label,x+5,y+5,x,y);
 	if(mouseX < (x+x) && mouseX > x && mouseY > y && mouseY < y+42){
 		if(mouseIsPressed){
+				bg.play();
 			if (arr.length != 1) {
 				state = 1;
 			}
