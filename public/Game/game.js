@@ -10,7 +10,7 @@ let img; //Loading image to cache
 let bg;
 function preload(){
 	img = loadImage("memes/"+floor(random(1,4))+".jpg");
-	bg = createVideo("memes/The ULTIMATE Stock Video Site!.mp4");
+	bg = createVideo("memes/Sony 4K Demo Another World.mp4");
 	bg.size($(window).width());
 	bg.volume(0);
 	bg.hide();
@@ -128,8 +128,9 @@ function drawButton(x,y,label){
 	text(label,x+5,y+5,x,y);
 	if(mouseX < (x+x) && mouseX > x && mouseY > y && mouseY < y+42){
 		if(mouseIsPressed){
-				bg.play();
 			if (arr.length != 1) {
+				bg.play();
+				setTimeout(3000);
 				state = 1;
 			}
 		}
