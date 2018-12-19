@@ -9,11 +9,7 @@ let codeFromServer = "";
 let img; //Loading image to cache
 let bg;
 function preload(){
-	img = loadImage("memes/"+floor(random(1,4))+".jpg");
-	bg = createVideo("memes/Sony 4K Demo Another World.mp4");
-	bg.size($(window).width());
-	bg.volume(0);
-	bg.hide();
+	img = loadImage("memes/1.jpg");
 	//TODO: add database integration
 }
 
@@ -55,7 +51,6 @@ function draw(){
 	switch (state) {
 		case 0:
 			background(127);
-			image(bg,0,0);
 			drawRoomCode();
 			drawConnPlayers();
 			drawTitle("Game Lobby");
@@ -129,8 +124,6 @@ function drawButton(x,y,label){
 	if(mouseX < (x+x) && mouseX > x && mouseY > y && mouseY < y+42){
 		if(mouseIsPressed){
 			if (arr.length != 1) {
-				bg.play();
-				setTimeout(3000);
 				state = 1;
 			}
 		}
