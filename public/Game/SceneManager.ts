@@ -15,12 +15,7 @@ abstract class Scene{
 	abstract unload():void;
 }
 
-class Load extends Scene{
-
-	private x: number;
-	private y: number;
-	private inc: number;
-
+class Lobby extends Scene{
 	private bg: Image;
 	private logo: Image;
 
@@ -29,71 +24,73 @@ class Load extends Scene{
 	private button: Image;
 
 	unload():void{
+		//Changing scene to next one
 		scenes.changeScene(new Start());
 	}
 
 	load():void{
-		this.x = 0;
-		this.y = 0;
-		this.inc = 10;
-
-		this.by = 50;
-		this.bx = 100;
+		//Basically a constructor
+		this.bx = width/2-272.5;
+		this.by = height/2;
 
 		this.bg = loadImage("assets/bg.png");
-		this.logo = loadImage("assets/logo.png");
 		this.button = loadImage("assets/button.png");
 	}
 
 	update():void {
-		this.x += randomInt(-this.inc,this.inc);
-		this.y += randomInt(-this.inc,this.inc);
-
-		if (this.x < 0 || this.x > window.innerWidth || this.y < 0 || this.y > window.innerHeight){
-			this.x = window.innerWidth/2;
-			this.y = window.innerHeight/2;
-		}
-
-		if (mouseX > this.bx && mouseX < (this.bx + 555) && mouseY > this.by && mouseY < (this.by + 225)){
+		//Chceking if button is pressed
+		if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)){
 			if (mouseIsPressed){
-				this.unload();
+				if (players.length-1){
+					this.unload();
+				}
 			}
 		}
+		//Redrawing
 		this.redraw();
 	}
 
 	redraw():void{
+		//Draw BG and button
 		image(this.bg,0,0);
 		image(this.button, this.bx, this.by);
 
+		//Draw title
 		textSize(72);
-		text("Ludum", width/2-64, height/7);
-
-		image(this.logo,this.x,this.y);
+		text("Ludum", (width-textWidth("Ludum"))/2, height/8);
+		//Draw roomcode
+		textSize(32);
+		text(roomCode, width-textWidth(roomCode), height/6);
+		//Draw connected players
+		textSize(24);
+		let step = height/6;
+		text("Players connected:",width/85,height/6);
+		for (var i = 0; i < players.length; i++) {
+			let player = players[i].name;
+			if (player != "Host") {
+				step += 32;
+				text(player,width/85,step,60,width);
+			}
+		}
 	}
-
-
 }
 
 class Start extends Scene{
 
-	private bg: number;
-	private inc: number;
+	private bg: Image;
 
 	update():void {
-		if (this.bg > 255 || this. bg < 0){
-			this.inc = -this.inc;
-		}
-		this.bg += this.inc;
-		background(this.bg,127,25);
+		this.redraw();
 	}
 	redraw():void{
+		image(this.bg,0,0);
 	}
 	load():void{
-		this.bg = 127;
-		this.inc = 5;
+		background(0,0,0,75);
+		this.bg = loadImage("assets/bg-1.png");
 	}
 	unload():void{
+
 	}
 }
 
@@ -120,19 +117,42 @@ class SceneManager{
 		this.currScene = newScene
 	}
 }
-
-
+//Socket.IO
+let socket = io();
+//Player variables
+let players = [];
+let roomCode = "";
+//SceneManager, canvas variables
+let scenes;
 let width;
 let height;
-let scenes;
 
 function setup(){
-	scenes = new SceneManager();
-	scenes.changeScene(new Load());
+	//Creating canvas
 	width = window.innerWidth;
 	height = window.innerHeight;
 	createCanvas(width,height);
+
+	//Initialize Scene
+	scenes = new SceneManager();
+	scenes.changeScene(new Lobby());
 	background(0);
+
+	//Update server with new Room
+	socket.emit('createRoom');
+	//Get room code
+	socket.on('code', function(code){
+		roomCode = "Kód miestnosti: " + code;
+	});
+	//Send players
+	socket.on('send', function(data){
+		players = data;
+	});
+	//Error handeling
+	socket.on('error', function(error){
+		alert(error);
+		location.reload();
+	});
 }
 
 function draw(){

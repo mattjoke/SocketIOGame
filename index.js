@@ -1,5 +1,6 @@
 let express = require('express');
 let path = require('path');
+let ngrok = require('ngrok');
 let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
@@ -9,6 +10,15 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', function(req, res) {
     res.redirect('index.html');
 });
+
+(async function() {
+	try {
+		const url = await ngrok.connect(3000);
+		await console.log("Connected!: "+url);
+	} catch(e) {
+		console.log("Error: "+e);
+	}
+})();
 
 console.log('Server is running on: localhost:3000');
 

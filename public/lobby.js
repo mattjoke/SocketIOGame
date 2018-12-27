@@ -4,7 +4,7 @@ $(document).ready(function(){
 	let allow_once = [true,true,true];
 
 	$('#create').click( function(){
-		$(location).attr('href', 'Game/play.html');
+		$(location).attr('href', 'Game/index.html');
 	});
 
 	$('#join').click( function(){

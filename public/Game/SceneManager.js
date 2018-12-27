@@ -25,46 +25,57 @@ var Scene = /** @class */ (function () {
     }
     return Scene;
 }());
-var Load = /** @class */ (function (_super) {
-    __extends(Load, _super);
-    function Load() {
+var Lobby = /** @class */ (function (_super) {
+    __extends(Lobby, _super);
+    function Lobby() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Load.prototype.unload = function () {
+    Lobby.prototype.unload = function () {
+        //Changing scene to next one
         scenes.changeScene(new Start());
     };
-    Load.prototype.load = function () {
-        this.x = 0;
-        this.y = 0;
-        this.inc = 10;
-        this.by = 50;
-        this.bx = 100;
+    Lobby.prototype.load = function () {
+        //Basically a constructor
+        this.bx = width / 2 - 272.5;
+        this.by = height / 2;
         this.bg = loadImage("assets/bg.png");
-        this.logo = loadImage("assets/logo.png");
         this.button = loadImage("assets/button.png");
     };
-    Load.prototype.update = function () {
-        this.x += randomInt(-this.inc, this.inc);
-        this.y += randomInt(-this.inc, this.inc);
-        if (this.x < 0 || this.x > window.innerWidth || this.y < 0 || this.y > window.innerHeight) {
-            this.x = window.innerWidth / 2;
-            this.y = window.innerHeight / 2;
-        }
-        if (mouseX > this.bx && mouseX < (this.bx + 555) && mouseY > this.by && mouseY < (this.by + 225)) {
+    Lobby.prototype.update = function () {
+        //Chceking if button is pressed
+        if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)) {
             if (mouseIsPressed) {
-                this.unload();
+                if (players.length - 1) {
+                    this.unload();
+                }
             }
         }
+        //Redrawing
         this.redraw();
     };
-    Load.prototype.redraw = function () {
+    Lobby.prototype.redraw = function () {
+        //Draw BG and button
         image(this.bg, 0, 0);
         image(this.button, this.bx, this.by);
+        //Draw title
         textSize(72);
-        text("Ludum", width / 2 - 64, height / 7);
-        image(this.logo, this.x, this.y);
+        text("Ludum", (width - textWidth("Ludum")) / 2, height / 8);
+        //Draw roomcode
+        textSize(32);
+        text(roomCode, width - textWidth(roomCode), height / 6);
+        //Draw connected players
+        textSize(24);
+        var step = height / 6;
+        text("Players connected:", width / 85, height / 6);
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i].name;
+            if (player != "Host") {
+                step += 32;
+                text(player, width / 85, step, 60, width);
+            }
+        }
     };
-    return Load;
+    return Lobby;
 }(Scene));
 var Start = /** @class */ (function (_super) {
     __extends(Start, _super);
@@ -72,17 +83,14 @@ var Start = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Start.prototype.update = function () {
-        if (this.bg > 255 || this.bg < 0) {
-            this.inc = -this.inc;
-        }
-        this.bg += this.inc;
-        background(this.bg, 127, 25);
+        this.redraw();
     };
     Start.prototype.redraw = function () {
+        image(this.bg, 0, 0);
     };
     Start.prototype.load = function () {
-        this.bg = 127;
-        this.inc = 5;
+        background(0, 0, 0, 75);
+        this.bg = loadImage("assets/bg-1.png");
     };
     Start.prototype.unload = function () {
     };
@@ -109,16 +117,39 @@ var SceneManager = /** @class */ (function () {
     };
     return SceneManager;
 }());
+//Socket.IO
+var socket = io();
+//Player variables
+var players = [];
+var roomCode = "";
+//SceneManager, canvas variables
+var scenes;
 var width;
 var height;
-var scenes;
 function setup() {
-    scenes = new SceneManager();
-    scenes.changeScene(new Load());
+    //Creating canvas
     width = window.innerWidth;
     height = window.innerHeight;
     createCanvas(width, height);
+    //Initialize Scene
+    scenes = new SceneManager();
+    scenes.changeScene(new Lobby());
     background(0);
+    //Update server with new Room
+    socket.emit('createRoom');
+    //Get room code
+    socket.on('code', function (code) {
+        roomCode = "Kód miestnosti: " + code;
+    });
+    //Send players
+    socket.on('send', function (data) {
+        players = data;
+    });
+    //Error handeling
+    socket.on('error', function (error) {
+        alert(error);
+        location.reload();
+    });
 }
 function draw() {
     scenes.update();
