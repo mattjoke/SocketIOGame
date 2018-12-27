@@ -5,13 +5,14 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 
-let choice = true;
+let choice = false; //Choice if Ngrok should be used (default false)
 
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
     res.redirect('index.html');
 });
+
 if (choice){
 	(async function() {
 		try {
@@ -31,6 +32,7 @@ io.on('connection',function(socket){
 
 	console.log("Someone has connected: "+socket.id);
 
+	//Based on user name -> changes it
 	function isUserAlreadyInRoom(name,id){
 		let room = rooms[id].People;
 		let count = 0;
@@ -56,6 +58,7 @@ io.on('connection',function(socket){
 		return -1;
 	}
 
+	//Generate random room ID
 	function generateRoomId() {
 	 	let text = "";
 	  	let pismena = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -117,7 +120,7 @@ io.on('connection',function(socket){
 			update(data.code,foundRoom.People);
 		}
 	});
-	//disconnect
+	//disconnect -> Host disconnecting
 	socket.on('disconnect', () => {
     	for (let i = 0; i < rooms.length; i++) {
     		let ppl = rooms[i].People;
