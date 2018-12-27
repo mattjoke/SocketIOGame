@@ -8,7 +8,7 @@ TODO:
 * add animations
 * Finish Maturita
 * Design overhaul
-* Decrease change of generating same room
+* Decrease chance of generating same room
 
 Done:
 
