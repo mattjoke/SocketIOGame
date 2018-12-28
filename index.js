@@ -5,7 +5,7 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 
-let choice = false; //Choice if Ngrok should be used (default false)
+let ngrok_active = false; //Choice if Ngrok should be used (default false)
 
 app.use(express.static(__dirname + '/public'));
 
@@ -13,7 +13,7 @@ app.get('/', function(req, res) {
     res.redirect('index.html');
 });
 
-if (choice){
+if (ngrok_active){
 	(async function() {
 		try {
 			const url = await ngrok.connect(3000);
