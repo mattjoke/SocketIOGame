@@ -1,13 +1,3 @@
- /**
- * generate a random integer between min and max
- * @param {Number} min
- * @param {Number} max
- * @return {Number} random generated integer
- */
- function randomInt(min, max){
-    return Math.floor(Math.random() * (max - min + 1)) + min;
- }
-
 abstract class Scene{
 	abstract update():void;
 	abstract redraw():void;
@@ -25,14 +15,14 @@ class Lobby extends Scene{
 
 	unload():void{
 		//Changing scene to next one
-		scenes.changeScene(new Start());
+		scenes.changeScene(new Role_assign());
 	}
 
 	load():void{
 		//Basically a constructor
 		this.bx = width/2-272.5;
 		this.by = height/2;
-
+		//loading imags to cache
 		this.bg = loadImage("assets/bg.png");
 		this.button = loadImage("assets/button.png");
 	}
@@ -41,7 +31,7 @@ class Lobby extends Scene{
 		//Chceking if button is pressed
 		if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)){
 			if (mouseIsPressed){
-				if (players.length-1){
+				if (players.length){
 					this.unload();
 				}
 			}
@@ -60,11 +50,11 @@ class Lobby extends Scene{
 		text("Ludum", (width-textWidth("Ludum"))/2, height/8);
 		//Draw roomcode
 		textSize(32);
-		text(roomCode, width-textWidth(roomCode), height/6);
+		text(roomCode, width-textWidth(roomCode) - width/85, height/6);
 		//Draw connected players
 		textSize(24);
 		let step = height/6;
-		text("Players connected:",width/85,height/6);
+		text("Pripojení hráči:",width/85,height/6);
 		for (var i = 0; i < players.length; i++) {
 			let player = players[i].name;
 			if (player != "Host") {
@@ -75,23 +65,50 @@ class Lobby extends Scene{
 	}
 }
 
-class Start extends Scene{
+class Role_assign extends Scene{
 
-	private bg: Image;
-
+	unload():void{
+		//Starts Game Loop
+		console.log(roles,players, count);
+		scenes.changeScene(new Start());
+	}
 	update():void {
-		this.redraw();
+		background(127,50,30);
 	}
 	redraw():void{
-		image(this.bg,0,0);
 	}
 	load():void{
-		background(0,0,0,75);
-		this.bg = loadImage("assets/bg-1.png");
+		let count = floor((players.length-1)/2);
+		if ((players.length-1)<=4){
+			count--;
+		}
+		roles[0] = "HOST";
+		//Assign roles 1:3 ratio
+		roles[floor(random(1,players.length))] = "DETEKTÍV";
+		let assign = true;
+		while (assign) {
+			let place = floor(random(1,players.length));
+			if (!roles[place]){
+				if(random() < 0.50 && count > 0){
+					roles[place] = "ZLODEJ";
+					count--;
+				}else{
+					roles[place] = "NEVINNÝ";
+				}
+			}
+			let isOk = true;
+			for (let i = 0; i < roles.length;i++){
+				if (!roles[i] || (roles.length != players.length)){
+					isOk = false;
+					break;
+				}
+			}
+			if(isOk){
+				assign = false;
+			}
+		}
 	}
-	unload():void{
 
-	}
 }
 
 class SceneManager{
@@ -121,6 +138,7 @@ class SceneManager{
 let socket = io();
 //Player variables
 let players = [];
+let roles = [];
 let roomCode = "";
 //SceneManager, canvas variables
 let scenes;

@@ -11,15 +11,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-/**
-* generate a random integer between min and max
-* @param {Number} min
-* @param {Number} max
-* @return {Number} random generated integer
-*/
-function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 var Scene = /** @class */ (function () {
     function Scene() {
     }
@@ -32,12 +23,13 @@ var Lobby = /** @class */ (function (_super) {
     }
     Lobby.prototype.unload = function () {
         //Changing scene to next one
-        scenes.changeScene(new Start());
+        scenes.changeScene(new Role_assign());
     };
     Lobby.prototype.load = function () {
         //Basically a constructor
         this.bx = width / 2 - 272.5;
         this.by = height / 2;
+        //loading imags to cache
         this.bg = loadImage("assets/bg.png");
         this.button = loadImage("assets/button.png");
     };
@@ -45,7 +37,7 @@ var Lobby = /** @class */ (function (_super) {
         //Chceking if button is pressed
         if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)) {
             if (mouseIsPressed) {
-                if (players.length - 1) {
+                if (players.length) {
                     this.unload();
                 }
             }
@@ -62,11 +54,11 @@ var Lobby = /** @class */ (function (_super) {
         text("Ludum", (width - textWidth("Ludum")) / 2, height / 8);
         //Draw roomcode
         textSize(32);
-        text(roomCode, width - textWidth(roomCode), height / 6);
+        text(roomCode, width - textWidth(roomCode) - width / 85, height / 6);
         //Draw connected players
         textSize(24);
         var step = height / 6;
-        text("Players connected:", width / 85, height / 6);
+        text("Pripojení hráči:", width / 85, height / 6);
         for (var i = 0; i < players.length; i++) {
             var player = players[i].name;
             if (player != "Host") {
@@ -77,24 +69,54 @@ var Lobby = /** @class */ (function (_super) {
     };
     return Lobby;
 }(Scene));
-var Start = /** @class */ (function (_super) {
-    __extends(Start, _super);
-    function Start() {
+var Role_assign = /** @class */ (function (_super) {
+    __extends(Role_assign, _super);
+    function Role_assign() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Start.prototype.update = function () {
-        this.redraw();
+    Role_assign.prototype.unload = function () {
+        //Starts Game Loop
+        roles = [];
     };
-    Start.prototype.redraw = function () {
-        image(this.bg, 0, 0);
+    Role_assign.prototype.update = function () {
+        background(127, 50, 30);
     };
-    Start.prototype.load = function () {
-        background(0, 0, 0, 75);
-        this.bg = loadImage("assets/bg-1.png");
+    Role_assign.prototype.redraw = function () {
     };
-    Start.prototype.unload = function () {
+    Role_assign.prototype.load = function () {
+        var count = floor((players.length - 1) / 2);
+        if ((players.length - 1) <= 4) {
+            count--;
+        }
+        roles[0] = "HOST";
+        //Assign roles 1:3 ratio
+        roles[floor(random(1, players.length))] = "DETEKTÍV";
+        var assign = true;
+        while (assign) {
+            var place = floor(random(1, players.length));
+            if (!roles[place]) {
+                if (random() < 0.50 && count > 0) {
+                    roles[place] = "ZLODEJ";
+                    count--;
+                }
+                else {
+                    roles[place] = "NEVINNÝ";
+                }
+            }
+            var isOk = true;
+            for (var i = 0; i < roles.length; i++) {
+                if (!roles[i] || (roles.length != players.length)) {
+                    isOk = false;
+                    break;
+                }
+            }
+            if (isOk) {
+                assign = false;
+            }
+        }
+        console.log(roles, players, count);
     };
-    return Start;
+    return Role_assign;
 }(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
@@ -121,6 +143,7 @@ var SceneManager = /** @class */ (function () {
 var socket = io();
 //Player variables
 var players = [];
+var roles = [];
 var roomCode = "";
 //SceneManager, canvas variables
 var scenes;
