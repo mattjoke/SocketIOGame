@@ -69,18 +69,19 @@ class Role_assign extends Scene{
 
 	unload():void{
 		//Starts Game Loop
-		console.log(roles,players, count);
 		scenes.changeScene(new Start());
 	}
 	update():void {
-		background(127,50,30);
+		background(127,54,30);
 	}
 	redraw():void{
+		let correction = roomCode.substring(16);
+		socket.emit('roles', [correction,[roles,players]]);
 	}
 	load():void{
 		let count = floor((players.length-1)/2);
 		if ((players.length-1)<=4){
-			count--;
+			count = 1;
 		}
 		roles[0] = "HOST";
 		//Assign roles 1:3 ratio
@@ -89,7 +90,7 @@ class Role_assign extends Scene{
 		while (assign) {
 			let place = floor(random(1,players.length));
 			if (!roles[place]){
-				if(random() < 0.50 && count > 0){
+				if(random() < 0.85 && count > 0){
 					roles[place] = "ZLODEJ";
 					count--;
 				}else{
@@ -107,6 +108,7 @@ class Role_assign extends Scene{
 				assign = false;
 			}
 		}
+		this.redraw();
 	}
 
 }
@@ -167,7 +169,7 @@ function setup(){
 		players = data;
 	});
 	//Error handeling
-	socket.on('error', function(error){
+	socket.on('err', function(error){
 		alert(error);
 		location.reload();
 	});

@@ -76,17 +76,19 @@ var Role_assign = /** @class */ (function (_super) {
     }
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
-        roles = [];
+        scenes.changeScene(new Start());
     };
     Role_assign.prototype.update = function () {
-        background(127, 50, 30);
+        background(127, 54, 30);
     };
     Role_assign.prototype.redraw = function () {
+        var correction = roomCode.substring(16);
+        socket.emit('roles', [correction, [roles, players]]);
     };
     Role_assign.prototype.load = function () {
         var count = floor((players.length - 1) / 2);
         if ((players.length - 1) <= 4) {
-            count--;
+            count = 1;
         }
         roles[0] = "HOST";
         //Assign roles 1:3 ratio
@@ -95,7 +97,7 @@ var Role_assign = /** @class */ (function (_super) {
         while (assign) {
             var place = floor(random(1, players.length));
             if (!roles[place]) {
-                if (random() < 0.50 && count > 0) {
+                if (random() < 0.85 && count > 0) {
                     roles[place] = "ZLODEJ";
                     count--;
                 }
@@ -114,7 +116,7 @@ var Role_assign = /** @class */ (function (_super) {
                 assign = false;
             }
         }
-        console.log(roles, players, count);
+        this.redraw();
     };
     return Role_assign;
 }(Scene));
@@ -169,7 +171,7 @@ function setup() {
         players = data;
     });
     //Error handeling
-    socket.on('error', function (error) {
+    socket.on('err', function (error) {
         alert(error);
         location.reload();
     });

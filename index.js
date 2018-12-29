@@ -138,7 +138,7 @@ io.on('connection',function(socket){
   	});
 
 	//Tasks
-	socket.on("TextTask",function (room){
+	socket.on("TextTask", function (room){
 		socket.broadcast.to(room).emit("task_text");
 	});
 
@@ -152,6 +152,11 @@ io.on('connection',function(socket){
 
 	socket.on("PickAnswerTaskDone", function(data){
 		socket.broadcast.to(data.room).emit("pick_answer_task_done",data);
+	});
+
+	//New sets of tasks
+	socket.on('roles', function(data){
+		socket.broadcast.to(data[0]).emit('roles',data[1]);
 	});
 
 });

@@ -3,12 +3,24 @@ $(document).ready(function(){
 	let socket = io();
 	let allow_once = [true,true,true];
 
+	function pickRandomThief(arr){
+		let help = [];
+		let role = arr[0];
+		let players = arr[1];
+		for (var i = 0; i < role.length; i++) {
+			if (role[i] == "ZLODEJ") {
+				help.push(i);
+			}
+		}
+		return "<br><h6>"+players[help[Math.floor(Math.random()*help.length)]].name+"</h6>";
+	}
+
 	$('#create').click( function(){
 		$(location).attr('href', 'Game/index.html');
 	});
 
 	$('#join').click( function(){
-		room = $('#code').val();
+		room = $('#code').val().toUpperCase();
 		nick = $('#name').val();
 		socket.emit('joinRoom',{
 			code: room,
@@ -35,6 +47,44 @@ $(document).ready(function(){
 		$("#exampleModal").modal("show");
 	});
 	//Tasks
+	socket.on('roles', function(data){
+		$('#lobby').addClass('d-none');
+		let roles = data[0];
+		let players = data[1];
+		for (let i = 0; i < roles.length;i++){
+			if(socket.id == players[i].id){
+				$('#role').append('<h3>'+roles[i]+'</h3>');
+				switch (roles[i]) {
+					case "DETEKTÍV":
+						$('#description').empty();
+						$('#description').append("Tvojou úlohou je presvedčit ostatných, že tento človek je zlodej:"+pickRandomThief(data)+".");
+						break;
+					case "NEVINNÝ":
+						$('#description').empty();
+						$('#description').append("Tvojou úlohou je pomôcť detektívovi nájsť zločincov.");
+						break;
+					case "ZLODEJ":
+						$('#description').empty();
+						$('#description').append("Tvojou úlohou je presvedčit ostatných, že nie si zlodej.");
+						let partners = [];
+						for (var j = 0; j < roles.length; j++) {
+							if (roles[j] == "ZLODEJ" && socket.id != players[j].id){
+								$('#description').push(players[j]);
+							}
+						}
+						if (partners.length > 0) {
+							$('#description').append("Tvoji parťáci sú: ");
+							for (var k = 0; k < partners.length; k++) {
+								$('#description').append("<strong>"+partners[k]+"</strong>");
+							}
+						}
+						break;
+				}
+			}
+		}
+		$('#roleTask').removeClass('d-none');
+	});
+
 	socket.on("task_text", function(){
 		if (allow_once[0]) {
 			$('#lobby').addClass('d-none');
@@ -60,7 +110,6 @@ $(document).ready(function(){
 			$("#lobby").addClass('d-none');
 			$("#pickAnswerTask").removeClass('d-none');
 			for(let i = 0; i < data.length;i++){
-				console.log(data[i]);
 				if (data[i].nick != nick){
 					$("#answers_pick").append('<button>'+data[i].answer+'</button>');
 				}
