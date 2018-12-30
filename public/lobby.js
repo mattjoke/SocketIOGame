@@ -15,6 +15,14 @@ $(document).ready(function(){
 		return "<br><h6>"+players[help[Math.floor(Math.random()*help.length)]].name+"</h6>";
 	}
 
+	$('#btn_role').change(function(){
+	    if ($(this).prop('checked')) {
+		    $('#roleContent').removeClass('d-none');
+	    }else {
+	    	$('#roleContent').addClass('d-none');
+	    }
+    });
+
 	$('#create').click( function(){
 		$(location).attr('href', 'Game/index.html');
 	});
@@ -48,7 +56,6 @@ $(document).ready(function(){
 	});
 	//Tasks
 	socket.on('roles', function(data){
-		$('#lobby').addClass('d-none');
 		let roles = data[0];
 		let players = data[1];
 		for (let i = 0; i < roles.length;i++){
@@ -57,7 +64,7 @@ $(document).ready(function(){
 				switch (roles[i]) {
 					case "DETEKTÍV":
 						$('#description').empty();
-						$('#description').append("Tvojou úlohou je presvedčit ostatných, že tento človek je zlodej:"+pickRandomThief(data)+".");
+						$('#description').append("Tvojou úlohou je presvedčit ostatných, že tento človek je zlodej:"+pickRandomThief(data));
 						break;
 					case "NEVINNÝ":
 						$('#description').empty();
@@ -82,6 +89,7 @@ $(document).ready(function(){
 				}
 			}
 		}
+		$('#lobby').addClass('d-none');
 		$('#roleTask').removeClass('d-none');
 	});
 

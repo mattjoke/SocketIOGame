@@ -85,27 +85,18 @@ class Role_assign extends Scene{
 		}
 		roles[0] = "HOST";
 		//Assign roles 1:3 ratio
-		roles[floor(random(1,players.length))] = "DETEKTÍV";
-		let assign = true;
-		while (assign) {
-			let place = floor(random(1,players.length));
-			if (!roles[place]){
-				if(random() < 0.85 && count > 0){
-					roles[place] = "ZLODEJ";
-					count--;
-				}else{
-					roles[place] = "NEVINNÝ";
-				}
+		let randomNum = floor(random(1,players.length));
+		roles[randomNum] = "DETEKTÍV";
+		while (count > 0) {
+			randomNum = floor(random(1,players.length));
+			if (!roles[randomNum]){
+				roles[randomNum] = "ZLODEJ";
+				count--;
 			}
-			let isOk = true;
-			for (let i = 0; i < roles.length;i++){
-				if (!roles[i] || (roles.length != players.length)){
-					isOk = false;
-					break;
-				}
-			}
-			if(isOk){
-				assign = false;
+		}
+		for (var i = 0; i < players.length; i++) {
+			if (!roles[i]) {
+				roles[i] = "NEVINNÝ";
 			}
 		}
 		this.redraw();
