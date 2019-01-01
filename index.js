@@ -145,18 +145,18 @@ io.on('connection',function(socket){
 	socket.on("TextTaskDone", function(data){
 		socket.broadcast.to(data.room).emit("task_text_done",data);
 	});
-
-	socket.on("PickAnswerTask", function(data){
-		socket.broadcast.to(data[0].room).emit("pick_answer_task",data);
-	});
-
-	socket.on("PickAnswerTaskDone", function(data){
-		socket.broadcast.to(data.room).emit("pick_answer_task_done",data);
-	});
-
 	//New sets of tasks
+	//Roles
 	socket.on('roles', function(data){
-		socket.broadcast.to(data[0]).emit('roles',data[1]);
+		socket.broadcast.to(data[0]).emit('roles', data[1]);
+	});
+	//Voting
+	socket.on("vote", function(data){
+		socket.broadcast.to(data[0]).emit('voting', data);
+	});
+	socket.on('VoteSubmit', function(data){
+		console.log(data);
+		socket.broadcast.to(data.room).emit('VoteFinal', data);
 	});
 
 });

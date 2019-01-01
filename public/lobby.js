@@ -3,18 +3,6 @@ $(document).ready(function(){
 	let socket = io();
 	let allow_once = [true,true,true];
 
-	function pickRandomThief(arr){
-		let help = [];
-		let role = arr[0];
-		let players = arr[1];
-		for (var i = 0; i < role.length; i++) {
-			if (role[i] == "ZLODEJ") {
-				help.push(i);
-			}
-		}
-		return "<br><h6>"+players[help[Math.floor(Math.random()*help.length)]].name+"</h6>";
-	}
-
 	$('#btn_role').change(function(){
 	    if ($(this).prop('checked')) {
 		    $('#roleContent').removeClass('d-none');
@@ -54,6 +42,19 @@ $(document).ready(function(){
 		$("#exampleModalLabel").append(error);
 		$("#exampleModal").modal("show");
 	});
+
+	function pickRandomThief(arr){
+		let help = [];
+		let role = arr[0];
+		let players = arr[1];
+		for (var i = 0; i < role.length; i++) {
+			if (role[i] == "ZLODEJ") {
+				help.push(i);
+			}
+		}
+		return "<br><h6>"+players[help[Math.floor(Math.random()*help.length)]].name+"</h6>";
+	}
+
 	//Tasks
 	socket.on('roles', function(data){
 		let roles = data[0];
@@ -113,32 +114,35 @@ $(document).ready(function(){
 		});
 	});
 
-	socket.on("pick_answer_task", function(data){
+
+	socket.on('voting', function(data){
 		if (allow_once[1]){
-			$("#lobby").addClass('d-none');
-			$("#pickAnswerTask").removeClass('d-none');
+			data = data[1];
+			$("#roleTask").addClass('d-none');
+			$("#roleContent").addClass('d-none');
+
+			$("#Voting").removeClass('d-none');
 			for(let i = 0; i < data.length;i++){
-				if (data[i].nick != nick){
-					$("#answers_pick").append('<button>'+data[i].answer+'</button>');
+				if (data[i].name != nick && data[i].name != "Host"){
+					$("#answers_pick").append('<button class="btn btn-secondary">'+data[i].name+'</button>');
 				}
 			}
 			allow_once[1] = false;
 		}
-
 	});
 
 	$(document).on("click", "#answers_pick button", function(){
-		let picked = $(this).text();
+		if (allow_once[2]) {
+			let picked = $(this).text();
+			$("#answers_pick").addClass('d-none');
+			$("#answers_pick").empty();
 
-		$("#answers_pick").addClass('d-none');
-		$("#answers_pick").empty();
-
-		socket.emit("PickAnswerTaskDone", {
-			room: room,
-			nick: nick,
-			picked_answer: picked
-		});
+			socket.emit('VoteSubmit', {
+				room: room,
+				id: socket.id,
+				answer: picked
+			});
+			allow_once[2] = false;
+		}
 	});
-
-
 });
