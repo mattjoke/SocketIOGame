@@ -76,7 +76,7 @@ var Role_assign = /** @class */ (function (_super) {
     }
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
-        scenes.changeScene(new Start());
+        scenes.changeScene(new Vote());
     };
     Role_assign.prototype.update = function () {
         background(127, 54, 30);
@@ -110,6 +110,65 @@ var Role_assign = /** @class */ (function (_super) {
     };
     return Role_assign;
 }(Scene));
+var Vote = /** @class */ (function (_super) {
+    __extends(Vote, _super);
+    function Vote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Vote.prototype.unload = function () {
+    };
+    Vote.prototype.load = function () {
+        this.bg = loadImage("assets/bg-1.png");
+        this.rCode = roomCode.substring(16);
+        socket.emit('vote', [this.rCode, players]);
+    };
+    Vote.prototype.update = function () {
+        this.redraw();
+    };
+    Vote.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+        //Draw title
+        fill(255);
+        textSize(72);
+        text("Hlasovanie", (width - textWidth("Hlasovanie")) / 2, height / 8);
+        textSize(32);
+        text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.", (width - textWidth("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.")) / 2, height / 5);
+        //Draw roomcode
+        textSize(32);
+        text(roomCode, width - textWidth(roomCode) - width / 85, height / 6);
+        //Draw connected players
+        textSize(24);
+        var step = height / 6;
+        text("Pripojení hráči:", width / 85, height / 6);
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i].name;
+            if (player != "Host") {
+                step += 32;
+                text(player, width / 85, step, 60, width);
+            }
+        }
+        //Draw selected users
+        textSize(72);
+        var step = height / 6 + 72;
+        text("Hráči, ktorí nezvolili:", (width - textWidth("Hráči, ktorí nezvolili:")) / 2, height / 3);
+        textSize(64);
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i].id;
+            var isThere = false;
+            for (var j = 0; j < answers.length; j++) {
+                if (player == answers[j].id) {
+                    console.log(player, answers[j].id);
+                    isThere = true;
+                }
+            }
+            if (!isThere) {
+                step += 64;
+                text(players[i].name, (width - textWidth(players[i].name)) / 2, step, 60, width);
+            }
+        }
+    };
+    return Vote;
+}(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
     }
@@ -136,6 +195,7 @@ var socket = io();
 //Player variables
 var players = [];
 var roles = [];
+var answers = [];
 var roomCode = "";
 //SceneManager, canvas variables
 var scenes;
@@ -165,7 +225,15 @@ function setup() {
         alert(error);
         location.reload();
     });
+    socket.on('VoteFinal', function (data) {
+        answers.push([data.answer, data.id]);
+    });
 }
 function draw() {
     scenes.update();
+}
+function mousePressed() {
+    if (mouseX > width / 4) {
+        scenes.changeScene(new Vote());
+    }
 }

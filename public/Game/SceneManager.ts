@@ -69,7 +69,7 @@ class Role_assign extends Scene{
 
 	unload():void{
 		//Starts Game Loop
-		scenes.changeScene(new Start());
+		scenes.changeScene(new Vote());
 	}
 	update():void {
 		background(127,54,30);
@@ -104,6 +104,68 @@ class Role_assign extends Scene{
 
 }
 
+class Vote extends Scene{
+
+	private bg: Image;
+	private rCode: string;
+
+	unload():void{
+	}
+
+	load():void{
+		this.bg = loadImage("assets/bg-1.png");
+		this.rCode = roomCode.substring(16);
+		socket.emit('vote',[this.rCode, players]);
+	}
+
+	update():void {
+		this.redraw();
+	}
+
+	redraw():void{
+		image(this.bg,0,0);
+		//Draw title
+		fill(255);
+		textSize(72);
+		text("Hlasovanie", (width-textWidth("Hlasovanie"))/2, height/8);
+		textSize(32);
+		text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.", (width-textWidth("Na svojom zariadení si zvoľte, kto je podľa vás zlodej."))/2, height/5);
+		//Draw roomcode
+		textSize(32);
+		text(roomCode, width-textWidth(roomCode) - width/85, height/6);
+		//Draw connected players
+		textSize(24);
+		let step = height/6;
+		text("Pripojení hráči:",width/85,height/6);
+		for (var i = 0; i < players.length; i++) {
+			let player = players[i].name;
+			if (player != "Host") {
+				step += 32;
+				text(player,width/85,step,60,width);
+			}
+		}
+		//Draw selected users
+		textSize(72);
+		let step = height/6+72;
+		text("Hráči, ktorí nezvolili:", (width-textWidth("Hráči, ktorí nezvolili:"))/2,height/3);
+		textSize(64);
+		for (var i = 0; i < players.length; i++) {
+			let player = players[i].id;
+			let isThere = false;
+			for (var j = 0; j < answers.length; j++) {
+				if (player == answers[j].id) {
+					console.log(player, answers[j].id);
+					isThere = true;
+				}
+			}
+			if (!isThere) {
+				step += 64;
+            	text(players[i].name, (width - textWidth(players[i].name)) / 2, step, 60, width);
+			}
+		}
+	}
+}
+
 class SceneManager{
 	private static instance: SceneManager;
 	currScene: Scene;
@@ -132,6 +194,7 @@ let socket = io();
 //Player variables
 let players = [];
 let roles = [];
+let answers = [];
 let roomCode = "";
 //SceneManager, canvas variables
 let scenes;
@@ -164,8 +227,17 @@ function setup(){
 		alert(error);
 		location.reload();
 	});
+	socket.on('VoteFinal', function(data){
+		answers.push([data.answer,data.id]);
+	});
 }
 
 function draw(){
 	scenes.update();
+}
+
+function mousePressed(){
+	if (mouseX > width/4){
+		scenes.changeScene(new Vote());
+	}
 }
