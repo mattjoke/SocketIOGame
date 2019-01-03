@@ -52,6 +52,11 @@ var Lobby = /** @class */ (function (_super) {
         //Draw title
         textSize(72);
         text("Ludum", (width - textWidth("Ludum")) / 2, height / 8);
+        //Draw url address
+        textSize(24);
+        text("Zdajte túto adresu vo svojom prehlidači:", (width - textWidth("Zdajte túto adresu vo svojom prehlidači:")) / 2, height / 2.5 - 64);
+        textSize(64);
+        text(url, (width - textWidth(url)) / 2, height / 2.5);
         //Draw roomcode
         textSize(32);
         text(roomCode, width - textWidth(roomCode) - width / 85, height / 6);
@@ -106,6 +111,19 @@ var Role_assign = /** @class */ (function (_super) {
                 roles[i] = "NEVINNÝ";
             }
         }
+        for (var i = 0; i < roles.length; i++) {
+            switch (roles[i]) {
+                case "DETEKTÍV":
+                    roles_count[0]++;
+                    break;
+                case "NEVINNÝ":
+                    roles_count[1]++;
+                    break;
+                case "ZLODEJ":
+                    roles_count[2]++;
+                    break;
+            }
+        }
         this.redraw();
     };
     return Role_assign;
@@ -116,6 +134,7 @@ var Vote = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Vote.prototype.unload = function () {
+        scenes.changeScene(new Conclusion());
     };
     Vote.prototype.load = function () {
         this.bg = loadImage("assets/bg-1.png");
@@ -124,6 +143,9 @@ var Vote = /** @class */ (function (_super) {
     };
     Vote.prototype.update = function () {
         this.redraw();
+        if (players.length - 1 == answers.length) {
+            this.unload();
+        }
     };
     Vote.prototype.redraw = function () {
         image(this.bg, 0, 0);
@@ -149,25 +171,125 @@ var Vote = /** @class */ (function (_super) {
         }
         //Draw selected users
         textSize(72);
-        var step = height / 6 + 72;
+        step = height / 6 + 128;
         text("Hráči, ktorí nezvolili:", (width - textWidth("Hráči, ktorí nezvolili:")) / 2, height / 3);
         textSize(64);
         for (var i = 0; i < players.length; i++) {
             var player = players[i].id;
             var isThere = false;
             for (var j = 0; j < answers.length; j++) {
-                if (player == answers[j].id) {
-                    console.log(player, answers[j].id);
+                var answer = answers[j];
+                if (player == answer[1]) {
                     isThere = true;
                 }
             }
-            if (!isThere) {
+            if (!isThere && players[i].name != "Host") {
                 step += 64;
                 text(players[i].name, (width - textWidth(players[i].name)) / 2, step, 60, width);
             }
         }
     };
     return Vote;
+}(Scene));
+var Conclusion = /** @class */ (function (_super) {
+    __extends(Conclusion, _super);
+    function Conclusion() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Conclusion.prototype.unload = function () {
+        //pick random events or launch endgame
+        switch (this.picked_role) {
+            case "DETEKTÍV":
+                count[0]--;
+                break;
+            case "NEVINNÝ":
+                count[1]--;
+                break;
+            case "ZLODEJ":
+                count[2]--;
+                break;
+        }
+        if ((count[0] + count[1]) == count[2]) {
+            //EPIC FINALE -> TRUE ENDGAME
+        }
+        else if (count[2] > 1) {
+            //Finale - Innocents win!
+        }
+        else {
+            //Game continues
+        }
+    };
+    Conclusion.prototype.load = function () {
+        this.bg = loadImage("assets/bg-2.png");
+        for (var i = 0; i < answers.length; i++) {
+            var answer = answers[i];
+            var isThere = false;
+            for (var j = 0; j < picked.length; j++) {
+                var pick = picked[j];
+                if (pick[0] == answer[0]) {
+                    pick[1]++;
+                    pick[2].push(answer[1]);
+                    isThere = true;
+                }
+            }
+            if (!isThere) {
+                picked.push([answer[0], 1, [answer[1]]]);
+            }
+        }
+        this.redraw();
+    };
+    Conclusion.prototype.update = function () {
+    };
+    Conclusion.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+        //Draw Title
+        fill(255);
+        textSize(72);
+        //Determine who is out
+        var pick = picked[0];
+        for (var i = 0; i < picked.length; i++) {
+            var tmp = picked[i];
+            if (pick[1] < tmp[1]) {
+                pick[1] = tmp;
+            }
+        }
+        var id = "";
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].name == pick[0]) {
+                id = players[i].id;
+            }
+        }
+        var title = pick[0] + " je mŕtvy!";
+        text(title, (width - textWidth(title)) / 2, height / 8);
+        var correction = roomCode.substring(16);
+        socket.emit('dead', {
+            room: correction,
+            id: id
+        });
+        //Draw who voted for picked
+        textSize(32);
+        text("Podľa našich dostupných informácií za zažalovanie môžu očití svedkovia:", (width - textWidth("Podľa našich dostupných informácií za zažalovanie môžu očití svedkovia:")) / 2, height / 5);
+        var step = height / 6 + 64;
+        for (var i = 0; i < pick[2].length; i++) {
+            var who = pick[2];
+            for (var j = 0; j < players.length; j++) {
+                if (who[i] == players[j].id) {
+                    text(players[j].name, (width - textWidth(players[j].name)) / 2, step);
+                    step += 48;
+                }
+            }
+        }
+        //Draw picked's role
+        text(pick[0] + " poslal svoje posledné slová:");
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].name == pick[0]) {
+                this.picked_role = roles[i];
+                text("Som: " + roles[i], (width - textWidth("Som: " + roles[i])) / 2, height / 2);
+            }
+        }
+        this.unload();
+    };
+    return Conclusion;
 }(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
@@ -195,8 +317,11 @@ var socket = io();
 //Player variables
 var players = [];
 var roles = [];
+var roles_count = [0, 0, 0]; //No. Detectives, Innocents and Murderers
 var answers = [];
+var picked = [];
 var roomCode = "";
+var url = "";
 //SceneManager, canvas variables
 var scenes;
 var width;
@@ -225,15 +350,20 @@ function setup() {
         alert(error);
         location.reload();
     });
+    //Final Voting
     socket.on('VoteFinal', function (data) {
         answers.push([data.answer, data.id]);
+    });
+    //Url Handeling
+    socket.on('url', function (data) {
+        url = data;
     });
 }
 function draw() {
     scenes.update();
 }
-function mousePressed() {
-    if (mouseX > width / 4) {
+function keyPressed() {
+    if (key == 'a') {
         scenes.changeScene(new Vote());
     }
 }
