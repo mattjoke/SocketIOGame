@@ -13,18 +13,21 @@ app.get('/', function(req, res) {
     res.redirect('index.html');
 });
 
+let web = "localhost:3000";
+
 if (ngrok_active){
 	(async function() {
 		try {
 			const url = await ngrok.connect(3000);
-			await console.log("Connected!: "+ url);
+			await console.log("Connected to:"+url);
+			web = url;
 		} catch(e) {
 			console.log("Error: "+e);
 		}
 	})();
 }
 
-console.log('Server is running on: localhost:3000');
+console.log('Server is running on: ' + web);
 
 let rooms = []; //keeps all rooms
 
@@ -76,6 +79,7 @@ io.on('connection',function(socket){
 		update(code, newRoom.People);
 		socket.emit("code",code);
 		console.log('Crreating room');
+		socket.emit('url', web);
 	});
 
 	function destroyRoom(code) {
@@ -151,12 +155,15 @@ io.on('connection',function(socket){
 		socket.broadcast.to(data[0]).emit('roles', data[1]);
 	});
 	//Voting
-	socket.on("vote", function(data){
+	socket.on('vote', function(data){
 		socket.broadcast.to(data[0]).emit('voting', data);
 	});
 	socket.on('VoteSubmit', function(data){
-		console.log(data);
 		socket.broadcast.to(data.room).emit('VoteFinal', data);
+	});
+	//Dead player
+	socket.on('dead', function(data){
+		socket.broadcast.to(data.room).emit('DeadPlayer', data.id);
 	});
 
 });
