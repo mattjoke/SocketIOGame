@@ -31,7 +31,7 @@ class Lobby extends Scene{
 		//Chceking if button is pressed
 		if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)){
 			if (mouseIsPressed){
-				if (players.length){
+				if (players.length-1 >= 3){
 					this.unload();
 				}
 			}
@@ -188,20 +188,23 @@ class Conclusion extends Scene{
 
 	unload():void{
 		//pick random events or launch endgame
+		answers = [];
+		picked = [];
 		switch(this.picked_role){
-			case "DETEKTÍV": count[0]--; break;
-			case "NEVINNÝ": count[1]--; break;
-			case "ZLODEJ": count[2]--; break;
+			case "DETEKTÍV": roles_count[0]--; break;
+			case "NEVINNÝ": roles_count[1]--; break;
+			case "ZLODEJ": roles_count[2]--; break;
 		}
-		if ((count[0]+count[1]) == count[2]) {
+		if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
 			//EPIC FINALE -> TRUE ENDGAME
-		}else if (count[2] > 1) {
+		}else if (roles_count[2] < 1) {
 			//Finale - Innocents win!
 		} else {
 			//Game continues
 		}
 	}
 	load():void{
+		background(0);
 		this.bg = loadImage("assets/bg-2.png");
 		for (var i = 0; i < answers.length; i++) {
 			let answer = answers[i];
@@ -221,6 +224,7 @@ class Conclusion extends Scene{
 		this.redraw();
 	}
 	update():void {
+		this.redraw();
 	}
 	redraw():void{
 		image(this.bg,0,0);
@@ -274,7 +278,6 @@ class Conclusion extends Scene{
 				text("Som: "+roles[i],(width-textWidth("Som: "+roles[i]))/2, height/2);
 			}
 		}
-		this.unload();
 	}
 }
 class SceneManager{

@@ -37,7 +37,7 @@ var Lobby = /** @class */ (function (_super) {
         //Chceking if button is pressed
         if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)) {
             if (mouseIsPressed) {
-                if (players.length) {
+                if (players.length - 1 >= 3) {
                     this.unload();
                 }
             }
@@ -200,19 +200,19 @@ var Conclusion = /** @class */ (function (_super) {
         //pick random events or launch endgame
         switch (this.picked_role) {
             case "DETEKTÍV":
-                count[0]--;
+                roles_count[0]--;
                 break;
             case "NEVINNÝ":
-                count[1]--;
+                roles_count[1]--;
                 break;
             case "ZLODEJ":
-                count[2]--;
+                roles_count[2]--;
                 break;
         }
-        if ((count[0] + count[1]) == count[2]) {
+        if ((roles_count[0] + roles_count[1]) == roles_count[2]) {
             //EPIC FINALE -> TRUE ENDGAME
         }
-        else if (count[2] > 1) {
+        else if (roles_count[2] < 1) {
             //Finale - Innocents win!
         }
         else {
@@ -220,6 +220,7 @@ var Conclusion = /** @class */ (function (_super) {
         }
     };
     Conclusion.prototype.load = function () {
+        background(0);
         this.bg = loadImage("assets/bg-2.png");
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
@@ -239,6 +240,7 @@ var Conclusion = /** @class */ (function (_super) {
         this.redraw();
     };
     Conclusion.prototype.update = function () {
+        this.redraw();
     };
     Conclusion.prototype.redraw = function () {
         image(this.bg, 0, 0);
@@ -287,7 +289,6 @@ var Conclusion = /** @class */ (function (_super) {
                 text("Som: " + roles[i], (width - textWidth("Som: " + roles[i])) / 2, height / 2);
             }
         }
-        this.unload();
     };
     return Conclusion;
 }(Scene));
