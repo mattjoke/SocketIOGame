@@ -85,12 +85,24 @@ var Role_assign = /** @class */ (function (_super) {
     };
     Role_assign.prototype.update = function () {
         background(127, 54, 30);
+        fill(255);
+        textSize(64);
+        text("Máte 30 sekúnd na pozretie si svojej roly", (width - textWidth("Máte 30 sekúnd na pozretie si svojej roly")) / 2, height / 4);
+        textSize(100);
+        text(this.timer, (width - textWidth(this.timer)) / 2, height / 2);
+        if (frameCount % 60 == 0 && this.timer > 0) {
+            this.timer--;
+        }
+        if (this.timer == 0) {
+            this.unload();
+        }
     };
     Role_assign.prototype.redraw = function () {
         var correction = roomCode.substring(16);
         socket.emit('roles', [correction, [roles, players]]);
     };
     Role_assign.prototype.load = function () {
+        this.timer = 30;
         var count = floor((players.length - 1) / 2);
         if ((players.length - 1) <= 4) {
             count = 1;
@@ -137,6 +149,7 @@ var Vote = /** @class */ (function (_super) {
         scenes.changeScene(new Conclusion());
     };
     Vote.prototype.load = function () {
+        this.timer = 90;
         this.bg = loadImage("assets/bg-1.png");
         this.rCode = roomCode.substring(16);
         socket.emit('vote', [this.rCode, players]);
@@ -144,6 +157,12 @@ var Vote = /** @class */ (function (_super) {
     Vote.prototype.update = function () {
         this.redraw();
         if (players.length - 1 == answers.length) {
+            this.unload();
+        }
+        if (frameCount % 60 == 0 && this.timer > 0) {
+            this.timer--;
+        }
+        if (this.timer == 0) {
             this.unload();
         }
     };
@@ -188,6 +207,12 @@ var Vote = /** @class */ (function (_super) {
                 text(players[i].name, (width - textWidth(players[i].name)) / 2, step, 60, width);
             }
         }
+        //Draw timer
+        fill(255);
+        textSize(48);
+        text("Čas zostávajúci na hlasovanie", width - (width - textWidth("Čas zostávajúci na hlasovanie")), height / 2);
+        textSize(72);
+        text(this.timer, width - textWidth(this.timer), height / 2);
     };
     return Vote;
 }(Scene));
@@ -334,6 +359,7 @@ function setup() {
     width = window.innerWidth;
     height = window.innerHeight;
     createCanvas(width, height);
+    frameRate(60);
     //Initialize Scene
     scenes = new SceneManager();
     scenes.changeScene(new Lobby());

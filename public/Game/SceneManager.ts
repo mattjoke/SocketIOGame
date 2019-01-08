@@ -72,18 +72,32 @@ class Lobby extends Scene{
 
 class Role_assign extends Scene{
 
+	private timer: number;
+
 	unload():void{
 		//Starts Game Loop
 		scenes.changeScene(new Vote());
 	}
 	update():void {
 		background(127,54,30);
+		fill(255);
+		textSize(64);
+		text("Máte 30 sekúnd na pozretie si svojej roly",(width-textWidth("Máte 30 sekúnd na pozretie si svojej roly"))/2, height/4);
+		textSize(100);
+  		text(this.timer, (width-textWidth(this.timer))/2, height/2);
+		if(frameCount % 60 == 0  && this.timer > 0){
+			this.timer--;
+		}
+		if (this.timer == 0) {
+			this.unload();
+		}
 	}
 	redraw():void{
 		let correction = roomCode.substring(16);
 		socket.emit('roles', [correction,[roles,players]]);
 	}
 	load():void{
+		this.timer = 30;
 		let count = floor((players.length-1)/2);
 		if ((players.length-1)<=4){
 			count = 1;
@@ -120,12 +134,14 @@ class Vote extends Scene{
 
 	private bg: Image;
 	private rCode: string;
+	private timer: number;
 
 	unload():void{
 		scenes.changeScene(new Conclusion());
 	}
 
 	load():void{
+		this.timer = 90;
 		this.bg = loadImage("assets/bg-1.png");
 		this.rCode = roomCode.substring(16);
 		socket.emit('vote',[this.rCode, players]);
@@ -134,6 +150,12 @@ class Vote extends Scene{
 	update():void {
 		this.redraw();
 		if (players.length-1 == answers.length) {
+			this.unload();
+		}
+		if(frameCount % 60 == 0 && this.timer > 0){
+			this.timer--;
+		}
+		if (this.timer == 0) {
 			this.unload();
 		}
 	}
@@ -179,6 +201,12 @@ class Vote extends Scene{
             	text(players[i].name, (width - textWidth(players[i].name)) / 2, step, 60, width);
 			}
 		}
+		//Draw timer
+		fill(255);
+		textSize(48);
+		text("Čas zostávajúci na hlasovanie",(width-textWidth("Čas zostávajúci na hlasovanie")), height/2);
+		textSize(72);
+		text(this.timer,width-textWidth(this.timer), height/2);
 	}
 }
 class Conclusion extends Scene{
@@ -205,6 +233,9 @@ class Conclusion extends Scene{
 	}
 	load():void{
 		background(0);
+		if (answers.length == 0 && picked.length == 0) {
+			this.unload();
+		}
 		this.bg = loadImage("assets/bg-2.png");
 		for (var i = 0; i < answers.length; i++) {
 			let answer = answers[i];
@@ -280,6 +311,23 @@ class Conclusion extends Scene{
 		}
 	}
 }
+class HandsOfTruth extends Scene{
+
+	unload():void{
+	}
+
+	update():void {
+	}
+
+	redraw():void{
+	}
+
+	load():void{
+	}
+
+}
+
+
 class SceneManager{
 	private static instance: SceneManager;
 	currScene: Scene;
@@ -323,6 +371,7 @@ function setup(){
 	width = window.innerWidth;
 	height = window.innerHeight;
 	createCanvas(width,height);
+	frameRate(60);
 
 	//Initialize Scene
 	scenes = new SceneManager();

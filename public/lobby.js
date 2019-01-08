@@ -1,8 +1,44 @@
-$(document).ready(function(){
+//$(document).ready(function(){
 
 	let socket = io();
-	let allow_once = [true,true,true];
+	let allow_once = [true,true,true, true];
 	let dead = false;
+
+	function overlay(){
+		if (allow_once[3]) {
+			let title = $('#name').val();
+			$("body").append("<div id='overlay'><p class='rip'>RIP</p><p class='rip_title'>"+title+"</p></div>");
+			$("#overlay")
+		      .height(window.innerHeight)
+		      .css({
+		         'opacity' : 1,
+		         'position': 'absolute',
+		         'top': 0,
+		         'left': 0,
+		         'right': 0,
+		         'background': 'black url(./Game/assets/RIP.png) no-repeat center center fixed',
+		         'width': '100%',
+		         'z-index': 5000
+		      });
+		    $('.rip').css({
+		    	'font-size': '84px',
+		        'position' : 'absolute',
+		        'left' : '47vw',
+		        'top' : '30vh',
+		        'margin-left' : -$('.overlay').innerWidth()/2,
+		        'margin-top' : -$('.overlay').outerHeight()/2
+		    });
+		    $('.rip_title').css({
+		    	'font-size': '64px',
+		        'position' : 'absolute',
+		        'left' : '35vw',
+		        'top' : '45vh',
+		        'margin-left' : -$('.overlay').innerWidth()/2,
+		        'margin-top' : -$('.overlay').outerHeight()/2
+		    });
+		    allow_once[3] = false;
+		}
+	}
 
 	$('#btn_role').change(function(){
 	    if ($(this).prop('checked')) {
@@ -46,7 +82,8 @@ $(document).ready(function(){
 
 	socket.on('DeadPlayer', function(data){
 		if (socket.id == data) {
-			dead = true;
+			//dead = true;
+			overlay();
 		}
 	});
 
@@ -152,5 +189,7 @@ $(document).ready(function(){
 				allow_once[2] = false;
 			}
 		});
+	}else{
+		overlay();
 	}
-});
+//});
