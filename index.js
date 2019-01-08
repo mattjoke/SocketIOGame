@@ -5,7 +5,7 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 
-let ngrok_active = false; //Choice if Ngrok should be used (default false)
+let ngrok_active = true; //Choice if Ngrok should be used (default false)
 
 app.use(express.static(__dirname + '/public'));
 

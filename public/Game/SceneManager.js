@@ -54,7 +54,7 @@ var Lobby = /** @class */ (function (_super) {
         text("Ludum", (width - textWidth("Ludum")) / 2, height / 8);
         //Draw url address
         textSize(24);
-        text("Zdajte túto adresu vo svojom prehlidači:", (width - textWidth("Zdajte túto adresu vo svojom prehlidači:")) / 2, height / 2.5 - 64);
+        text("Zadajte túto adresu vo svojom prehlidači:", (width - textWidth("Zadajte túto adresu vo svojom prehlidači:")) / 2, height / 2.5 - 64);
         textSize(64);
         text(url, (width - textWidth(url)) / 2, height / 2.5);
         //Draw roomcode
@@ -198,6 +198,8 @@ var Conclusion = /** @class */ (function (_super) {
     }
     Conclusion.prototype.unload = function () {
         //pick random events or launch endgame
+        answers = [];
+        picked = [];
         switch (this.picked_role) {
             case "DETEKTÍV":
                 roles_count[0]--;
