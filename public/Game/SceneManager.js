@@ -98,7 +98,6 @@ var Role_assign = /** @class */ (function (_super) {
         }
     };
     Role_assign.prototype.redraw = function () {
-        var correction = roomCode.substring(16);
         socket.emit('roles', [correction, [roles, players]]);
     };
     Role_assign.prototype.load = function () {
@@ -210,9 +209,10 @@ var Vote = /** @class */ (function (_super) {
         //Draw timer
         fill(255);
         textSize(48);
-        text("Čas zostávajúci na hlasovanie", width - (width - textWidth("Čas zostávajúci na hlasovanie")), height / 2);
+        text("Čas zostávajúci", width - textWidth("Čas zostávajúci"), height / 2);
+        text(" na hlasovanie", width - textWidth(" na hlasovanie"), height / 2 + 50);
         textSize(72);
-        text(this.timer, width - textWidth(this.timer), height / 2);
+        text(this.timer, width - textWidth(this.timer), height / 2 + 100);
     };
     return Vote;
 }(Scene));
@@ -248,6 +248,9 @@ var Conclusion = /** @class */ (function (_super) {
     };
     Conclusion.prototype.load = function () {
         background(0);
+        if (answers.length == 0 && picked.length == 0) {
+            this.unload();
+        }
         this.bg = loadImage("assets/bg-2.png");
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
@@ -290,7 +293,6 @@ var Conclusion = /** @class */ (function (_super) {
         }
         var title = pick[0] + " je mŕtvy!";
         text(title, (width - textWidth(title)) / 2, height / 8);
-        var correction = roomCode.substring(16);
         socket.emit('dead', {
             room: correction,
             id: id
@@ -309,7 +311,7 @@ var Conclusion = /** @class */ (function (_super) {
             }
         }
         //Draw picked's role
-        text(pick[0] + " poslal svoje posledné slová:");
+        text(pick[0] + " poslal svoje posledné slová:", (width - textWidth(pick[0] + " poslal svoje posledné slová:")), height / 2);
         for (var i = 0; i < players.length; i++) {
             if (players[i].name == pick[0]) {
                 this.picked_role = roles[i];
@@ -318,6 +320,26 @@ var Conclusion = /** @class */ (function (_super) {
         }
     };
     return Conclusion;
+}(Scene));
+var HandsOfTruth = /** @class */ (function (_super) {
+    __extends(HandsOfTruth, _super);
+    function HandsOfTruth() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    HandsOfTruth.prototype.unload = function () {
+    };
+    HandsOfTruth.prototype.update = function () {
+        this.redraw();
+    };
+    HandsOfTruth.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+    };
+    HandsOfTruth.prototype.load = function () {
+        this.task = "";
+        this.bg = loadImage("assets/bg-3.jpg");
+        socket.emit('Hands', correction);
+    };
+    return HandsOfTruth;
 }(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
@@ -349,6 +371,7 @@ var roles_count = [0, 0, 0]; //No. Detectives, Innocents and Murderers
 var answers = [];
 var picked = [];
 var roomCode = "";
+var correction;
 var url = "";
 //SceneManager, canvas variables
 var scenes;
@@ -368,6 +391,7 @@ function setup() {
     socket.emit('createRoom');
     //Get room code
     socket.on('code', function (code) {
+        correction = code;
         roomCode = "Kód miestnosti: " + code;
     });
     //Send players
@@ -387,12 +411,16 @@ function setup() {
     socket.on('url', function (data) {
         url = data;
     });
+    //Database hanedling
+    socket.on('HandsTask', function (data) {
+        console.log(data);
+    });
 }
 function draw() {
     scenes.update();
 }
 function keyPressed() {
     if (key == 'a') {
-        scenes.changeScene(new Vote());
+        scenes.changeScene(new HandsOfTruth());
     }
 }

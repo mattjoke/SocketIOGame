@@ -93,7 +93,6 @@ class Role_assign extends Scene{
 		}
 	}
 	redraw():void{
-		let correction = roomCode.substring(16);
 		socket.emit('roles', [correction,[roles,players]]);
 	}
 	load():void{
@@ -204,9 +203,10 @@ class Vote extends Scene{
 		//Draw timer
 		fill(255);
 		textSize(48);
-		text("Čas zostávajúci na hlasovanie",(width-textWidth("Čas zostávajúci na hlasovanie")), height/2);
+		text("Čas zostávajúci",width-textWidth("Čas zostávajúci"), height/2);
+		text(" na hlasovanie",width-textWidth(" na hlasovanie"), height/2+50);
 		textSize(72);
-		text(this.timer,width-textWidth(this.timer), height/2);
+		text(this.timer,width-textWidth(this.timer), height/2+100);
 	}
 }
 class Conclusion extends Scene{
@@ -281,8 +281,6 @@ class Conclusion extends Scene{
 		let title = pick[0] + " je mŕtvy!";
 		text(title, (width-textWidth(title))/2, height/8);
 
-		let correction = roomCode.substring(16);
-
 		socket.emit('dead', {
 			room: correction,
 			id: id
@@ -302,7 +300,7 @@ class Conclusion extends Scene{
 			}
 		}
 		//Draw picked's role
-		text(pick[0]+" poslal svoje posledné slová:")
+		text(pick[0]+" poslal svoje posledné slová:", (width-textWidth(pick[0]+" poslal svoje posledné slová:")),height/2);
 		for (var i = 0; i < players.length; i++) {
 			if(players[i].name == pick[0]){
 				this.picked_role = roles[i];
@@ -313,16 +311,24 @@ class Conclusion extends Scene{
 }
 class HandsOfTruth extends Scene{
 
+	private bg: Image;
+	private task;
+
 	unload():void{
 	}
 
 	update():void {
+		this.redraw();
 	}
 
 	redraw():void{
+		image(this.bg,0,0);
 	}
 
 	load():void{
+		this.task = "";
+		this.bg = loadImage("assets/bg-3.jpg");
+		socket.emit('Hands', correction);
 	}
 
 }
@@ -359,7 +365,9 @@ let roles = [];
 let roles_count = [0,0,0]; //No. Detectives, Innocents and Murderers
 let answers = [];
 let picked = [];
+
 let roomCode = "";
+let correction;
 let url = "";
 //SceneManager, canvas variables
 let scenes;
@@ -382,6 +390,7 @@ function setup(){
 	socket.emit('createRoom');
 	//Get room code
 	socket.on('code', function(code){
+		correction = code;
 		roomCode = "Kód miestnosti: " + code;
 	});
 	//Send players
@@ -401,6 +410,10 @@ function setup(){
 	socket.on('url',function(data){
 		url = data;
 	});
+	//Database hanedling
+	socket.on('HandsTask', function(data){
+		console.log(data);
+	});
 }
 
 function draw(){
@@ -409,6 +422,6 @@ function draw(){
 
 function keyPressed(){
 	if(key == 'a'){
-		scenes.changeScene(new Vote());
+		scenes.changeScene(new HandsOfTruth());
 	}
 }

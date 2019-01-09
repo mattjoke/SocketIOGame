@@ -18,7 +18,7 @@
 		         'right': 0,
 		         'background': 'black url(./Game/assets/RIP.png) no-repeat center center fixed',
 		         'width': '100%',
-		         'z-index': 5000
+		         'z-index': 1
 		      });
 		    $('.rip').css({
 		    	'font-size': '84px',
