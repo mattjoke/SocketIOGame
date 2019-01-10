@@ -82,9 +82,11 @@
 
 	socket.on('DeadPlayer', function(data){
 		if (socket.id == data) {
-			//dead = true;
 			overlay();
 		}
+	});
+	socket.on('HandsTask', function(data){
+		console.log(data);
 	});
 
 	if (!dead) {

@@ -2,19 +2,11 @@ let express = require('express');
 let path = require('path');
 let ngrok = require('ngrok');
 let app = express();
-let sqlite3 = require('sqlite3').verbose();
+let fs = require('fs');
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 
 let ngrok_active = true; //Choice if Ngrok should be used (default false)
-
-let db = new sqlite3.Database('./db/database.db', (err)=>{
-	if (err) {
-		console.log(err.message);
-	}
-	console.log('Connected to DB!')
-});
-
 
 app.use(express.static(__dirname + '/public'));
 
@@ -150,18 +142,11 @@ io.on('connection',function(socket){
     	}
   	});
 
-  	(async function dataParse(){
-		db.all("SELECT * FROM Tasks ORDER BY RANDOM() LIMIT 1;", [], (err,rows)=>{
-			if (err) {
-				throw err;
-			}
-			return rows;
-		});
-  	});
-	//Handle DB requests
-	socket.on('Hands', function(room){
-		const out = await ;
-		console.log(out);
+	//Handle DB requests - Hands of truth
+	socket.on('Hands', function(data){
+		let db = JSON.parse(fs.readFileSync('./db/database.json', 'utf8'));
+		let random = db[Math.floor(Math.random() * db.length)];
+		io.sockets.in(data).emit('HandsTask', random.otazka);
 	});
 	//Tasks
 	socket.on("TextTask", function (room){

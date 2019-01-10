@@ -328,16 +328,20 @@ var HandsOfTruth = /** @class */ (function (_super) {
     }
     HandsOfTruth.prototype.unload = function () {
     };
+    HandsOfTruth.prototype.load = function () {
+        this.bg = loadImage("assets/bg-3.jpg");
+        socket.emit('Hands', correction);
+        textSize(textWidth(this.task) / (width));
+    };
     HandsOfTruth.prototype.update = function () {
         this.redraw();
     };
     HandsOfTruth.prototype.redraw = function () {
         image(this.bg, 0, 0);
-    };
-    HandsOfTruth.prototype.load = function () {
-        this.task = "";
-        this.bg = loadImage("assets/bg-3.jpg");
-        socket.emit('Hands', correction);
+        fill(255);
+        if (this.task != undefined) {
+            text(this.task, (width - textWidth(this.task)) / 2, height / 2);
+        }
     };
     return HandsOfTruth;
 }(Scene));
@@ -411,13 +415,13 @@ function setup() {
     socket.on('url', function (data) {
         url = data;
     });
-    //Database hanedling
+    //DB Handeling
+    socket.on('HandsTask', function (data) {
+        scenes.currScene.task = data;
+    });
 }
 function draw() {
     scenes.update();
-    socket.on('HandsTask', function (data) {
-        console.log("am here");
-    });
 }
 function keyPressed() {
     if (key == 'a') {

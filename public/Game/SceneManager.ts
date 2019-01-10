@@ -312,27 +312,29 @@ class Conclusion extends Scene{
 class HandsOfTruth extends Scene{
 
 	private bg: Image;
-	private task;
+	private task: string;
 
 	unload():void{
+
 	}
 
+	load():void{
+		this.bg = loadImage("assets/bg-3.jpg");
+		socket.emit('Hands', correction);
+	}
 	update():void {
 		this.redraw();
 	}
 
 	redraw():void{
 		image(this.bg,0,0);
-	}
 
-	load():void{
-		this.task = "";
-		this.bg = loadImage("assets/bg-3.jpg");
-		socket.emit('Hands', correction);
+		fill(255);
+		if (this.task != undefined) {
+			text(this.task,(width-textWidth(this.task))/2,height/2);
+		}
 	}
-
 }
-
 
 class SceneManager{
 	private static instance: SceneManager;
@@ -410,9 +412,9 @@ function setup(){
 	socket.on('url',function(data){
 		url = data;
 	});
-	//Database hanedling
+	//DB Handeling
 	socket.on('HandsTask', function(data){
-		console.log("am here");
+		scenes.currScene.task = data;
 	});
 }
 
