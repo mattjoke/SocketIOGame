@@ -412,7 +412,7 @@ function setup(){
 	});
 	//Database hanedling
 	socket.on('HandsTask', function(data){
-		console.log(data);
+		console.log("am here");
 	});
 }
 

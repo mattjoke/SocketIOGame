@@ -412,12 +412,12 @@ function setup() {
         url = data;
     });
     //Database hanedling
-    socket.on('HandsTask', function (data) {
-        console.log(data);
-    });
 }
 function draw() {
     scenes.update();
+    socket.on('HandsTask', function (data) {
+        console.log("am here");
+    });
 }
 function keyPressed() {
     if (key == 'a') {
