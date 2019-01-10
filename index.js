@@ -149,16 +149,16 @@ io.on('connection',function(socket){
     		}
     	}
   	});
+
+  	(async function())
 	//Handle DB requests
 	socket.on('Hands', async(room)=>{
-		let out = undefined;
-		await db.all("SELECT * FROM Tasks ORDER BY RANDOM() LIMIT 1;", [], (err,rows)=>{
+		let out;
+		db.all("SELECT * FROM Tasks ORDER BY RANDOM() LIMIT 1;", [], (err,rows)=>{
 			if (err) {
 				throw err;
 			}
-			while(out == undefined){
-				out = rows;
-			}
+			out = rows;
 		});
 	});
 	//Tasks
