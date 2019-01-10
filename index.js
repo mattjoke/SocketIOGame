@@ -150,16 +150,18 @@ io.on('connection',function(socket){
     	}
   	});
 
-  	(async function())
-	//Handle DB requests
-	socket.on('Hands', async(room)=>{
-		let out;
+  	(async function dataParse(){
 		db.all("SELECT * FROM Tasks ORDER BY RANDOM() LIMIT 1;", [], (err,rows)=>{
 			if (err) {
 				throw err;
 			}
-			out = rows;
+			return rows;
 		});
+  	});
+	//Handle DB requests
+	socket.on('Hands', function(room){
+		const out = await ;
+		console.log(out);
 	});
 	//Tasks
 	socket.on("TextTask", function (room){
