@@ -327,11 +327,18 @@ var HandsOfTruth = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     HandsOfTruth.prototype.unload = function () {
+        scenes.changeScene(new Vote());
     };
     HandsOfTruth.prototype.load = function () {
-        this.bg = loadImage("assets/bg-3.jpg");
         socket.emit('Hands', correction);
-        textSize(textWidth(this.task) / (width));
+        this.bg = loadImage("assets/bg-3.jpg");
+        this.size = 72;
+        this.drawAnswer = 0;
+        this.timer = 10;
+        this.round = 1;
+        textSize(this.size);
+        while (this.task != undefined)
+            ;
     };
     HandsOfTruth.prototype.update = function () {
         this.redraw();
@@ -339,8 +346,47 @@ var HandsOfTruth = /** @class */ (function (_super) {
     HandsOfTruth.prototype.redraw = function () {
         image(this.bg, 0, 0);
         fill(255);
-        if (this.task != undefined) {
+        if (this.drawAnswer == 1) {
+            text("Úloha znela:", (width - textWidth("Úloha znela:")) / 2, height / 2.5);
+            if (textWidth(this.task) < width) {
+                textSize(this.size);
+            }
+            else {
+                while (textWidth(this.task) > width) {
+                    this.size--;
+                    textSize(this.size);
+                }
+            }
             text(this.task, (width - textWidth(this.task)) / 2, height / 2);
+            if (frameCount % 60 == 0 && this.timer > 0) {
+                this.timer--;
+            }
+            if (this.timer == 0) {
+                if (this.round == 3) {
+                    this.unload();
+                }
+            }
+        }
+        else {
+            textSize(128);
+            text(this.timer, (width - textWidth(this.timer)) / 2, height / 2);
+            if (frameCount % 60 == 0 && this.timer > 0) {
+                this.timer--;
+            }
+            if (this.timer == 0) {
+                if (this.round == 2) {
+                    this.drawAnswer = 1;
+                    this.timer = 20;
+                    this.round = 3;
+                }
+                if (this.round == 1) {
+                    //Play GO! sound
+                    image(this.bg, 0, 0);
+                    text("Teraz!", (width - textWidth("Teraz!")) / 2, height / 2);
+                    this.timer = 5;
+                    this.round = 2;
+                }
+            }
         }
     };
     return HandsOfTruth;
