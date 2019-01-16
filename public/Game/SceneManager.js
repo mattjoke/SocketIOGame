@@ -336,6 +336,7 @@ var HandsOfTruth = /** @class */ (function (_super) {
         this.drawAnswer = 0;
         this.timer = 10;
         this.round = 1;
+        this.label = "Hands of truth";
         textSize(this.size);
         while (this.task != undefined)
             ;
@@ -369,7 +370,10 @@ var HandsOfTruth = /** @class */ (function (_super) {
         }
         else {
             textSize(128);
-            text(this.timer, (width - textWidth(this.timer)) / 2, height / 2);
+            text(this.label, (width - textWidth(this.label)) / 2, height / 2);
+            if (this.round == 1) {
+                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2, height / 2 + 150);
+            }
             if (frameCount % 60 == 0 && this.timer > 0) {
                 this.timer--;
             }
@@ -382,7 +386,7 @@ var HandsOfTruth = /** @class */ (function (_super) {
                 if (this.round == 1) {
                     //Play GO! sound
                     image(this.bg, 0, 0);
-                    text("Teraz!", (width - textWidth("Teraz!")) / 2, height / 2);
+                    this.label = "Teraz!";
                     this.timer = 5;
                     this.round = 2;
                 }
@@ -397,11 +401,16 @@ var YouGottaPoint = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     YouGottaPoint.prototype.unload = function () {
-        scenes.changeScene(new Voting());
+        scenes.changeScene(new Vote());
     };
     YouGottaPoint.prototype.load = function () {
         socket.emit('Point', correction);
         this.bg = loadImage('assets/bg-3.png');
+        this.size = 72;
+        this.drawAnswer = 0;
+        this.timer = 10;
+        this.round = 1;
+        this.label = "You gotta point!";
         while (this.task != undefined)
             ;
     };
@@ -410,6 +419,53 @@ var YouGottaPoint = /** @class */ (function (_super) {
     };
     YouGottaPoint.prototype.redraw = function () {
         image(this.bg, 0, 0);
+        fill(255);
+        if (this.drawAnswer == 1) {
+            text("Úloha znela:", (width - textWidth("Úloha znela:")) / 2, height / 2.5);
+            if (textWidth(this.task) < width) {
+                textSize(this.size);
+            }
+            else {
+                while (textWidth(this.task) > width) {
+                    this.size--;
+                    textSize(this.size);
+                }
+            }
+            text(this.task, (width - textWidth(this.task)) / 2, height / 2);
+            if (frameCount % 60 == 0 && this.timer > 0) {
+                this.timer--;
+            }
+            if (this.timer == 0) {
+                if (this.round == 3) {
+                    this.unload();
+                }
+            }
+        }
+        else {
+            textSize(128);
+            text(this.label, (width - textWidth(this.label)) / 2, height / 2);
+            textSize(64);
+            if (this.round == 1) {
+                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2, height / 2 + 150);
+            }
+            if (frameCount % 60 == 0 && this.timer > 0) {
+                this.timer--;
+            }
+            if (this.timer == 0) {
+                if (this.round == 2) {
+                    this.drawAnswer = 1;
+                    this.timer = 20;
+                    this.round = 3;
+                }
+                if (this.round == 1) {
+                    //Play GO! sound
+                    image(this.bg, 0, 0);
+                    this.label = "Teraz!";
+                    this.timer = 5;
+                    this.round = 2;
+                }
+            }
+        }
     };
     return YouGottaPoint;
 }(Scene));
