@@ -143,10 +143,15 @@ io.on('connection',function(socket){
   	});
 
 	//Handle DB requests - Hands of truth
-	socket.on('Hands', function(data){
+	socket.on('Hands', function(room){
 		let db = JSON.parse(fs.readFileSync('./db/database.json', 'utf8'));
 		let random = db[Math.floor(Math.random() * db.length)];
-		io.sockets.in(data).emit('HandsTask', random.otazka);
+		io.sockets.in(room).emit('HandsTask', random.otazka);
+	});
+	socket.on('Point', function(room){
+		let db = JSON.parse(fs.readFileSync('./db/database.json','utf8'));
+		let random = db[Math.floor(Math.random() * db.length)];
+		io.sockets.in(room).emit('PointTask', random.otazka);
 	});
 	//Tasks
 	socket.on("TextTask", function (room){

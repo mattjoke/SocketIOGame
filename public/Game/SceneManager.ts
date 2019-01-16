@@ -228,7 +228,7 @@ class Conclusion extends Scene{
 		}else if (roles_count[2] < 1) {
 			//Finale - Innocents win!
 		} else {
-			//Game continues
+			scenes.changeScene(new HandsOfTruth());
 		}
 	}
 	load():void{
@@ -384,6 +384,32 @@ class HandsOfTruth extends Scene{
 	}
 }
 
+class YouGottaPoint extends Scene{
+
+	private bg: Image;
+	private task: string;
+
+	unload():void{
+		scenes.changeScene(new Voting());
+	}
+
+	load():void{
+		socket.emit('Point', correction);
+		this.bg = loadImage('assets/bg-3.png');
+
+		while(this.task != undefined);
+	}
+
+	update():void {
+		this.redraw();
+	}
+
+	redraw():void{
+		image(this.bg,0,0);
+	}
+}
+
+
 class SceneManager{
 	private static instance: SceneManager;
 	currScene: Scene;
@@ -464,6 +490,9 @@ function setup(){
 	socket.on('HandsTask', function(data){
 		scenes.currScene.task = data;
 	});
+	socket.on('PointTask', function(data){
+		scenes.currScene.task = data;
+	});
 }
 
 function draw(){
@@ -472,6 +501,6 @@ function draw(){
 
 function keyPressed(){
 	if(key == 'a'){
-		scenes.changeScene(new HandsOfTruth());
+		scenes.changeScene(new YouGottaPoint());
 	}
 }

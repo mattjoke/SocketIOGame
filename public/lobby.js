@@ -1,8 +1,17 @@
 //$(document).ready(function(){
 
 	let socket = io();
-	let allow_once = [true,true,true, true];
+	let allow_once = [true,true,true, true, true];
 	let dead = false;
+	let role;
+
+	function clearAll(){
+		$('#lobby').addClass('d-none');
+		$('#HandsPointTask').addClass('d-none');
+		$('#Voting').addClass('d-none');
+		$('#roleTask').addClass('d-none');
+		$('#roleContent').addClass('d-none');
+	}
 
 	function overlay(){
 		if (allow_once[3]) {
@@ -85,10 +94,6 @@
 			overlay();
 		}
 	});
-	socket.on('HandsTask', function(data){
-		console.log(data);
-	});
-
 	if (!dead) {
 		function pickRandomThief(arr){
 			let help = [];
@@ -112,10 +117,12 @@
 						case "DETEKTÍV":
 							$('#description').empty();
 							$('#description').append("Tvojou úlohou je presvedčit ostatných, že tento človek je zlodej:"+pickRandomThief(data));
+							role = roles[i];
 							break;
 						case "NEVINNÝ":
 							$('#description').empty();
 							$('#description').append("Tvojou úlohou je pomôcť detektívovi nájsť zločincov.");
+							role = roles[i];
 							break;
 						case "ZLODEJ":
 							$('#description').empty();
@@ -132,12 +139,26 @@
 									$('#description').append("<strong>"+partners[k]+"</strong>");
 								}
 							}
+							role = roles[i];
 							break;
 					}
 				}
 			}
 			$('#lobby').addClass('d-none');
 			$('#roleTask').removeClass('d-none');
+		});
+
+		socket.on('HandsTask', function(data){
+			if(allow_once[4]){
+				clearAll();
+				$('#task').empty();
+				if(role = "ZLODEJ"){
+					$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť.");
+				}else {
+					$('#task').append(data);
+				}
+				$('#HandsPointTask').removeClass('d-none');
+			}
 		});
 
 		socket.on("task_text", function(){
@@ -164,8 +185,7 @@
 		socket.on('voting', function(data){
 			if (allow_once[1]){
 				data = data[1];
-				$("#roleTask").addClass('d-none');
-				$("#roleContent").addClass('d-none');
+				clearAll();
 
 				$("#Voting").removeClass('d-none');
 				for(let i = 0; i < data.length;i++){
@@ -188,6 +208,9 @@
 					id: socket.id,
 					answer: picked
 				});
+
+				$('#lobby').addClass('d-none');
+				$('#Voting').addClass('d-none');
 				allow_once[2] = false;
 			}
 		});

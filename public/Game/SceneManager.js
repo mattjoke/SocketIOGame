@@ -243,7 +243,7 @@ var Conclusion = /** @class */ (function (_super) {
             //Finale - Innocents win!
         }
         else {
-            //Game continues
+            scenes.changeScene(new HandsOfTruth());
         }
     };
     Conclusion.prototype.load = function () {
@@ -391,6 +391,28 @@ var HandsOfTruth = /** @class */ (function (_super) {
     };
     return HandsOfTruth;
 }(Scene));
+var YouGottaPoint = /** @class */ (function (_super) {
+    __extends(YouGottaPoint, _super);
+    function YouGottaPoint() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    YouGottaPoint.prototype.unload = function () {
+        scenes.changeScene(new Voting());
+    };
+    YouGottaPoint.prototype.load = function () {
+        socket.emit('Point', correction);
+        this.bg = loadImage('assets/bg-3.png');
+        while (this.task != undefined)
+            ;
+    };
+    YouGottaPoint.prototype.update = function () {
+        this.redraw();
+    };
+    YouGottaPoint.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+    };
+    return YouGottaPoint;
+}(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
     }
@@ -465,12 +487,15 @@ function setup() {
     socket.on('HandsTask', function (data) {
         scenes.currScene.task = data;
     });
+    socket.on('PointTask', function (data) {
+        scenes.currScene.task = data;
+    });
 }
 function draw() {
     scenes.update();
 }
 function keyPressed() {
     if (key == 'a') {
-        scenes.changeScene(new HandsOfTruth());
+        scenes.changeScene(new YouGottaPoint());
     }
 }
