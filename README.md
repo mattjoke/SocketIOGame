@@ -1,13 +1,13 @@
-# "Simple"SocketIOGame
+# "Simple" SocketIOGame
 
 TODO:
 
+* Write a documentation
 * Dice of luck
 * Cover it up
 * clean code
 * add sound
 * Design overhaul
-* Decrease chance of generating same room
 * Finish Maturita
 
 Done:
@@ -21,3 +21,4 @@ Done:
 * Added Role Chooser communication -> player see descriptions with their roles
 * Add Hand of truth
 * Add You've gotta point
+* Decrease chance of generating same room

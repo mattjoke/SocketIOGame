@@ -49,6 +49,15 @@ io.on('connection',function(socket){
 		return count;
 	}
 
+	function roomCodeExists(roomcode){
+		for (var i = 0; i < rooms.length; i++) {
+			if(rooms[i].Code == roomcode){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function update(room, arr){ 	//updates users in room
 		io.sockets.in(room).emit('send',arr);
 	}
@@ -64,10 +73,12 @@ io.on('connection',function(socket){
 
 	//Generate random room ID
 	function generateRoomId() {
-	 	let text = "";
-	  	let pismena = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	  	for (let i = 0; i < 4; i++)
-	    	text += pismena.charAt(Math.floor(Math.random() * pismena.length));
+		let text = "";
+		do{
+	  		let pismena = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	  		for (let i = 0; i < 4; i++)
+	    		text += pismena.charAt(Math.floor(Math.random() * pismena.length));
+		}while(roomCodeExists(text));
 		return text;
 	}
 
