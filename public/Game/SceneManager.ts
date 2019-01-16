@@ -314,10 +314,10 @@ class HandsOfTruth extends Scene{
 	private bg: Image;
 	private task: string;
 	private size: number;
-	private drawAnswer: number;
 	private round: number;
 	private timer: number;
 	private label: string;
+	private drawAnswer: number;
 
 	unload():void{
 		scenes.changeScene(new Vote());
@@ -394,10 +394,10 @@ class YouGottaPoint extends Scene{
 	private bg: Image;
 	private task: string;
 	private size: number;
-	private drawAnswer: number;
 	private round: number;
 	private timer: number;
 	private label: string;
+	private drawAnswer: number;
 
 	unload():void{
 		scenes.changeScene(new Vote());
@@ -471,8 +471,8 @@ class YouGottaPoint extends Scene{
 
 
 class SceneManager{
-	private static instance: SceneManager;
 	currScene: Scene;
+	private static instance: SceneManager;
 
 	public static getInstance():SceneManager{
 		if (!this.instance) {
@@ -506,9 +506,9 @@ let roomCode = "";
 let correction;
 let url = "";
 //SceneManager, canvas variables
-let scenes;
 let width;
 let height;
+let scenes;
 
 function setup(){
 	//Creating canvas

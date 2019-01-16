@@ -153,7 +153,7 @@
 				clearAll();
 				$('#task').empty();
 				if(role = "ZLODEJ"){
-					$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť.");
+					$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
 				}else {
 					$('#task').append(data);
 				}
