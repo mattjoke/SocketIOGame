@@ -7,11 +7,6 @@ abstract class Scene{
 
 class Lobby extends Scene{
 	private bg: Image;
-	private logo: Image;
-
-	private bx: number;
-	private by: number;
-	private button: Image;
 
 	unload():void{
 		//Changing scene to next one
@@ -23,13 +18,14 @@ class Lobby extends Scene{
 		this.bx = width/2-272.5;
 		this.by = height/2;
 		//loading imags to cache
-		this.bg = loadImage("assets/bg.png");
+		this.bg = loadImage("assets/FirstPart.png");
 		this.button = loadImage("assets/button.png");
 	}
 
 	update():void {
 		//Chceking if button is pressed
-		if (mouseX > this.bx && mouseX < (this.bx + 545) && mouseY > this.by && mouseY < (this.by + 225)){
+		width, height - height/2.3
+		if (mouseX > (width - 761)  && mouseX < (width - 39) && mouseY > (height - 512) && mouseY < (height - 147)){
 			if (mouseIsPressed){
 				if (players.length-1 >= 3){
 					this.unload();
@@ -42,29 +38,24 @@ class Lobby extends Scene{
 
 	redraw():void{
 		//Draw BG and button
-		image(this.bg,0,0);
-		image(this.button, this.bx, this.by);
+		image(this.bg,0,0,0,height);
 
-		//Draw title
-		textSize(72);
-		text("Ludum", (width-textWidth("Ludum"))/2, height/8);
 		//Draw url address
 		textSize(24);
-		text("Zadajte túto adresu vo svojom prehlidači:", (width-textWidth("Zadajte túto adresu vo svojom prehlidači:"))/2, height/2.5 - 64);
+		text("Zadajte túto adresu vo svojom prehlidači:", width-textWidth("Zadajte túto adresu vo svojom prehlidači:"), height - height/2 - 64);
 		textSize(64);
-		text(url, (width-textWidth(url))/2, height/2.5);
+		text(url, width-textWidth(url), height - height/2);
 		//Draw roomcode
-		textSize(32);
-		text(roomCode, width-textWidth(roomCode) - width/85, height/6);
+		textSize(64);
+		text(correction, width-width/4, height/3);
 		//Draw connected players
 		textSize(24);
-		let step = height/6;
-		text("Pripojení hráči:",width/85,height/6);
+		let step = height-height/3-50;
 		for (var i = 0; i < players.length; i++) {
 			let player = players[i].name;
 			if (player != "Host") {
 				step += 32;
-				text(player,width/85,step,60,width);
+				text(player,width/11,step,60,width);
 			}
 		}
 	}
