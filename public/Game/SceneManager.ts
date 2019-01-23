@@ -14,18 +14,14 @@ class Lobby extends Scene{
 	}
 
 	load():void{
-		//Basically a constructor
-		this.bx = width/2-272.5;
-		this.by = height/2;
 		//loading imags to cache
-		this.bg = loadImage("assets/FirstPart.png");
-		this.button = loadImage("assets/button.png");
+		this.bg = loadImage("assets/Lobby.jpeg");
 	}
 
 	update():void {
 		//Chceking if button is pressed
 		width, height - height/2.3
-		if (mouseX > (width - 761)  && mouseX < (width - 39) && mouseY > (height - 512) && mouseY < (height - 147)){
+		if (mouseX > (width - 823)  && mouseX < (width - 138) && mouseY > (height - 429) && mouseY < (height - 90)){
 			if (mouseIsPressed){
 				if (players.length-1 >= 3){
 					this.unload();
@@ -42,40 +38,44 @@ class Lobby extends Scene{
 
 		//Draw url address
 		textSize(24);
-		text("Zadajte túto adresu vo svojom prehlidači:", width-textWidth("Zadajte túto adresu vo svojom prehlidači:"), height - height/2 - 64);
+		text("Zadajte túto adresu vo svojom prehlidači:", width-textWidth("Zadajte túto adresu vo svojom prehlidači:"), height - height/2.5 - 64);
 		textSize(64);
-		text(url, width-textWidth(url), height - height/2);
-		//Draw roomcode
-		textSize(64);
-		text(correction, width-width/4, height/3);
+		text(url, width-textWidth(url), height - height/2.5);
+
 		//Draw connected players
 		textSize(24);
-		let step = height-height/3-50;
+		let step = height-height/3;
 		for (var i = 0; i < players.length; i++) {
 			let player = players[i].name;
 			if (player != "Host") {
 				step += 32;
-				text(player,width/11,step,60,width);
+				text(player,width/20,step,60,width);
 			}
 		}
+		//Draw roomcode
+		translate(width-width/2.5,height/3);
+		textSize(72);
+		angleMode(DEGREES);
+		rotate(17);
+		text(correction, 0, 0);
 	}
 }
 
 class Role_assign extends Scene{
 
 	private timer: number;
+	private bg: Image;
 
 	unload():void{
 		//Starts Game Loop
 		scenes.changeScene(new Vote());
 	}
 	update():void {
-		background(127,54,30);
-		fill(255);
+		image(this.bg,0,0);
+		fill(0);
 		textSize(64);
 		text("Máte 30 sekúnd na pozretie si svojej roly",(width-textWidth("Máte 30 sekúnd na pozretie si svojej roly"))/2, height/4);
 		textSize(100);
-  		text(this.timer, (width-textWidth(this.timer))/2, height/2);
 		if(frameCount % 60 == 0  && this.timer > 0){
 			this.timer--;
 		}
@@ -87,7 +87,9 @@ class Role_assign extends Scene{
 		socket.emit('roles', [correction,[roles,players]]);
 	}
 	load():void{
+		this.bg = loadImage('assets/RoleChoose.jpeg');
 		this.timer = 30;
+
 		let count = floor((players.length-1)/2);
 		if ((players.length-1)<=4){
 			count = 1;

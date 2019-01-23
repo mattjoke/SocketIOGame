@@ -1,0 +1,76 @@
+*, *:after, *:before {
+	box-sizing: border-box;
+}
+
+/*
+the animation here is for the opacity effect on the text content (ie. ON or OFF)
+*/
+@keyframes change-content {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.switch {
+  position: absolute;
+	/* make the checkbox unvisible using clip-path */
+  clip-path: circle(0%);
+
+  opacity: 0;
+  & + label {
+    display: inline-block;
+    margin: 20px;
+    width: 140px;
+    height: 60px;
+    position: relative;
+
+    border: 2px solid #607d8b;
+    border-radius: 30px;
+
+    cursor: pointer;
+
+    font-size: 40px;
+		text-align: center;
+
+    &:before, &:after {
+      display: inline-block;
+      position: absolute;
+    }
+
+		/* for slider thumb */
+    &:before {
+      content: '';
+      width: 46px;
+      height: 46px;
+      border-radius: 25px;
+      left: 5px;
+      top: 5px;
+      background: #607d8b;
+      transition: all 0.3s ease-in-out;
+    }
+
+		/* for text content */
+    &:after {
+      display: inline-block;
+      content: 'UKÁŽ';
+      bottom: -60px;
+			/* to center it horizontally */
+      left: 50%;
+      transform: translateX(-50%);
+
+			color: #607d8b;
+    }
+  }
+
+  &:checked {
+
+    & + label:before {
+      left: 85px;
+    }
+
+    & + label:after {
+      content: 'SKRY';
+			color: #4caf50;
+			animation: change-content 0.3s forwards linear;
+    }
+  }
+}

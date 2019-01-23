@@ -26,12 +26,8 @@ var Lobby = /** @class */ (function (_super) {
         scenes.changeScene(new Role_assign());
     };
     Lobby.prototype.load = function () {
-        //Basically a constructor
-        this.bx = width / 2 - 272.5;
-        this.by = height / 2;
         //loading imags to cache
-        this.bg = loadImage("assets/FirstPart.png");
-        this.button = loadImage("assets/button.png");
+        this.bg = loadImage("assets/Lobby.jpeg");
     };
     Lobby.prototype.update = function () {
         //Chceking if button is pressed
@@ -51,22 +47,25 @@ var Lobby = /** @class */ (function (_super) {
         image(this.bg, 0, 0, 0, height);
         //Draw url address
         textSize(24);
-        text("Zadajte túto adresu vo svojom prehlidači:", width - textWidth("Zadajte túto adresu vo svojom prehlidači:"), height - height / 2 - 64);
+        text("Zadajte túto adresu vo svojom prehlidači:", width - textWidth("Zadajte túto adresu vo svojom prehlidači:"), height - height / 2.5 - 64);
         textSize(64);
-        text(url, width - textWidth(url), height - height / 2);
-        //Draw roomcode
-        textSize(64);
-        text(correction, width - width / 4, height / 3);
+        text(url, width - textWidth(url), height - height / 2.5);
         //Draw connected players
         textSize(24);
-        var step = height - height / 3 - 50;
+        var step = height - height / 3;
         for (var i = 0; i < players.length; i++) {
             var player = players[i].name;
             if (player != "Host") {
                 step += 32;
-                text(player, width / 11, step, 60, width);
+                text(player, width / 20, step, 60, width);
             }
         }
+        //Draw roomcode
+        translate(width - width / 2.5, height / 3);
+        textSize(72);
+        angleMode(DEGREES);
+        rotate(17);
+        text(correction, 0, 0);
     };
     return Lobby;
 }(Scene));
@@ -80,12 +79,11 @@ var Role_assign = /** @class */ (function (_super) {
         scenes.changeScene(new Vote());
     };
     Role_assign.prototype.update = function () {
-        background(127, 54, 30);
-        fill(255);
+        image(this.bg, 0, 0);
+        fill(0);
         textSize(64);
         text("Máte 30 sekúnd na pozretie si svojej roly", (width - textWidth("Máte 30 sekúnd na pozretie si svojej roly")) / 2, height / 4);
         textSize(100);
-        text(this.timer, (width - textWidth(this.timer)) / 2, height / 2);
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
         }
@@ -97,6 +95,7 @@ var Role_assign = /** @class */ (function (_super) {
         socket.emit('roles', [correction, [roles, players]]);
     };
     Role_assign.prototype.load = function () {
+        this.bg = loadImage('assets/RoleChoose.jpeg');
         this.timer = 30;
         var count = floor((players.length - 1) / 2);
         if ((players.length - 1) <= 4) {
