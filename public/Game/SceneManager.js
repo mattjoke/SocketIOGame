@@ -32,7 +32,7 @@ var Lobby = /** @class */ (function (_super) {
     Lobby.prototype.update = function () {
         //Chceking if button is pressed
         width, height - height / 2.3;
-        if (mouseX > (width - 761) && mouseX < (width - 39) && mouseY > (height - 512) && mouseY < (height - 147)) {
+        if (mouseX > (width - 823) && mouseX < (width - 138) && mouseY > (height - 429) && mouseY < (height - 90)) {
             if (mouseIsPressed) {
                 if (players.length - 1 >= 3) {
                     this.unload();
@@ -144,7 +144,7 @@ var Vote = /** @class */ (function (_super) {
     };
     Vote.prototype.load = function () {
         this.timer = 90;
-        this.bg = loadImage("assets/bg-1.png");
+        this.bg = loadImage("assets/Výsluch.jpeg");
         this.rCode = roomCode.substring(16);
         socket.emit('vote', [this.rCode, players]);
     };
@@ -163,25 +163,9 @@ var Vote = /** @class */ (function (_super) {
     Vote.prototype.redraw = function () {
         image(this.bg, 0, 0);
         //Draw title
-        fill(255);
-        textSize(72);
-        text("Hlasovanie", (width - textWidth("Hlasovanie")) / 2, height / 8);
+        fill(0);
         textSize(32);
-        text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.", (width - textWidth("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.")) / 2, height / 5);
-        //Draw roomcode
-        textSize(32);
-        text(roomCode, width - textWidth(roomCode) - width / 85, height / 6);
-        //Draw connected players
-        textSize(24);
-        var step = height / 6;
-        text("Pripojení hráči:", width / 85, height / 6);
-        for (var i = 0; i < players.length; i++) {
-            var player = players[i].name;
-            if (player != "Host") {
-                step += 32;
-                text(player, width / 85, step, 60, width);
-            }
-        }
+        text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.", width / 85, height / 5);
         //Draw selected users
         textSize(72);
         step = height / 6 + 128;
@@ -547,6 +531,6 @@ function draw() {
 }
 function keyPressed() {
     if (key == 'a') {
-        scenes.changeScene(new YouGottaPoint());
+        scenes.changeScene(new Vote());
     }
 }

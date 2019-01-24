@@ -134,7 +134,7 @@ class Vote extends Scene{
 
 	load():void{
 		this.timer = 90;
-		this.bg = loadImage("assets/bg-1.png");
+		this.bg = loadImage("assets/Výsluch.jpeg");
 		this.rCode = roomCode.substring(16);
 		socket.emit('vote',[this.rCode, players]);
 	}
@@ -155,25 +155,9 @@ class Vote extends Scene{
 	redraw():void{
 		image(this.bg,0,0);
 		//Draw title
-		fill(255);
-		textSize(72);
-		text("Hlasovanie", (width-textWidth("Hlasovanie"))/2, height/8);
+		fill(0);
 		textSize(32);
-		text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.", (width-textWidth("Na svojom zariadení si zvoľte, kto je podľa vás zlodej."))/2, height/5);
-		//Draw roomcode
-		textSize(32);
-		text(roomCode, width-textWidth(roomCode) - width/85, height/6);
-		//Draw connected players
-		textSize(24);
-		let step = height/6;
-		text("Pripojení hráči:",width/85,height/6);
-		for (var i = 0; i < players.length; i++) {
-			let player = players[i].name;
-			if (player != "Host") {
-				step += 32;
-				text(player,width/85,step,60,width);
- 			}
-		}
+		text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.",width/85, height/5);
 		//Draw selected users
 		textSize(72);
 		step = height/6+128;
@@ -554,6 +538,6 @@ function draw(){
 
 function keyPressed(){
 	if(key == 'a'){
-		scenes.changeScene(new YouGottaPoint());
+		scenes.changeScene(new Vote());
 	}
 }

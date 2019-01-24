@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
 	<title>Ludum - hra plná zábavy</title>
 	<link rel="stylesheet" href="../scripts/bootstrap.min.css">
-	<link rel="stylesheet" href="scripts/css.css">
+	<link rel="stylesheet" href="scripts/bootstrap-switch.min.css">
 </head>
 <body>
 	<div class="start">
@@ -41,8 +41,13 @@
 
 	<div id="roleTask" class="d-none">
 		<h4>Tvoja rola je:</h4>
-		<input type="checkbox" class="switch" id="btn_role">
+		<p class="text-justify">Ukázať rolu</p>
+
+		<div class="make-switch" data-off-text="Ukáž" data-on-text="Skry">
+    		<input type="checkbox" unchecked class="probeProbe" />
+		</div>
 	</div>
+
 	<div id="roleContent" class="d-none">
 		<div id="role">
 		</div>
@@ -73,5 +78,11 @@
 	</div>
 	<script src="scripts/popper.min.js"></script>
 	<script src="scripts/bootstrap.min.js"></script>
+	<script src="scripts/bootstrap-switch.min.js"></script>
+	<script>
+		$('.probeProbe').bootstrapSwitch('setOnLabel', 'Skry');
+		$('.probeProbe').bootstrapSwitch('setOnLabel', 'Ukáž');
+		$('.probeProbe').bootstrapSwitch('state', false);
+	</script>
 </body>
 </html>

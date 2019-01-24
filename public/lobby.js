@@ -49,8 +49,9 @@
 		}
 	}
 
-	$('#btn_role').change(function(){
-	    if ($(this).prop('checked')) {
+	$('.probeProbe').on('switchChange.bootstrapSwitch', function (event, state) {
+	    console.log(state);
+	    if (state) {
 		    $('#roleContent').removeClass('d-none');
 	    }else {
 	    	$('#roleContent').addClass('d-none');
