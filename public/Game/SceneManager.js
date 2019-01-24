@@ -165,12 +165,13 @@ var Vote = /** @class */ (function (_super) {
         //Draw title
         fill(0);
         textSize(32);
-        text("Na svojom zariadení si zvoľte, kto je podľa vás zlodej.", width / 85, height / 5);
+        text("Na svojom zariadení si zvoľte,", width / 85, height / 5);
+        text(" kto je podľa vás zlodej.", width / 85, height / 5 + 35);
         //Draw selected users
-        textSize(72);
+        textSize(42);
         step = height / 6 + 128;
-        text("Hráči, ktorí nezvolili:", (width - textWidth("Hráči, ktorí nezvolili:")) / 2, height / 3);
-        textSize(64);
+        text("Hráči, ktorí nehlasovali:", width / 85, height / 3);
+        textSize(32);
         for (var i = 0; i < players.length; i++) {
             var player = players[i].id;
             var isThere = false;
@@ -181,17 +182,17 @@ var Vote = /** @class */ (function (_super) {
                 }
             }
             if (!isThere && players[i].name != "Host") {
-                step += 64;
-                text(players[i].name, (width - textWidth(players[i].name)) / 2, step, 60, width);
+                step += 40;
+                text(players[i].name, width / 85, step, 60, width);
             }
         }
         //Draw timer
-        fill(255);
-        textSize(48);
-        text("Čas zostávajúci", width - textWidth("Čas zostávajúci"), height / 2);
-        text(" na hlasovanie", width - textWidth(" na hlasovanie"), height / 2 + 50);
-        textSize(72);
-        text(this.timer, width - textWidth(this.timer), height / 2 + 100);
+        fill(0);
+        translate(width / 2.75, height - height / 5);
+        angleMode(DEGREES);
+        rotate(17);
+        textSize(96);
+        text(this.timer, 0, 0);
     };
     return Vote;
 }(Scene));
@@ -230,7 +231,7 @@ var Conclusion = /** @class */ (function (_super) {
         if (answers.length == 0 && picked.length == 0) {
             this.unload();
         }
-        this.bg = loadImage("assets/bg-2.png");
+        this.bg = loadImage("assets/Dead.jpeg");
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
             var isThere = false;
@@ -254,7 +255,7 @@ var Conclusion = /** @class */ (function (_super) {
     Conclusion.prototype.redraw = function () {
         image(this.bg, 0, 0);
         //Draw Title
-        fill(255);
+        fill(0);
         textSize(72);
         //Determine who is out
         var pick = picked[0];
@@ -270,27 +271,12 @@ var Conclusion = /** @class */ (function (_super) {
                 id = players[i].id;
             }
         }
-        var title = pick[0] + " je mŕtvy!";
-        text(title, (width - textWidth(title)) / 2, height / 8);
+        text(pick[0], width / 2 - 50, height / 7);
         socket.emit('dead', {
             room: correction,
             id: id
         });
-        //Draw who voted for picked
-        textSize(32);
-        text("Podľa našich dostupných informácií za zažalovanie môžu očití svedkovia:", (width - textWidth("Podľa našich dostupných informácií za zažalovanie môžu očití svedkovia:")) / 2, height / 5);
-        var step = height / 6 + 64;
-        for (var i = 0; i < pick[2].length; i++) {
-            var who = pick[2];
-            for (var j = 0; j < players.length; j++) {
-                if (who[i] == players[j].id) {
-                    text(players[j].name, (width - textWidth(players[j].name)) / 2, step);
-                    step += 48;
-                }
-            }
-        }
         //Draw picked's role
-        text(pick[0] + " poslal svoje posledné slová:", (width - textWidth(pick[0] + " poslal svoje posledné slová:")), height / 2);
         for (var i = 0; i < players.length; i++) {
             if (players[i].name == pick[0]) {
                 this.picked_role = roles[i];
