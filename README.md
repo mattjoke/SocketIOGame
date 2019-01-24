@@ -4,10 +4,9 @@ TODO:
 
 * Write a documentation
 * Dice of luck
-* Cover it up
 * clean code
 * add sound
-* Design overhaul
+* Design overhaul - started 15.1.2019
 * Finish Maturita
 
 Done:
