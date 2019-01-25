@@ -256,7 +256,7 @@ class Conclusion extends Scene{
 			}
 		}
 
-		text(pick[0], width/2 - 50, height/7);
+		text(pick[0], width/2 - textWidth(pick[0])/1.8, height/6.6);
 
 		socket.emit('dead', {
 			room: correction,
