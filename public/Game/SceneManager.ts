@@ -256,8 +256,11 @@ class Conclusion extends Scene{
 			}
 		}
 
-		text(pick[0], width/2 - textWidth(pick[0])/1.8, height/6.6);
+		//Draw player's name
+		textSize(64);
+		text(pick[0], width/2 - textWidth(pick[0])/1.4, height/6.45);
 
+		//Emits dead person to server
 		socket.emit('dead', {
 			room: correction,
 			id: id
@@ -267,7 +270,7 @@ class Conclusion extends Scene{
 		for (var i = 0; i < players.length; i++) {
 			if(players[i].name == pick[0]){
 				this.picked_role = roles[i];
-				text("Som: "+roles[i],(width-textWidth("Som: "+roles[i]))/2, height/2);
+				text(roles[i],width-textWidth(roles[i])-width/35, height-height/3);
 			}
 		}
 	}
