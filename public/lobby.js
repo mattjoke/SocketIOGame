@@ -11,6 +11,7 @@
 		$('#Voting').addClass('d-none');
 		$('#roleTask').addClass('d-none');
 		$('#roleContent').addClass('d-none');
+		$('#answers_pick').addClass('d-none');
 	}
 
 	function overlay(){
@@ -96,6 +97,7 @@
 		}
 	});
 	if (!dead) {
+
 		function pickRandomThief(arr){
 			let help = [];
 			let role = arr[0];
@@ -153,12 +155,13 @@
 			if(allow_once[4]){
 				clearAll();
 				$('#task').empty();
-				if(role = "ZLODEJ"){
+				if(role == "ZLODEJ"){
 					$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
 				}else {
 					$('#task').append(data);
 				}
 				$('#HandsPointTask').removeClass('d-none');
+				allow_once[1] = true;
 			}
 		});
 
@@ -166,7 +169,7 @@
 			if (allow_once[0]) {
 				$('#lobby').addClass('d-none');
 				$('#textTask').removeClass('d-none');
-				allow_once[0] = false;
+				allow_once[1] = false;
 			}
 		});
 
@@ -185,15 +188,20 @@
 
 		socket.on('voting', function(data){
 			if (allow_once[1]){
-				data = data[1];
 				clearAll();
+				$("#answers_pick").empty();
+				data = data[1];
 
-				$("#Voting").removeClass('d-none');
 				for(let i = 0; i < data.length;i++){
 					if (data[i].name != nick && data[i].name != "Host"){
+						console.log(data[i].name, nick);
 						$("#answers_pick").append('<button class="btn btn-secondary">'+data[i].name+'</button>');
 					}
 				}
+
+				$('#answers_pick').removeClass('d-none');
+				$("#Voting").removeClass('d-none');
+				allow_once[2] = true;
 				allow_once[1] = false;
 			}
 		});

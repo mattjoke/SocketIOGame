@@ -161,7 +161,7 @@ class Vote extends Scene{
 		text(" kto je podľa vás zlodej.", width/85, height/5+35);
 		//Draw selected users
 		textSize(42);
-		step = height/6+128;
+		step = height/6+160;
 		text("Hráči, ktorí nehlasovali:", width/85, height/3);
 		textSize(32);
 		for (var i = 0; i < players.length; i++) {
@@ -180,7 +180,7 @@ class Vote extends Scene{
 		}
 		//Draw timer
 		fill(0);
-		translate(width/2.75, height - height/5);
+		translate(width/2.75, height - height/4.5);
 		angleMode(DEGREES);
 		rotate(17);
 		textSize(96);
@@ -191,6 +191,7 @@ class Conclusion extends Scene{
 
 	private bg: Image;
 	private picked_role: string;
+	private timer: number;
 
 	unload():void{
 		//pick random events or launch endgame
@@ -201,13 +202,14 @@ class Conclusion extends Scene{
 			case "NEVINNÝ": roles_count[1]--; break;
 			case "ZLODEJ": roles_count[2]--; break;
 		}
-		if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
+		scenes.changeScene(new HandsOfTruth());
+		/*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
 			//EPIC FINALE -> TRUE ENDGAME
 		}else if (roles_count[2] < 1) {
 			//Finale - Innocents win!
 		} else {
 			scenes.changeScene(new HandsOfTruth());
-		}
+		}*/
 	}
 	load():void{
 		background(0);
@@ -230,10 +232,18 @@ class Conclusion extends Scene{
 				picked.push([answer[0], 1, [answer[1]]]);
 			}
 		}
+		this.timer = 30;
 		this.redraw();
 	}
 	update():void {
 		this.redraw();
+	}
+	removePerson(id:string):void{
+		for (var i = 0; i < players.length; i++) {
+			if(players[i].id == id){
+				players.splice(i, 1);
+			}
+		}
 	}
 	redraw():void{
 		image(this.bg,0,0);
@@ -257,7 +267,7 @@ class Conclusion extends Scene{
 		}
 
 		//Draw player's name
-		textSize(64);
+		textSize(56);
 		text(pick[0], width/2 - textWidth(pick[0])/1.4, height/6.45);
 
 		//Emits dead person to server
@@ -270,9 +280,19 @@ class Conclusion extends Scene{
 		for (var i = 0; i < players.length; i++) {
 			if(players[i].name == pick[0]){
 				this.picked_role = roles[i];
-				text(roles[i],width-textWidth(roles[i])-width/35, height-height/3);
+				text(roles[i],width-textWidth(roles[i])-width/30, height-height/3);
 			}
 		}
+
+		//Timer
+		if(frameCount % 60 == 0 && this.timer > 0){
+			this.timer--;
+		}
+		if (this.timer == 0) {
+			this.removePerson(id);
+			this.unload();
+		}
+
 	}
 }
 class HandsOfTruth extends Scene{
@@ -282,7 +302,6 @@ class HandsOfTruth extends Scene{
 	private size: number;
 	private round: number;
 	private timer: number;
-	private label: string;
 	private drawAnswer: number;
 
 	unload():void{
@@ -291,12 +310,11 @@ class HandsOfTruth extends Scene{
 
 	load():void{
 		socket.emit('Hands', correction);
-		this.bg = loadImage("assets/bg-3.jpg");
+		this.bg = loadImage("assets/handOfTruth.jpeg");
 		this.size = 72;
 		this.drawAnswer = 0;
 		this.timer = 10;
 		this.round = 1;
-		this.label = "Hands of truth";
 
 		textSize(this.size);
 		while(this.task != undefined);
@@ -308,7 +326,7 @@ class HandsOfTruth extends Scene{
 	redraw():void{
 		image(this.bg,0,0);
 
-		fill(255);
+		fill(0);
 		if (this.drawAnswer == 1) {
 			text("Úloha znela:",(width-textWidth("Úloha znela:"))/2,height/2.5);
 			if (textWidth(this.task) < width) {
@@ -329,8 +347,7 @@ class HandsOfTruth extends Scene{
 				}
 			}
 		}else{
-			textSize(128);
-			text(this.label,(width-textWidth(this.label))/2, height/2);
+			textSize(64);
 			if (this.round == 1) {
 				text("Na svojom zariadení si prečítajte úlohu.",(width-textWidth("Na svojom zariadení si prečítajte úlohu."))/2, height/2+150);
 			}
@@ -346,7 +363,6 @@ class HandsOfTruth extends Scene{
 				if (this.round == 1) {
 					//Play GO! sound
 					image(this.bg,0,0);
-					this.label = "Teraz!"
 					this.timer = 5;
 					this.round = 2;
 				}
@@ -362,7 +378,6 @@ class YouGottaPoint extends Scene{
 	private size: number;
 	private round: number;
 	private timer: number;
-	private label: string;
 	private drawAnswer: number;
 
 	unload():void{
@@ -371,12 +386,11 @@ class YouGottaPoint extends Scene{
 
 	load():void{
 		socket.emit('Point', correction);
-		this.bg = loadImage('assets/bg-3.png');
+		this.bg = loadImage('assets/YouGottaPoint.jpeg');
 		this.size = 72;
 		this.drawAnswer = 0;
 		this.timer = 10;
 		this.round = 1;
-		this.label = "You gotta point!";
 
 		while(this.task != undefined);
 	}
@@ -387,7 +401,7 @@ class YouGottaPoint extends Scene{
 
 	redraw():void{
 		image(this.bg,0,0);
-		fill(255);
+		fill(0);
 		if (this.drawAnswer == 1) {
 			text("Úloha znela:",(width-textWidth("Úloha znela:"))/2,height/2.5);
 			if (textWidth(this.task) < width) {
@@ -408,8 +422,6 @@ class YouGottaPoint extends Scene{
 				}
 			}
 		}else{
-			textSize(128);
-			text(this.label,(width-textWidth(this.label))/2, height/2);
 			textSize(64);
 			if (this.round == 1) {
 				text("Na svojom zariadení si prečítajte úlohu.",(width-textWidth("Na svojom zariadení si prečítajte úlohu."))/2, height/2+150);
@@ -528,5 +540,8 @@ function draw(){
 function keyPressed(){
 	if(key == 'a'){
 		scenes.changeScene(new Vote());
+	}
+	if (key == 'b') {
+		scenes.changeScene(new YouGottaPoint());
 	}
 }
