@@ -351,9 +351,9 @@ var HandsOfTruth = /** @class */ (function (_super) {
             }
         }
         else {
-            textSize(64);
+            textSize(56);
             if (this.round == 1) {
-                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2, height / 2 + 150);
+                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2.1, height / 2 + 72);
             }
             if (frameCount % 60 == 0 && this.timer > 0) {
                 this.timer--;
@@ -421,9 +421,9 @@ var YouGottaPoint = /** @class */ (function (_super) {
             }
         }
         else {
-            textSize(64);
+            textSize(56);
             if (this.round == 1) {
-                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2, height / 2 + 150);
+                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2 + 150, height / 2 - 25);
             }
             if (frameCount % 60 == 0 && this.timer > 0) {
                 this.timer--;
