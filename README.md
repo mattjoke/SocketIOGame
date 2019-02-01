@@ -6,7 +6,6 @@ TODO:
 * Dice of luck
 * clean code
 * add sound
-* Design overhaul - started 15.1.2019 Ended 31.1.2019
 * Fix known bugs
 * Add animations
 * Add Endgame situation
@@ -24,3 +23,4 @@ Done:
 * Add Hand of truth
 * Add You've gotta point
 * Decrease chance of generating same room
+* Design overhaul - started 15.1.2019 Ended 31.1.2019
