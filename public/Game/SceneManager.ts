@@ -10,7 +10,7 @@ class Lobby extends Scene{
 
 	unload():void{
 		//Changing scene to next one
-		scenes.changeScene(new Role_assign());
+		scenes.changeScene(new LobbyMoveRolechoose());
 	}
 
 	load():void{
@@ -387,7 +387,7 @@ class YouGottaPoint extends Scene{
 	load():void{
 		socket.emit('Point', correction);
 		this.bg = loadImage('assets/YouGottaPoint.jpeg');
-		this.size = 72;
+		this.size = 56;
 		this.drawAnswer = 0;
 		this.timer = 10;
 		this.round = 1;
@@ -412,7 +412,7 @@ class YouGottaPoint extends Scene{
 					textSize(this.size);
 				}
 			}
-			text(this.task,(width-textWidth(this.task))/2,height/2);
+			text(this.task,(width-textWidth(this.task))/2,height/2-25);
 			if(frameCount % 60 == 0 && this.timer > 0){
 				this.timer--;
 			}
@@ -444,6 +444,146 @@ class YouGottaPoint extends Scene{
 				}
 			}
 		}
+	}
+}
+
+class LobbyMoveRolechoose extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Role_assign());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -268;
+		this.y = -47;
+		this.targetX = 973;
+		this.targetY = 397;
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class RolechooseMovePoint extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new HandsOfTruth());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = 973;
+		this.y = 397;
+		this.targetX = 487;
+		this.targetY = 1101;
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class RolechooseMoveHands extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new HandsOfTruth());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = 973;
+		this.y = 397;
+		this.targetX = 1823;
+		this.targetY = 1388;
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class RolechooseMoveDice extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new HandsOfTruth());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = 973;
+		this.y = 397;
+		this.targetX = 487;
+		this.targetY = 1101;
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
 	}
 }
 
@@ -542,6 +682,6 @@ function keyPressed(){
 		scenes.changeScene(new Vote());
 	}
 	if (key == 'b') {
-		scenes.changeScene(new YouGottaPoint());
+		scenes.changeScene(new DiceOfLuck());
 	}
 }

@@ -16,6 +16,19 @@ var Scene = /** @class */ (function () {
     }
     return Scene;
 }());
+function chooseRandomEvent() {
+    switch (random(0, 2)) {
+        case 0:
+            scenes.changeScene(new HandsOfTruth());
+            break;
+        case 1:
+            scenes.changeScene(new YouGottaPoint());
+            break;
+        case 2:
+            scenes.changeScene(new DiceOfLuck());
+            break;
+    }
+}
 var Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
     function Lobby() {
@@ -23,7 +36,7 @@ var Lobby = /** @class */ (function (_super) {
     }
     Lobby.prototype.unload = function () {
         //Changing scene to next one
-        scenes.changeScene(new Role_assign());
+        scenes.changeScene(new LobbyMoveRolechoose());
     };
     Lobby.prototype.load = function () {
         //loading imags to cache
@@ -386,7 +399,7 @@ var YouGottaPoint = /** @class */ (function (_super) {
     YouGottaPoint.prototype.load = function () {
         socket.emit('Point', correction);
         this.bg = loadImage('assets/YouGottaPoint.jpeg');
-        this.size = 72;
+        this.size = 56;
         this.drawAnswer = 0;
         this.timer = 10;
         this.round = 1;
@@ -410,7 +423,7 @@ var YouGottaPoint = /** @class */ (function (_super) {
                     textSize(this.size);
                 }
             }
-            text(this.task, (width - textWidth(this.task)) / 2, height / 2);
+            text(this.task, (width - textWidth(this.task)) / 2, height / 2 - 25);
             if (frameCount % 60 == 0 && this.timer > 0) {
                 this.timer--;
             }
@@ -445,6 +458,37 @@ var YouGottaPoint = /** @class */ (function (_super) {
         }
     };
     return YouGottaPoint;
+}(Scene));
+var LobbyMoveRolechoose = /** @class */ (function (_super) {
+    __extends(LobbyMoveRolechoose, _super);
+    function LobbyMoveRolechoose() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    LobbyMoveRolechoose.prototype.unload = function () {
+        console.log("Unload");
+        scenes.changeScene(new Role_assign());
+    };
+    LobbyMoveRolechoose.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -268;
+        this.y = -47;
+        this.targetX = 973;
+        this.targetY = 397;
+    };
+    LobbyMoveRolechoose.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    LobbyMoveRolechoose.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return LobbyMoveRolechoose;
 }(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
@@ -532,6 +576,6 @@ function keyPressed() {
         scenes.changeScene(new Vote());
     }
     if (key == 'b') {
-        scenes.changeScene(new YouGottaPoint());
+        scenes.changeScene(new DiceOfLuck());
     }
 }
