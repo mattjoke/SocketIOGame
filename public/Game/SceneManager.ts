@@ -68,7 +68,11 @@ class Role_assign extends Scene{
 
 	unload():void{
 		//Starts Game Loop
-		scenes.changeScene(new Vote());
+		switch(round(random(0,2))){
+			case 0: scenes.changeScene(new RolechooseMovePoint()); break;
+			case 1: scenes.changeScene(new RolechooseMoveHands()); break;
+			case 2: scenes.changeScene(new RolechooseMoveDice()); break;
+		}
 	}
 	update():void {
 		image(this.bg,0,0);
@@ -447,6 +451,27 @@ class YouGottaPoint extends Scene{
 	}
 }
 
+class DiceOfLuck extends Scene{
+
+	private bg: Image;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/DiceOfLuck.jpeg');
+	}
+
+	update():void {
+		this.redraw();
+	}
+
+	redraw():void{
+		image(this.bg,0,0);
+	}
+}
+
 class LobbyMoveRolechoose extends Scene{
 
 	private bg: Image;
@@ -460,11 +485,14 @@ class LobbyMoveRolechoose extends Scene{
 	}
 
 	load():void{
+		background(0);
 		this.bg = loadImage('assets/Full.jpeg');
 		this.x = -268;
 		this.y = -47;
 		this.targetX = 973;
 		this.targetY = 397;
+
+		while(this.bg == undefined);
 	}
 
 	update():void {
@@ -491,15 +519,18 @@ class RolechooseMovePoint extends Scene{
 	private targetY: number;
 
 	unload():void{
-		scenes.changeScene(new HandsOfTruth());
+		scenes.changeScene(new YouGottaPoint());
 	}
 
 	load():void{
+		background(0);
 		this.bg = loadImage('assets/Full.jpeg');
-		this.x = 973;
-		this.y = 397;
+		this.x = -973;
+		this.y = -397;
 		this.targetX = 487;
 		this.targetY = 1101;
+
+		while(this.bg == undefined);
 	}
 
 	update():void {
@@ -531,10 +562,12 @@ class RolechooseMoveHands extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/Full.jpeg');
-		this.x = 973;
-		this.y = 397;
+		this.x = -973;
+		this.y = -397;
 		this.targetX = 1823;
 		this.targetY = 1388;
+
+		while(this.bg == undefined);
 	}
 
 	update():void {
@@ -561,15 +594,17 @@ class RolechooseMoveDice extends Scene{
 	private targetY: number;
 
 	unload():void{
-		scenes.changeScene(new HandsOfTruth());
+		scenes.changeScene(new DiceOfLuck());
 	}
 
 	load():void{
 		this.bg = loadImage('assets/Full.jpeg');
-		this.x = 973;
-		this.y = 397;
+		this.x = -973;
+		this.y = -397;
 		this.targetX = 487;
 		this.targetY = 1101;
+
+		while(this.bg == undefined);
 	}
 
 	update():void {

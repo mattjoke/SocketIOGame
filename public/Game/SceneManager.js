@@ -16,19 +16,6 @@ var Scene = /** @class */ (function () {
     }
     return Scene;
 }());
-function chooseRandomEvent() {
-    switch (random(0, 2)) {
-        case 0:
-            scenes.changeScene(new HandsOfTruth());
-            break;
-        case 1:
-            scenes.changeScene(new YouGottaPoint());
-            break;
-        case 2:
-            scenes.changeScene(new DiceOfLuck());
-            break;
-    }
-}
 var Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
     function Lobby() {
@@ -89,7 +76,17 @@ var Role_assign = /** @class */ (function (_super) {
     }
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
-        scenes.changeScene(new Vote());
+        switch (round(random(0, 2))) {
+            case 0:
+                scenes.changeScene(new RolechooseMovePoint());
+                break;
+            case 1:
+                scenes.changeScene(new RolechooseMoveHands());
+                break;
+            case 2:
+                scenes.changeScene(new RolechooseMoveDice());
+                break;
+        }
     };
     Role_assign.prototype.update = function () {
         image(this.bg, 0, 0);
@@ -459,21 +456,42 @@ var YouGottaPoint = /** @class */ (function (_super) {
     };
     return YouGottaPoint;
 }(Scene));
+var DiceOfLuck = /** @class */ (function (_super) {
+    __extends(DiceOfLuck, _super);
+    function DiceOfLuck() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DiceOfLuck.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DiceOfLuck.prototype.load = function () {
+        this.bg = loadImage('assets/DiceOfLuck.jpeg');
+    };
+    DiceOfLuck.prototype.update = function () {
+        this.redraw();
+    };
+    DiceOfLuck.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+    };
+    return DiceOfLuck;
+}(Scene));
 var LobbyMoveRolechoose = /** @class */ (function (_super) {
     __extends(LobbyMoveRolechoose, _super);
     function LobbyMoveRolechoose() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     LobbyMoveRolechoose.prototype.unload = function () {
-        console.log("Unload");
         scenes.changeScene(new Role_assign());
     };
     LobbyMoveRolechoose.prototype.load = function () {
+        background(0);
         this.bg = loadImage('assets/Full.jpeg');
         this.x = -268;
         this.y = -47;
         this.targetX = 973;
         this.targetY = 397;
+        while (this.bg == undefined)
+            ;
     };
     LobbyMoveRolechoose.prototype.update = function () {
         if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
@@ -489,6 +507,103 @@ var LobbyMoveRolechoose = /** @class */ (function (_super) {
         this.y = lerp(this.y, -this.targetY, 0.03);
     };
     return LobbyMoveRolechoose;
+}(Scene));
+var RolechooseMovePoint = /** @class */ (function (_super) {
+    __extends(RolechooseMovePoint, _super);
+    function RolechooseMovePoint() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RolechooseMovePoint.prototype.unload = function () {
+        scenes.changeScene(new YouGottaPoint());
+    };
+    RolechooseMovePoint.prototype.load = function () {
+        background(0);
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -973;
+        this.y = -397;
+        this.targetX = 487;
+        this.targetY = 1101;
+        while (this.bg == undefined)
+            ;
+    };
+    RolechooseMovePoint.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    RolechooseMovePoint.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return RolechooseMovePoint;
+}(Scene));
+var RolechooseMoveHands = /** @class */ (function (_super) {
+    __extends(RolechooseMoveHands, _super);
+    function RolechooseMoveHands() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RolechooseMoveHands.prototype.unload = function () {
+        scenes.changeScene(new HandsOfTruth());
+    };
+    RolechooseMoveHands.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -973;
+        this.y = -397;
+        this.targetX = 1823;
+        this.targetY = 1388;
+        while (this.bg == undefined)
+            ;
+    };
+    RolechooseMoveHands.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    RolechooseMoveHands.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return RolechooseMoveHands;
+}(Scene));
+var RolechooseMoveDice = /** @class */ (function (_super) {
+    __extends(RolechooseMoveDice, _super);
+    function RolechooseMoveDice() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RolechooseMoveDice.prototype.unload = function () {
+        scenes.changeScene(new DiceOfLuck());
+    };
+    RolechooseMoveDice.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -973;
+        this.y = -397;
+        this.targetX = 487;
+        this.targetY = 1101;
+        while (this.bg == undefined)
+            ;
+    };
+    RolechooseMoveDice.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    RolechooseMoveDice.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return RolechooseMoveDice;
 }(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
