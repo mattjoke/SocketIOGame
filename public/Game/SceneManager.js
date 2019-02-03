@@ -76,7 +76,9 @@ var Role_assign = /** @class */ (function (_super) {
     }
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
-        switch (round(random(0, 2))) {
+        var pick = round(random(0, 2));
+        console.log(pick);
+        switch (pick) {
             case 0:
                 scenes.changeScene(new RolechooseMovePoint());
                 break;
@@ -150,7 +152,7 @@ var Vote = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Vote.prototype.unload = function () {
-        scenes.changeScene(new Conclusion());
+        scenes.changeScene(new VoteMoveDead());
     };
     Vote.prototype.load = function () {
         this.timer = 90;
@@ -226,7 +228,18 @@ var Conclusion = /** @class */ (function (_super) {
                 roles_count[2]--;
                 break;
         }
-        scenes.changeScene(new HandsOfTruth());
+        var pick = round(random(0, 2));
+        switch (pick) {
+            case 0:
+                scenes.changeScene(new HandsOfTruth());
+                break;
+            case 1:
+                scenes.changeScene(new YouGottaPoint());
+                break;
+            case 2:
+                scenes.changeScene(new DiceOfLuck());
+                break;
+        }
         /*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
             //EPIC FINALE -> TRUE ENDGAME
         }else if (roles_count[2] < 1) {
@@ -320,7 +333,7 @@ var HandsOfTruth = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     HandsOfTruth.prototype.unload = function () {
-        scenes.changeScene(new Vote());
+        scenes.changeScene(new HandsMoveVote());
     };
     HandsOfTruth.prototype.load = function () {
         socket.emit('Hands', correction);
@@ -391,7 +404,7 @@ var YouGottaPoint = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     YouGottaPoint.prototype.unload = function () {
-        scenes.changeScene(new Vote());
+        scenes.changeScene(new PointMoveVote());
     };
     YouGottaPoint.prototype.load = function () {
         socket.emit('Point', correction);
@@ -462,13 +475,16 @@ var DiceOfLuck = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DiceOfLuck.prototype.unload = function () {
-        scenes.changeScene(new Vote());
+        scenes.changeScene(new DiceMoveVote());
     };
     DiceOfLuck.prototype.load = function () {
         this.bg = loadImage('assets/DiceOfLuck.jpeg');
     };
     DiceOfLuck.prototype.update = function () {
         this.redraw();
+        if (frameCount % 60 == 0) {
+            this.unload();
+        }
     };
     DiceOfLuck.prototype.redraw = function () {
         image(this.bg, 0, 0);
@@ -553,8 +569,8 @@ var RolechooseMoveHands = /** @class */ (function (_super) {
         this.bg = loadImage('assets/Full.jpeg');
         this.x = -973;
         this.y = -397;
-        this.targetX = 1823;
-        this.targetY = 1388;
+        this.targetX = 1427;
+        this.targetY = 1084;
         while (this.bg == undefined)
             ;
     };
@@ -585,8 +601,8 @@ var RolechooseMoveDice = /** @class */ (function (_super) {
         this.bg = loadImage('assets/Full.jpeg');
         this.x = -973;
         this.y = -397;
-        this.targetX = 487;
-        this.targetY = 1101;
+        this.targetX = 2363;
+        this.targetY = 1177;
         while (this.bg == undefined)
             ;
     };
@@ -604,6 +620,134 @@ var RolechooseMoveDice = /** @class */ (function (_super) {
         this.y = lerp(this.y, -this.targetY, 0.03);
     };
     return RolechooseMoveDice;
+}(Scene));
+var DiceMoveVote = /** @class */ (function (_super) {
+    __extends(DiceMoveVote, _super);
+    function DiceMoveVote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DiceMoveVote.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DiceMoveVote.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2363;
+        this.y = -1177;
+        this.targetX = -420;
+        this.targetY = 1131;
+        while (this.bg == undefined)
+            ;
+    };
+    DiceMoveVote.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DiceMoveVote.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DiceMoveVote;
+}(Scene));
+var PointMoveVote = /** @class */ (function (_super) {
+    __extends(PointMoveVote, _super);
+    function PointMoveVote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    PointMoveVote.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    PointMoveVote.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -487;
+        this.y = -1101;
+        this.targetX = -420;
+        this.targetY = 1131;
+        while (this.bg == undefined)
+            ;
+    };
+    PointMoveVote.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    PointMoveVote.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return PointMoveVote;
+}(Scene));
+var HandsMoveVote = /** @class */ (function (_super) {
+    __extends(HandsMoveVote, _super);
+    function HandsMoveVote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    HandsMoveVote.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    HandsMoveVote.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -1427;
+        this.y = -1084;
+        this.targetX = -420;
+        this.targetY = 1131;
+        while (this.bg == undefined)
+            ;
+    };
+    HandsMoveVote.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    HandsMoveVote.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return HandsMoveVote;
+}(Scene));
+var VoteMoveDead = /** @class */ (function (_super) {
+    __extends(VoteMoveDead, _super);
+    function VoteMoveDead() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    VoteMoveDead.prototype.unload = function () {
+        scenes.changeScene(new Conclusion());
+    };
+    VoteMoveDead.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = 420;
+        this.y = -1131;
+        this.targetX = 2094;
+        this.targetY = 6;
+        while (this.bg == undefined)
+            ;
+    };
+    VoteMoveDead.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    VoteMoveDead.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return VoteMoveDead;
 }(Scene));
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
@@ -685,12 +829,4 @@ function setup() {
 }
 function draw() {
     scenes.update();
-}
-function keyPressed() {
-    if (key == 'a') {
-        scenes.changeScene(new Vote());
-    }
-    if (key == 'b') {
-        scenes.changeScene(new DiceOfLuck());
-    }
 }

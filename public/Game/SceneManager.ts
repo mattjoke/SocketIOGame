@@ -68,7 +68,9 @@ class Role_assign extends Scene{
 
 	unload():void{
 		//Starts Game Loop
-		switch(round(random(0,2))){
+		let pick = round(random(0,2));
+		console.log(pick);
+		switch(pick){
 			case 0: scenes.changeScene(new RolechooseMovePoint()); break;
 			case 1: scenes.changeScene(new RolechooseMoveHands()); break;
 			case 2: scenes.changeScene(new RolechooseMoveDice()); break;
@@ -133,7 +135,7 @@ class Vote extends Scene{
 	private timer: number;
 
 	unload():void{
-		scenes.changeScene(new Conclusion());
+		scenes.changeScene(new VoteMoveDead());
 	}
 
 	load():void{
@@ -206,7 +208,12 @@ class Conclusion extends Scene{
 			case "NEVINNÝ": roles_count[1]--; break;
 			case "ZLODEJ": roles_count[2]--; break;
 		}
-		scenes.changeScene(new HandsOfTruth());
+		let pick = round(random(0,2));
+		switch(pick){
+			case 0: scenes.changeScene(new HandsOfTruth()); break;
+			case 1: scenes.changeScene(new YouGottaPoint()); break;
+			case 2: scenes.changeScene(new DiceOfLuck()); break;
+		}
 		/*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
 			//EPIC FINALE -> TRUE ENDGAME
 		}else if (roles_count[2] < 1) {
@@ -309,7 +316,7 @@ class HandsOfTruth extends Scene{
 	private drawAnswer: number;
 
 	unload():void{
-		scenes.changeScene(new Vote());
+		scenes.changeScene(new HandsMoveVote());
 	}
 
 	load():void{
@@ -385,7 +392,7 @@ class YouGottaPoint extends Scene{
 	private drawAnswer: number;
 
 	unload():void{
-		scenes.changeScene(new Vote());
+		scenes.changeScene(new PointMoveVote());
 	}
 
 	load():void{
@@ -456,7 +463,7 @@ class DiceOfLuck extends Scene{
 	private bg: Image;
 
 	unload():void{
-		scenes.changeScene(new Vote());
+		scenes.changeScene(new DiceMoveVote());
 	}
 
 	load():void{
@@ -465,6 +472,9 @@ class DiceOfLuck extends Scene{
 
 	update():void {
 		this.redraw();
+		if(frameCount % 60 == 0){
+			this.unload();
+		}
 	}
 
 	redraw():void{
@@ -564,8 +574,8 @@ class RolechooseMoveHands extends Scene{
 		this.bg = loadImage('assets/Full.jpeg');
 		this.x = -973;
 		this.y = -397;
-		this.targetX = 1823;
-		this.targetY = 1388;
+		this.targetX = 1427;
+		this.targetY = 1084;
 
 		while(this.bg == undefined);
 	}
@@ -601,8 +611,156 @@ class RolechooseMoveDice extends Scene{
 		this.bg = loadImage('assets/Full.jpeg');
 		this.x = -973;
 		this.y = -397;
-		this.targetX = 487;
-		this.targetY = 1101;
+		this.targetX = 2363;
+		this.targetY = 1177;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class DiceMoveVote extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2363;
+		this.y = -1177;
+		this.targetX = -420;
+		this.targetY = 1131;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class PointMoveVote extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -487;
+		this.y = -1101;
+		this.targetX = -420;
+		this.targetY = 1131;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class HandsMoveVote extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -1427;
+		this.y = -1084;
+		this.targetX = -420;
+		this.targetY = 1131;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class VoteMoveDead extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Conclusion());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = 420;
+		this.y = -1131;
+		this.targetX = 2094;
+		this.targetY = 6;
 
 		while(this.bg == undefined);
 	}
@@ -710,13 +868,4 @@ function setup(){
 
 function draw(){
 	scenes.update();
-}
-
-function keyPressed(){
-	if(key == 'a'){
-		scenes.changeScene(new Vote());
-	}
-	if (key == 'b') {
-		scenes.changeScene(new DiceOfLuck());
-	}
 }
