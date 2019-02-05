@@ -1,8 +1,8 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
+let __extends = (this && this.__extends) || (function () {
+    let extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (let p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -11,12 +11,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Scene = /** @class */ (function () {
+let Scene = /** @class */ (function () {
     function Scene() {
     }
     return Scene;
 }());
-var Lobby = /** @class */ (function (_super) {
+let Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
     function Lobby() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -52,9 +52,9 @@ var Lobby = /** @class */ (function (_super) {
         text(url, width - textWidth(url), height - height / 2.5);
         //Draw connected players
         textSize(24);
-        var step = height - height / 3;
-        for (var i = 0; i < players.length; i++) {
-            var player = players[i].name;
+        let step = height - height / 3;
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i].name;
             if (player != "Host") {
                 step += 32;
                 text(player, width / 20, step, 60, width);
@@ -69,14 +69,14 @@ var Lobby = /** @class */ (function (_super) {
     };
     return Lobby;
 }(Scene));
-var Role_assign = /** @class */ (function (_super) {
+let Role_assign = /** @class */ (function (_super) {
     __extends(Role_assign, _super);
     function Role_assign() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
-        var pick = round(random(0, 2));
+        let pick = round(random(0, 2));
         console.log(pick);
         switch (pick) {
             case 0:
@@ -109,13 +109,13 @@ var Role_assign = /** @class */ (function (_super) {
     Role_assign.prototype.load = function () {
         this.bg = loadImage('assets/RoleChoose.jpeg');
         this.timer = 30;
-        var count = floor((players.length - 1) / 2);
+        let count = floor((players.length - 1) / 2);
         if ((players.length - 1) <= 4) {
             count = 1;
         }
         roles[0] = "HOST";
         //Assign roles 1:3 ratio
-        var randomNum = floor(random(1, players.length));
+        let randomNum = floor(random(1, players.length));
         roles[randomNum] = "DETEKTÍV";
         while (count > 0) {
             randomNum = floor(random(1, players.length));
@@ -124,12 +124,12 @@ var Role_assign = /** @class */ (function (_super) {
                 count--;
             }
         }
-        for (var i = 0; i < players.length; i++) {
+        for (let i = 0; i < players.length; i++) {
             if (!roles[i]) {
                 roles[i] = "NEVINNÝ";
             }
         }
-        for (var i = 0; i < roles.length; i++) {
+        for (let i = 0; i < roles.length; i++) {
             switch (roles[i]) {
                 case "DETEKTÍV":
                     roles_count[0]++;
@@ -146,7 +146,7 @@ var Role_assign = /** @class */ (function (_super) {
     };
     return Role_assign;
 }(Scene));
-var Vote = /** @class */ (function (_super) {
+let Vote = /** @class */ (function (_super) {
     __extends(Vote, _super);
     function Vote() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -184,11 +184,11 @@ var Vote = /** @class */ (function (_super) {
         step = height / 6 + 160;
         text("Hráči, ktorí nehlasovali:", width / 85, height / 3);
         textSize(32);
-        for (var i = 0; i < players.length; i++) {
-            var player = players[i].id;
-            var isThere = false;
-            for (var j = 0; j < answers.length; j++) {
-                var answer = answers[j];
+        for (let i = 0; i < players.length; i++) {
+            let player = players[i].id;
+            let isThere = false;
+            for (let j = 0; j < answers.length; j++) {
+                let answer = answers[j];
                 if (player == answer[1]) {
                     isThere = true;
                 }
@@ -208,7 +208,7 @@ var Vote = /** @class */ (function (_super) {
     };
     return Vote;
 }(Scene));
-var Conclusion = /** @class */ (function (_super) {
+let Conclusion = /** @class */ (function (_super) {
     __extends(Conclusion, _super);
     function Conclusion() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -228,16 +228,17 @@ var Conclusion = /** @class */ (function (_super) {
                 roles_count[2]--;
                 break;
         }
-        var pick = round(random(0, 2));
+        socket.emit("NewRound", correction);
+        let pick = round(random(0, 2));
         switch (pick) {
             case 0:
-                scenes.changeScene(new HandsOfTruth());
+                scenes.changeScene(new DeadMoveHands());
                 break;
             case 1:
-                scenes.changeScene(new YouGottaPoint());
+                scenes.changeScene(new DeadMovePoint());
                 break;
             case 2:
-                scenes.changeScene(new DiceOfLuck());
+                scenes.changeScene(new DeadMoveDice());
                 break;
         }
         /*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
@@ -254,11 +255,11 @@ var Conclusion = /** @class */ (function (_super) {
             this.unload();
         }
         this.bg = loadImage("assets/Dead.jpeg");
-        for (var i = 0; i < answers.length; i++) {
-            var answer = answers[i];
-            var isThere = false;
-            for (var j = 0; j < picked.length; j++) {
-                var pick = picked[j];
+        for (let i = 0; i < answers.length; i++) {
+            let answer = answers[i];
+            let isThere = false;
+            for (let j = 0; j < picked.length; j++) {
+                let pick = picked[j];
                 if (pick[0] == answer[0]) {
                     pick[1]++;
                     pick[2].push(answer[1]);
@@ -276,7 +277,7 @@ var Conclusion = /** @class */ (function (_super) {
         this.redraw();
     };
     Conclusion.prototype.removePerson = function (id) {
-        for (var i = 0; i < players.length; i++) {
+        for (let i = 0; i < players.length; i++) {
             if (players[i].id == id) {
                 players.splice(i, 1);
             }
@@ -288,15 +289,15 @@ var Conclusion = /** @class */ (function (_super) {
         fill(0);
         textSize(72);
         //Determine who is out
-        var pick = picked[0];
-        for (var i = 0; i < picked.length; i++) {
-            var tmp = picked[i];
+        let pick = picked[0];
+        for (let i = 0; i < picked.length; i++) {
+            let tmp = picked[i];
             if (pick[1] < tmp[1]) {
                 pick[1] = tmp;
             }
         }
-        var id = "";
-        for (var i = 0; i < players.length; i++) {
+        let id = "";
+        for (let i = 0; i < players.length; i++) {
             if (players[i].name == pick[0]) {
                 id = players[i].id;
             }
@@ -310,7 +311,7 @@ var Conclusion = /** @class */ (function (_super) {
             id: id
         });
         //Draw picked's role
-        for (var i = 0; i < players.length; i++) {
+        for (let i = 0; i < players.length; i++) {
             if (players[i].name == pick[0]) {
                 this.picked_role = roles[i];
                 text(roles[i], width - textWidth(roles[i]) - width / 30, height - height / 3);
@@ -327,7 +328,7 @@ var Conclusion = /** @class */ (function (_super) {
     };
     return Conclusion;
 }(Scene));
-var HandsOfTruth = /** @class */ (function (_super) {
+let HandsOfTruth = /** @class */ (function (_super) {
     __extends(HandsOfTruth, _super);
     function HandsOfTruth() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -336,6 +337,7 @@ var HandsOfTruth = /** @class */ (function (_super) {
         scenes.changeScene(new HandsMoveVote());
     };
     HandsOfTruth.prototype.load = function () {
+        this.task = undefined;
         socket.emit('Hands', correction);
         this.bg = loadImage("assets/handOfTruth.jpeg");
         this.size = 72;
@@ -398,7 +400,7 @@ var HandsOfTruth = /** @class */ (function (_super) {
     };
     return HandsOfTruth;
 }(Scene));
-var YouGottaPoint = /** @class */ (function (_super) {
+let YouGottaPoint = /** @class */ (function (_super) {
     __extends(YouGottaPoint, _super);
     function YouGottaPoint() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -407,6 +409,7 @@ var YouGottaPoint = /** @class */ (function (_super) {
         scenes.changeScene(new PointMoveVote());
     };
     YouGottaPoint.prototype.load = function () {
+        this.task = undefined;
         socket.emit('Point', correction);
         this.bg = loadImage('assets/YouGottaPoint.jpeg');
         this.size = 56;
@@ -469,7 +472,7 @@ var YouGottaPoint = /** @class */ (function (_super) {
     };
     return YouGottaPoint;
 }(Scene));
-var DiceOfLuck = /** @class */ (function (_super) {
+let DiceOfLuck = /** @class */ (function (_super) {
     __extends(DiceOfLuck, _super);
     function DiceOfLuck() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -482,7 +485,7 @@ var DiceOfLuck = /** @class */ (function (_super) {
     };
     DiceOfLuck.prototype.update = function () {
         this.redraw();
-        if (frameCount % 60 == 0) {
+        if (frameCount % 120 == 0) {
             this.unload();
         }
     };
@@ -491,7 +494,7 @@ var DiceOfLuck = /** @class */ (function (_super) {
     };
     return DiceOfLuck;
 }(Scene));
-var LobbyMoveRolechoose = /** @class */ (function (_super) {
+let LobbyMoveRolechoose = /** @class */ (function (_super) {
     __extends(LobbyMoveRolechoose, _super);
     function LobbyMoveRolechoose() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -524,7 +527,7 @@ var LobbyMoveRolechoose = /** @class */ (function (_super) {
     };
     return LobbyMoveRolechoose;
 }(Scene));
-var RolechooseMovePoint = /** @class */ (function (_super) {
+let RolechooseMovePoint = /** @class */ (function (_super) {
     __extends(RolechooseMovePoint, _super);
     function RolechooseMovePoint() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -557,7 +560,7 @@ var RolechooseMovePoint = /** @class */ (function (_super) {
     };
     return RolechooseMovePoint;
 }(Scene));
-var RolechooseMoveHands = /** @class */ (function (_super) {
+let RolechooseMoveHands = /** @class */ (function (_super) {
     __extends(RolechooseMoveHands, _super);
     function RolechooseMoveHands() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -589,7 +592,7 @@ var RolechooseMoveHands = /** @class */ (function (_super) {
     };
     return RolechooseMoveHands;
 }(Scene));
-var RolechooseMoveDice = /** @class */ (function (_super) {
+let RolechooseMoveDice = /** @class */ (function (_super) {
     __extends(RolechooseMoveDice, _super);
     function RolechooseMoveDice() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -621,7 +624,7 @@ var RolechooseMoveDice = /** @class */ (function (_super) {
     };
     return RolechooseMoveDice;
 }(Scene));
-var DiceMoveVote = /** @class */ (function (_super) {
+let DiceMoveVote = /** @class */ (function (_super) {
     __extends(DiceMoveVote, _super);
     function DiceMoveVote() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -653,7 +656,7 @@ var DiceMoveVote = /** @class */ (function (_super) {
     };
     return DiceMoveVote;
 }(Scene));
-var PointMoveVote = /** @class */ (function (_super) {
+let PointMoveVote = /** @class */ (function (_super) {
     __extends(PointMoveVote, _super);
     function PointMoveVote() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -685,7 +688,7 @@ var PointMoveVote = /** @class */ (function (_super) {
     };
     return PointMoveVote;
 }(Scene));
-var HandsMoveVote = /** @class */ (function (_super) {
+let HandsMoveVote = /** @class */ (function (_super) {
     __extends(HandsMoveVote, _super);
     function HandsMoveVote() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -717,7 +720,7 @@ var HandsMoveVote = /** @class */ (function (_super) {
     };
     return HandsMoveVote;
 }(Scene));
-var VoteMoveDead = /** @class */ (function (_super) {
+let VoteMoveDead = /** @class */ (function (_super) {
     __extends(VoteMoveDead, _super);
     function VoteMoveDead() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -749,7 +752,103 @@ var VoteMoveDead = /** @class */ (function (_super) {
     };
     return VoteMoveDead;
 }(Scene));
-var SceneManager = /** @class */ (function () {
+let DeadMoveHands = /** @class */ (function (_super) {
+    __extends(DeadMoveHands, _super);
+    function DeadMoveHands() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveHands.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DeadMoveHands.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 1427;
+        this.targetY = 1084;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveHands.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveHands.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveHands;
+}(Scene));
+let DeadMovePoint = /** @class */ (function (_super) {
+    __extends(DeadMovePoint, _super);
+    function DeadMovePoint() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMovePoint.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DeadMovePoint.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 487;
+        this.targetY = 1101;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMovePoint.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMovePoint.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMovePoint;
+}(Scene));
+let DeadMoveDice = /** @class */ (function (_super) {
+    __extends(DeadMoveDice, _super);
+    function DeadMoveDice() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveDice.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DeadMoveDice.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 2363;
+        this.targetY = 1177;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveDice.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveDice.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveDice;
+}(Scene));
+let SceneManager = /** @class */ (function () {
     function SceneManager() {
     }
     SceneManager.getInstance = function () {
@@ -771,20 +870,20 @@ var SceneManager = /** @class */ (function () {
     return SceneManager;
 }());
 //Socket.IO
-var socket = io();
-//Player variables
-var players = [];
-var roles = [];
-var roles_count = [0, 0, 0]; //No. Detectives, Innocents and Murderers
-var answers = [];
-var picked = [];
-var roomCode = "";
-var correction;
-var url = "";
-//SceneManager, canvas variables
-var width;
-var height;
-var scenes;
+let socket = io();
+//Player letiables
+let players = [];
+let roles = [];
+let roles_count = [0, 0, 0]; //No. Detectives, Innocents and Murderers
+let answers = [];
+let picked = [];
+let roomCode = "";
+let correction;
+let url = "";
+//SceneManager, canvas letiables
+let width;
+let height;
+let scenes;
 function setup() {
     //Creating canvas
     width = window.innerWidth;

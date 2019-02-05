@@ -188,6 +188,10 @@ io.on('connection',function(socket){
 	socket.on('dead', function(data){
 		socket.broadcast.to(data.room).emit('DeadPlayer', data.id);
 	});
+	//Handle NewRound
+	socket.on('NewRound', function(data){
+		socket.broadcast.to(data).emit('NewRound');
+	})
 
 });
 

@@ -208,11 +208,12 @@ class Conclusion extends Scene{
 			case "NEVINNÝ": roles_count[1]--; break;
 			case "ZLODEJ": roles_count[2]--; break;
 		}
+		socket.emit("NewRound", correction);
 		let pick = round(random(0,2));
 		switch(pick){
-			case 0: scenes.changeScene(new HandsOfTruth()); break;
-			case 1: scenes.changeScene(new YouGottaPoint()); break;
-			case 2: scenes.changeScene(new DiceOfLuck()); break;
+			case 0: scenes.changeScene(new DeadMoveHands()); break;
+			case 1: scenes.changeScene(new DeadMovePoint()); break;
+			case 2: scenes.changeScene(new DeadMoveDice()); break;
 		}
 		/*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
 			//EPIC FINALE -> TRUE ENDGAME
@@ -320,6 +321,7 @@ class HandsOfTruth extends Scene{
 	}
 
 	load():void{
+		this.task = undefined;
 		socket.emit('Hands', correction);
 		this.bg = loadImage("assets/handOfTruth.jpeg");
 		this.size = 72;
@@ -396,6 +398,7 @@ class YouGottaPoint extends Scene{
 	}
 
 	load():void{
+		this.task = undefined;
 		socket.emit('Point', correction);
 		this.bg = loadImage('assets/YouGottaPoint.jpeg');
 		this.size = 56;
@@ -472,7 +475,7 @@ class DiceOfLuck extends Scene{
 
 	update():void {
 		this.redraw();
-		if(frameCount % 60 == 0){
+		if(frameCount % 120 == 0){
 			this.unload();
 		}
 	}
@@ -780,6 +783,116 @@ class VoteMoveDead extends Scene{
 	}
 }
 
+class DeadMoveHands extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2094;
+		this.y = -6;
+		this.targetX = 1427;
+		this.targetY = 1084;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class DeadMovePoint extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2094;
+		this.y = -6;
+		this.targetX = 487;
+		this.targetY = 1101;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+
+class DeadMoveDice extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new Vote());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2094;
+		this.y = -6;
+		this.targetX = 2363;
+		this.targetY = 1177;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
 
 class SceneManager{
 	currScene: Scene;
