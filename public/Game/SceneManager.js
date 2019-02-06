@@ -1,8 +1,8 @@
-let __extends = (this && this.__extends) || (function () {
-    let extendStatics = function (d, b) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (let p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
@@ -11,12 +11,368 @@ let __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-let Scene = /** @class */ (function () {
+var Scene = /** @class */ (function () {
     function Scene() {
     }
     return Scene;
 }());
-let Lobby = /** @class */ (function (_super) {
+var LobbyMoveRolechoose = /** @class */ (function (_super) {
+    __extends(LobbyMoveRolechoose, _super);
+    function LobbyMoveRolechoose() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    LobbyMoveRolechoose.prototype.unload = function () {
+        scenes.changeScene(new Role_assign());
+    };
+    LobbyMoveRolechoose.prototype.load = function () {
+        background(0);
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -268;
+        this.y = -47;
+        this.targetX = 973;
+        this.targetY = 397;
+        while (this.bg == undefined)
+            ;
+    };
+    LobbyMoveRolechoose.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    LobbyMoveRolechoose.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return LobbyMoveRolechoose;
+}(Scene));
+var RolechooseMovePoint = /** @class */ (function (_super) {
+    __extends(RolechooseMovePoint, _super);
+    function RolechooseMovePoint() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RolechooseMovePoint.prototype.unload = function () {
+        scenes.changeScene(new YouGottaPoint());
+    };
+    RolechooseMovePoint.prototype.load = function () {
+        background(0);
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -973;
+        this.y = -397;
+        this.targetX = 487;
+        this.targetY = 1101;
+        while (this.bg == undefined)
+            ;
+    };
+    RolechooseMovePoint.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    RolechooseMovePoint.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return RolechooseMovePoint;
+}(Scene));
+var RolechooseMoveHands = /** @class */ (function (_super) {
+    __extends(RolechooseMoveHands, _super);
+    function RolechooseMoveHands() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RolechooseMoveHands.prototype.unload = function () {
+        scenes.changeScene(new HandsOfTruth());
+    };
+    RolechooseMoveHands.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -973;
+        this.y = -397;
+        this.targetX = 1427;
+        this.targetY = 1084;
+        while (this.bg == undefined)
+            ;
+    };
+    RolechooseMoveHands.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    RolechooseMoveHands.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return RolechooseMoveHands;
+}(Scene));
+var RolechooseMoveDice = /** @class */ (function (_super) {
+    __extends(RolechooseMoveDice, _super);
+    function RolechooseMoveDice() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RolechooseMoveDice.prototype.unload = function () {
+        scenes.changeScene(new DiceOfLuck());
+    };
+    RolechooseMoveDice.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -973;
+        this.y = -397;
+        this.targetX = 2363;
+        this.targetY = 1177;
+        while (this.bg == undefined)
+            ;
+    };
+    RolechooseMoveDice.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    RolechooseMoveDice.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return RolechooseMoveDice;
+}(Scene));
+var DiceMoveVote = /** @class */ (function (_super) {
+    __extends(DiceMoveVote, _super);
+    function DiceMoveVote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DiceMoveVote.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DiceMoveVote.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2363;
+        this.y = -1177;
+        this.targetX = -420;
+        this.targetY = 1131;
+        while (this.bg == undefined)
+            ;
+    };
+    DiceMoveVote.prototype.update = function () {
+        var xhelp = abs(this.targetX + this.x);
+        var yhelp = abs(this.targetY + this.y);
+        if (xhelp < 1 && yhelp < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DiceMoveVote.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DiceMoveVote;
+}(Scene));
+var PointMoveVote = /** @class */ (function (_super) {
+    __extends(PointMoveVote, _super);
+    function PointMoveVote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    PointMoveVote.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    PointMoveVote.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -487;
+        this.y = -1101;
+        this.targetX = -420;
+        this.targetY = 1131;
+        while (this.bg == undefined)
+            ;
+    };
+    PointMoveVote.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    PointMoveVote.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return PointMoveVote;
+}(Scene));
+var HandsMoveVote = /** @class */ (function (_super) {
+    __extends(HandsMoveVote, _super);
+    function HandsMoveVote() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    HandsMoveVote.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    HandsMoveVote.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -1427;
+        this.y = -1084;
+        this.targetX = -420;
+        this.targetY = 1131;
+        while (this.bg == undefined)
+            ;
+    };
+    HandsMoveVote.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    HandsMoveVote.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return HandsMoveVote;
+}(Scene));
+var VoteMoveDead = /** @class */ (function (_super) {
+    __extends(VoteMoveDead, _super);
+    function VoteMoveDead() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    VoteMoveDead.prototype.unload = function () {
+        scenes.changeScene(new Conclusion());
+    };
+    VoteMoveDead.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = 420;
+        this.y = -1131;
+        this.targetX = 2094;
+        this.targetY = 6;
+        while (this.bg == undefined)
+            ;
+    };
+    VoteMoveDead.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    VoteMoveDead.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return VoteMoveDead;
+}(Scene));
+var DeadMoveHands = /** @class */ (function (_super) {
+    __extends(DeadMoveHands, _super);
+    function DeadMoveHands() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveHands.prototype.unload = function () {
+        scenes.changeScene(new Vote());
+    };
+    DeadMoveHands.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 1427;
+        this.targetY = 1084;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveHands.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveHands.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveHands;
+}(Scene));
+var DeadMovePoint = /** @class */ (function (_super) {
+    __extends(DeadMovePoint, _super);
+    function DeadMovePoint() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMovePoint.prototype.unload = function () {
+        scenes.changeScene(new YouGottaPoint());
+    };
+    DeadMovePoint.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 487;
+        this.targetY = 1101;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMovePoint.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMovePoint.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMovePoint;
+}(Scene));
+var DeadMoveDice = /** @class */ (function (_super) {
+    __extends(DeadMoveDice, _super);
+    function DeadMoveDice() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveDice.prototype.unload = function () {
+        scenes.changeScene(new DiceOfLuck());
+    };
+    DeadMoveDice.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 2363;
+        this.targetY = 1177;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveDice.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveDice.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveDice;
+}(Scene));
+var Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
     function Lobby() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -52,9 +408,9 @@ let Lobby = /** @class */ (function (_super) {
         text(url, width - textWidth(url), height - height / 2.5);
         //Draw connected players
         textSize(24);
-        let step = height - height / 3;
-        for (let i = 0; i < players.length; i++) {
-            let player = players[i].name;
+        var step = height - height / 3;
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i].name;
             if (player != "Host") {
                 step += 32;
                 text(player, width / 20, step, 60, width);
@@ -69,14 +425,14 @@ let Lobby = /** @class */ (function (_super) {
     };
     return Lobby;
 }(Scene));
-let Role_assign = /** @class */ (function (_super) {
+var Role_assign = /** @class */ (function (_super) {
     __extends(Role_assign, _super);
     function Role_assign() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
-        let pick = round(random(0, 2));
+        var pick = round(random(0, 2));
         console.log(pick);
         switch (pick) {
             case 0:
@@ -109,13 +465,13 @@ let Role_assign = /** @class */ (function (_super) {
     Role_assign.prototype.load = function () {
         this.bg = loadImage('assets/RoleChoose.jpeg');
         this.timer = 30;
-        let count = floor((players.length - 1) / 2);
+        var count = floor((players.length - 1) / 2);
         if ((players.length - 1) <= 4) {
             count = 1;
         }
         roles[0] = "HOST";
         //Assign roles 1:3 ratio
-        let randomNum = floor(random(1, players.length));
+        var randomNum = floor(random(1, players.length));
         roles[randomNum] = "DETEKTÍV";
         while (count > 0) {
             randomNum = floor(random(1, players.length));
@@ -124,12 +480,12 @@ let Role_assign = /** @class */ (function (_super) {
                 count--;
             }
         }
-        for (let i = 0; i < players.length; i++) {
+        for (var i = 0; i < players.length; i++) {
             if (!roles[i]) {
                 roles[i] = "NEVINNÝ";
             }
         }
-        for (let i = 0; i < roles.length; i++) {
+        for (var i = 0; i < roles.length; i++) {
             switch (roles[i]) {
                 case "DETEKTÍV":
                     roles_count[0]++;
@@ -146,7 +502,7 @@ let Role_assign = /** @class */ (function (_super) {
     };
     return Role_assign;
 }(Scene));
-let Vote = /** @class */ (function (_super) {
+var Vote = /** @class */ (function (_super) {
     __extends(Vote, _super);
     function Vote() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -184,11 +540,11 @@ let Vote = /** @class */ (function (_super) {
         step = height / 6 + 160;
         text("Hráči, ktorí nehlasovali:", width / 85, height / 3);
         textSize(32);
-        for (let i = 0; i < players.length; i++) {
-            let player = players[i].id;
-            let isThere = false;
-            for (let j = 0; j < answers.length; j++) {
-                let answer = answers[j];
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i].id;
+            var isThere = false;
+            for (var j = 0; j < answers.length; j++) {
+                var answer = answers[j];
                 if (player == answer[1]) {
                     isThere = true;
                 }
@@ -208,15 +564,15 @@ let Vote = /** @class */ (function (_super) {
     };
     return Vote;
 }(Scene));
-let Conclusion = /** @class */ (function (_super) {
+var Conclusion = /** @class */ (function (_super) {
     __extends(Conclusion, _super);
     function Conclusion() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Conclusion.prototype.unload = function () {
         //pick random events or launch endgame
-        answers = [];
-        picked = [];
+        answers = null;
+        picked = null;
         switch (this.picked_role) {
             case "DETEKTÍV":
                 roles_count[0]--;
@@ -229,16 +585,36 @@ let Conclusion = /** @class */ (function (_super) {
                 break;
         }
         socket.emit("NewRound", correction);
-        let pick = round(random(0, 2));
-        switch (pick) {
-            case 0:
-                scenes.changeScene(new DeadMoveHands());
+        switch (lastRandomEvent) {
+            case "Dice":
+                if (random() < 0.5) {
+                    lastRandomEvent = "Hands";
+                    scenes.changeScene(new DeadMoveHands());
+                }
+                else {
+                    lastRandomEvent = "Point";
+                    scenes.changeScene(new DeadMovePoint());
+                }
                 break;
-            case 1:
-                scenes.changeScene(new DeadMovePoint());
+            case "Hands":
+                if (random() < 0.5) {
+                    lastRandomEvent = "Dice";
+                    scenes.changeScene(new DeadMoveDice());
+                }
+                else {
+                    lastRandomEvent = "Point";
+                    scenes.changeScene(new DeadMovePoint());
+                }
                 break;
-            case 2:
-                scenes.changeScene(new DeadMoveDice());
+            case "Point":
+                if (random() < 0.5) {
+                    lastRandomEvent = "Hands";
+                    scenes.changeScene(new DeadMoveHands());
+                }
+                else {
+                    lastRandomEvent = "Dice";
+                    scenes.changeScene(new DeadMoveDice());
+                }
                 break;
         }
         /*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
@@ -255,11 +631,11 @@ let Conclusion = /** @class */ (function (_super) {
             this.unload();
         }
         this.bg = loadImage("assets/Dead.jpeg");
-        for (let i = 0; i < answers.length; i++) {
-            let answer = answers[i];
-            let isThere = false;
-            for (let j = 0; j < picked.length; j++) {
-                let pick = picked[j];
+        for (var i = 0; i < answers.length; i++) {
+            var answer = answers[i];
+            var isThere = false;
+            for (var j = 0; j < picked.length; j++) {
+                var pick = picked[j];
                 if (pick[0] == answer[0]) {
                     pick[1]++;
                     pick[2].push(answer[1]);
@@ -277,7 +653,7 @@ let Conclusion = /** @class */ (function (_super) {
         this.redraw();
     };
     Conclusion.prototype.removePerson = function (id) {
-        for (let i = 0; i < players.length; i++) {
+        for (var i = 0; i < players.length; i++) {
             if (players[i].id == id) {
                 players.splice(i, 1);
             }
@@ -289,15 +665,15 @@ let Conclusion = /** @class */ (function (_super) {
         fill(0);
         textSize(72);
         //Determine who is out
-        let pick = picked[0];
-        for (let i = 0; i < picked.length; i++) {
-            let tmp = picked[i];
+        var pick = picked[0];
+        for (var i = 0; i < picked.length; i++) {
+            var tmp = picked[i];
             if (pick[1] < tmp[1]) {
                 pick[1] = tmp;
             }
         }
-        let id = "";
-        for (let i = 0; i < players.length; i++) {
+        var id = "";
+        for (var i = 0; i < players.length; i++) {
             if (players[i].name == pick[0]) {
                 id = players[i].id;
             }
@@ -311,7 +687,7 @@ let Conclusion = /** @class */ (function (_super) {
             id: id
         });
         //Draw picked's role
-        for (let i = 0; i < players.length; i++) {
+        for (var i = 0; i < players.length; i++) {
             if (players[i].name == pick[0]) {
                 this.picked_role = roles[i];
                 text(roles[i], width - textWidth(roles[i]) - width / 30, height - height / 3);
@@ -328,7 +704,7 @@ let Conclusion = /** @class */ (function (_super) {
     };
     return Conclusion;
 }(Scene));
-let HandsOfTruth = /** @class */ (function (_super) {
+var HandsOfTruth = /** @class */ (function (_super) {
     __extends(HandsOfTruth, _super);
     function HandsOfTruth() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -337,16 +713,10 @@ let HandsOfTruth = /** @class */ (function (_super) {
         scenes.changeScene(new HandsMoveVote());
     };
     HandsOfTruth.prototype.load = function () {
-        this.task = undefined;
         socket.emit('Hands', correction);
         this.bg = loadImage("assets/handOfTruth.jpeg");
-        this.size = 72;
-        this.drawAnswer = 0;
         this.timer = 10;
-        this.round = 1;
-        textSize(this.size);
-        while (this.task != undefined)
-            ;
+        this.round = 0;
     };
     HandsOfTruth.prototype.update = function () {
         this.redraw();
@@ -354,70 +724,41 @@ let HandsOfTruth = /** @class */ (function (_super) {
     HandsOfTruth.prototype.redraw = function () {
         image(this.bg, 0, 0);
         fill(0);
-        if (this.drawAnswer == 1) {
-            text("Úloha znela:", (width - textWidth("Úloha znela:")) / 2, height / 2.5);
-            if (textWidth(this.task) < width) {
-                textSize(this.size);
-            }
-            else {
-                while (textWidth(this.task) > width) {
-                    this.size--;
-                    textSize(this.size);
-                }
-            }
-            text(this.task, (width - textWidth(this.task)) / 2, height / 2);
-            if (frameCount % 60 == 0 && this.timer > 0) {
-                this.timer--;
-            }
+        textSize(56);
+        text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2.1, height / 2 + 72);
+        if (frameCount % 60 == 0 && this.timer > 0) {
+            this.timer--;
             if (this.timer == 0) {
-                if (this.round == 3) {
-                    this.unload();
-                }
+                this.round = 1;
             }
         }
+        if (this.round == 1) {
+            //Play GO! sound
+            this.timer = 5;
+            this.round = 2;
+        }
         else {
-            textSize(56);
-            if (this.round == 1) {
-                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2.1, height / 2 + 72);
-            }
-            if (frameCount % 60 == 0 && this.timer > 0) {
-                this.timer--;
-            }
-            if (this.timer == 0) {
-                if (this.round == 2) {
-                    this.drawAnswer = 1;
-                    this.timer = 20;
-                    this.round = 3;
-                }
-                if (this.round == 1) {
-                    //Play GO! sound
-                    image(this.bg, 0, 0);
-                    this.timer = 5;
-                    this.round = 2;
-                }
+            if (this.round == 2) {
+                this.unload();
             }
         }
     };
     return HandsOfTruth;
 }(Scene));
-let YouGottaPoint = /** @class */ (function (_super) {
+var YouGottaPoint = /** @class */ (function (_super) {
     __extends(YouGottaPoint, _super);
     function YouGottaPoint() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     YouGottaPoint.prototype.unload = function () {
-        scenes.changeScene(new PointMoveVote());
+        console.log("Som tu");
+        //scenes.changeScene(new PointMoveVote());
     };
     YouGottaPoint.prototype.load = function () {
-        this.task = undefined;
         socket.emit('Point', correction);
         this.bg = loadImage('assets/YouGottaPoint.jpeg');
-        this.size = 56;
-        this.drawAnswer = 0;
         this.timer = 10;
         this.round = 1;
-        while (this.task != undefined)
-            ;
     };
     YouGottaPoint.prototype.update = function () {
         this.redraw();
@@ -425,59 +766,34 @@ let YouGottaPoint = /** @class */ (function (_super) {
     YouGottaPoint.prototype.redraw = function () {
         image(this.bg, 0, 0);
         fill(0);
-        if (this.drawAnswer == 1) {
-            text("Úloha znela:", (width - textWidth("Úloha znela:")) / 2, height / 2.5);
-            if (textWidth(this.task) < width) {
-                textSize(this.size);
-            }
-            else {
-                while (textWidth(this.task) > width) {
-                    this.size--;
-                    textSize(this.size);
-                }
-            }
-            text(this.task, (width - textWidth(this.task)) / 2, height / 2 - 25);
-            if (frameCount % 60 == 0 && this.timer > 0) {
-                this.timer--;
-            }
+        textSize(56);
+        text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2.1, height / 2 + 72);
+        if (frameCount % 60 == 0 && this.timer > 0) {
+            this.timer--;
             if (this.timer == 0) {
-                if (this.round == 3) {
-                    this.unload();
-                }
+                this.round = 1;
             }
         }
+        if (this.round == 1) {
+            //Play GO! sound
+            this.timer = 5;
+            this.round = 2;
+        }
         else {
-            textSize(56);
-            if (this.round == 1) {
-                text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2 + 150, height / 2 - 25);
-            }
-            if (frameCount % 60 == 0 && this.timer > 0) {
-                this.timer--;
-            }
-            if (this.timer == 0) {
-                if (this.round == 2) {
-                    this.drawAnswer = 1;
-                    this.timer = 20;
-                    this.round = 3;
-                }
-                if (this.round == 1) {
-                    //Play GO! sound
-                    image(this.bg, 0, 0);
-                    this.label = "Teraz!";
-                    this.timer = 5;
-                    this.round = 2;
-                }
+            if (this.round == 2) {
+                this.unload();
             }
         }
     };
     return YouGottaPoint;
 }(Scene));
-let DiceOfLuck = /** @class */ (function (_super) {
+var DiceOfLuck = /** @class */ (function (_super) {
     __extends(DiceOfLuck, _super);
     function DiceOfLuck() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DiceOfLuck.prototype.unload = function () {
+        console.log("out dice");
         scenes.changeScene(new DiceMoveVote());
     };
     DiceOfLuck.prototype.load = function () {
@@ -485,7 +801,7 @@ let DiceOfLuck = /** @class */ (function (_super) {
     };
     DiceOfLuck.prototype.update = function () {
         this.redraw();
-        if (frameCount % 120 == 0) {
+        if (frameCount % 300 == 0) {
             this.unload();
         }
     };
@@ -494,361 +810,7 @@ let DiceOfLuck = /** @class */ (function (_super) {
     };
     return DiceOfLuck;
 }(Scene));
-let LobbyMoveRolechoose = /** @class */ (function (_super) {
-    __extends(LobbyMoveRolechoose, _super);
-    function LobbyMoveRolechoose() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    LobbyMoveRolechoose.prototype.unload = function () {
-        scenes.changeScene(new Role_assign());
-    };
-    LobbyMoveRolechoose.prototype.load = function () {
-        background(0);
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -268;
-        this.y = -47;
-        this.targetX = 973;
-        this.targetY = 397;
-        while (this.bg == undefined)
-            ;
-    };
-    LobbyMoveRolechoose.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    LobbyMoveRolechoose.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return LobbyMoveRolechoose;
-}(Scene));
-let RolechooseMovePoint = /** @class */ (function (_super) {
-    __extends(RolechooseMovePoint, _super);
-    function RolechooseMovePoint() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    RolechooseMovePoint.prototype.unload = function () {
-        scenes.changeScene(new YouGottaPoint());
-    };
-    RolechooseMovePoint.prototype.load = function () {
-        background(0);
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -973;
-        this.y = -397;
-        this.targetX = 487;
-        this.targetY = 1101;
-        while (this.bg == undefined)
-            ;
-    };
-    RolechooseMovePoint.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    RolechooseMovePoint.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return RolechooseMovePoint;
-}(Scene));
-let RolechooseMoveHands = /** @class */ (function (_super) {
-    __extends(RolechooseMoveHands, _super);
-    function RolechooseMoveHands() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    RolechooseMoveHands.prototype.unload = function () {
-        scenes.changeScene(new HandsOfTruth());
-    };
-    RolechooseMoveHands.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -973;
-        this.y = -397;
-        this.targetX = 1427;
-        this.targetY = 1084;
-        while (this.bg == undefined)
-            ;
-    };
-    RolechooseMoveHands.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    RolechooseMoveHands.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return RolechooseMoveHands;
-}(Scene));
-let RolechooseMoveDice = /** @class */ (function (_super) {
-    __extends(RolechooseMoveDice, _super);
-    function RolechooseMoveDice() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    RolechooseMoveDice.prototype.unload = function () {
-        scenes.changeScene(new DiceOfLuck());
-    };
-    RolechooseMoveDice.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -973;
-        this.y = -397;
-        this.targetX = 2363;
-        this.targetY = 1177;
-        while (this.bg == undefined)
-            ;
-    };
-    RolechooseMoveDice.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    RolechooseMoveDice.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return RolechooseMoveDice;
-}(Scene));
-let DiceMoveVote = /** @class */ (function (_super) {
-    __extends(DiceMoveVote, _super);
-    function DiceMoveVote() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    DiceMoveVote.prototype.unload = function () {
-        scenes.changeScene(new Vote());
-    };
-    DiceMoveVote.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -2363;
-        this.y = -1177;
-        this.targetX = -420;
-        this.targetY = 1131;
-        while (this.bg == undefined)
-            ;
-    };
-    DiceMoveVote.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    DiceMoveVote.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return DiceMoveVote;
-}(Scene));
-let PointMoveVote = /** @class */ (function (_super) {
-    __extends(PointMoveVote, _super);
-    function PointMoveVote() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    PointMoveVote.prototype.unload = function () {
-        scenes.changeScene(new Vote());
-    };
-    PointMoveVote.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -487;
-        this.y = -1101;
-        this.targetX = -420;
-        this.targetY = 1131;
-        while (this.bg == undefined)
-            ;
-    };
-    PointMoveVote.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    PointMoveVote.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return PointMoveVote;
-}(Scene));
-let HandsMoveVote = /** @class */ (function (_super) {
-    __extends(HandsMoveVote, _super);
-    function HandsMoveVote() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    HandsMoveVote.prototype.unload = function () {
-        scenes.changeScene(new Vote());
-    };
-    HandsMoveVote.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -1427;
-        this.y = -1084;
-        this.targetX = -420;
-        this.targetY = 1131;
-        while (this.bg == undefined)
-            ;
-    };
-    HandsMoveVote.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    HandsMoveVote.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return HandsMoveVote;
-}(Scene));
-let VoteMoveDead = /** @class */ (function (_super) {
-    __extends(VoteMoveDead, _super);
-    function VoteMoveDead() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    VoteMoveDead.prototype.unload = function () {
-        scenes.changeScene(new Conclusion());
-    };
-    VoteMoveDead.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = 420;
-        this.y = -1131;
-        this.targetX = 2094;
-        this.targetY = 6;
-        while (this.bg == undefined)
-            ;
-    };
-    VoteMoveDead.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    VoteMoveDead.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return VoteMoveDead;
-}(Scene));
-let DeadMoveHands = /** @class */ (function (_super) {
-    __extends(DeadMoveHands, _super);
-    function DeadMoveHands() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    DeadMoveHands.prototype.unload = function () {
-        scenes.changeScene(new Vote());
-    };
-    DeadMoveHands.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -2094;
-        this.y = -6;
-        this.targetX = 1427;
-        this.targetY = 1084;
-        while (this.bg == undefined)
-            ;
-    };
-    DeadMoveHands.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    DeadMoveHands.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return DeadMoveHands;
-}(Scene));
-let DeadMovePoint = /** @class */ (function (_super) {
-    __extends(DeadMovePoint, _super);
-    function DeadMovePoint() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    DeadMovePoint.prototype.unload = function () {
-        scenes.changeScene(new Vote());
-    };
-    DeadMovePoint.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -2094;
-        this.y = -6;
-        this.targetX = 487;
-        this.targetY = 1101;
-        while (this.bg == undefined)
-            ;
-    };
-    DeadMovePoint.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    DeadMovePoint.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return DeadMovePoint;
-}(Scene));
-let DeadMoveDice = /** @class */ (function (_super) {
-    __extends(DeadMoveDice, _super);
-    function DeadMoveDice() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    DeadMoveDice.prototype.unload = function () {
-        scenes.changeScene(new Vote());
-    };
-    DeadMoveDice.prototype.load = function () {
-        this.bg = loadImage('assets/Full.jpeg');
-        this.x = -2094;
-        this.y = -6;
-        this.targetX = 2363;
-        this.targetY = 1177;
-        while (this.bg == undefined)
-            ;
-    };
-    DeadMoveDice.prototype.update = function () {
-        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
-            this.unload();
-        }
-        else {
-            this.redraw();
-        }
-    };
-    DeadMoveDice.prototype.redraw = function () {
-        image(this.bg, this.x, this.y);
-        this.x = lerp(this.x, -this.targetX, 0.03);
-        this.y = lerp(this.y, -this.targetY, 0.03);
-    };
-    return DeadMoveDice;
-}(Scene));
-let SceneManager = /** @class */ (function () {
+var SceneManager = /** @class */ (function () {
     function SceneManager() {
     }
     SceneManager.getInstance = function () {
@@ -864,26 +826,28 @@ let SceneManager = /** @class */ (function () {
         this.currScene.redraw();
     };
     SceneManager.prototype.changeScene = function (newScene) {
+        this.currScene = null;
         newScene.load();
         this.currScene = newScene;
     };
     return SceneManager;
 }());
 //Socket.IO
-let socket = io();
-//Player letiables
-let players = [];
-let roles = [];
-let roles_count = [0, 0, 0]; //No. Detectives, Innocents and Murderers
-let answers = [];
-let picked = [];
-let roomCode = "";
-let correction;
-let url = "";
-//SceneManager, canvas letiables
-let width;
-let height;
-let scenes;
+var socket = io();
+//Player variables
+var players = [];
+var roles = [];
+var roles_count = [0, 0, 0]; //No. Detectives, Innocents and Murderers
+var answers = [];
+var picked = [];
+var roomCode = "";
+var correction;
+var url = "";
+var lastRandomEvent = "Dice";
+//SceneManager, canvas variables
+var width;
+var height;
+var scenes;
 function setup() {
     //Creating canvas
     width = window.innerWidth;

@@ -51,7 +51,6 @@
 	}
 
 	$('.probeProbe').on('switchChange.bootstrapSwitch', function (event, state) {
-	    console.log(state);
 	    if (state) {
 		    $('#roleContent').removeClass('d-none');
 	    }else {
@@ -99,6 +98,7 @@
 	});
 
 	socket.on('NewRound', function(){
+		console.log("New round starts!");
 		for (var i = 0; i < allow_once.length; i++) {
 			allow_once[i] = true;
 		}
@@ -197,11 +197,9 @@
 			clearAll();
 			$("#answers_pick").empty();
 			data = data[1];
-			console.log(data);
 
 			for(let i = 0; i < data.length;i++){
 				if (data[i].name != nick && data[i].name != "Host"){
-					console.log(data[i].name, nick);
 					$("#answers_pick").append('<button class="btn btn-secondary">'+data[i].name+'</button>');
 				}
 			}
