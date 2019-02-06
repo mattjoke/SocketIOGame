@@ -6,7 +6,6 @@ TODO:
 * Dice of luck
 * clean code
 * add sound
-* Fix known bugs
 * Fix Major bug - game is broken after one round
 * Add Endgame situation
 * Finish Maturita
@@ -25,3 +24,4 @@ Done:
 * Decrease chance of generating same room
 * Design overhaul - started 15.1.2019 Ended 31.1.2019
 * Add animations
+* Fixed minor bugs
