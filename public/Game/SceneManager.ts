@@ -4,7 +4,7 @@ abstract class Scene{
 	abstract load():void;
 	abstract unload():void;
 }
-
+//Camera movement
 class LobbyMoveRolechoose extends Scene{
 
 	private bg: Image;
@@ -306,7 +306,7 @@ class DeadMoveHands extends Scene{
 	private targetY: number;
 
 	unload():void{
-		scenes.changeScene(new Vote());
+		scenes.changeScene(new HandsOfTruth());
 	}
 
 	load():void{
@@ -405,7 +405,7 @@ class DeadMoveDice extends Scene{
 		this.y = lerp(this.y, -this.targetY, 0.03);
 	}
 }
-
+//Scenes with game
 class Lobby extends Scene{
 	private bg: Image;
 
@@ -469,7 +469,6 @@ class Role_assign extends Scene{
 	unload():void{
 		//Starts Game Loop
 		let pick = round(random(0,2));
-		console.log(pick);
 		switch(pick){
 			case 0: scenes.changeScene(new RolechooseMovePoint()); break;
 			case 1: scenes.changeScene(new RolechooseMoveHands()); break;
@@ -599,8 +598,8 @@ class Conclusion extends Scene{
 
 	unload():void{
 		//pick random events or launch endgame
-		answers = null;
-		picked = null;
+		answers = [];
+		picked = [];
 
 		switch(this.picked_role){
 			case "DETEKTÍV": roles_count[0]--; break;
@@ -610,49 +609,56 @@ class Conclusion extends Scene{
 
 		socket.emit("NewRound", correction);
 
-		switch(lastRandomEvent){
-			case "Dice":
-				if(random()<0.5){
-					lastRandomEvent = "Hands";
-					scenes.changeScene(new DeadMoveHands());
-				}else{
-					lastRandomEvent = "Point";
-					scenes.changeScene(new DeadMovePoint());
-				}
-				break;
-			case "Hands":
-				if(random()<0.5){
-					lastRandomEvent = "Dice";
-					scenes.changeScene(new DeadMoveDice());
-				}else{
-					lastRandomEvent = "Point";
-					scenes.changeScene(new DeadMovePoint());
-				}
-				break;
-			case "Point":
-				if(random()<0.5){
-					lastRandomEvent = "Hands";
-					scenes.changeScene(new DeadMoveHands());
-				}else{
-					lastRandomEvent = "Dice";
-					scenes.changeScene(new DeadMoveDice());
-				}
-				break;
-		}
-		/*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
+		if (roles_count[2] == 2 && ((roles_count[0]+roles_count[1]) == roles_count[2])) {
 			//EPIC FINALE -> TRUE ENDGAME
-		}else if (roles_count[2] < 1) {
+		}else if (roles_count[2] == 0) {
 			//Finale - Innocents win!
 		} else {
-			scenes.changeScene(new HandsOfTruth());
-		}*/
+			switch(lastRandomEvent){
+				case "Dice":
+					if(random()<0.5){
+						lastRandomEvent = "Hands";
+						scenes.changeScene(new DeadMoveHands());
+					}else{
+						lastRandomEvent = "Point";
+						scenes.changeScene(new DeadMovePoint());
+					}
+					break;
+				case "Hands":
+					if(random()<0.5){
+						lastRandomEvent = "Dice";
+						scenes.changeScene(new DeadMoveDice());
+					}else{
+						lastRandomEvent = "Point";
+						scenes.changeScene(new DeadMovePoint());
+					}
+					break;
+				case "Point":
+					if(random()<0.5){
+						lastRandomEvent = "Hands";
+						scenes.changeScene(new DeadMoveHands());
+					}else{
+						lastRandomEvent = "Dice";
+						scenes.changeScene(new DeadMoveDice());
+					}
+					break;
+			}
+		}
 	}
 	load():void{
 		background(0);
-		if (answers.length == 0 && picked.length == 0) {
-			this.unload();
-		}
+
 		this.bg = loadImage("assets/Dead.jpeg");
+		this.timer = 30;
+
+		if (picked.length == 0) {
+			let pick = random(players);
+			while (pick.name == "Host"){
+				pick = random(players);
+			}
+			picked.push([pick.name, 1, [pick.id]);
+		}
+
 		for (var i = 0; i < answers.length; i++) {
 			let answer = answers[i];
 			let isThere = false;
@@ -668,7 +674,7 @@ class Conclusion extends Scene{
 				picked.push([answer[0], 1, [answer[1]]]);
 			}
 		}
-		this.timer = 30;
+
 		this.redraw();
 	}
 	update():void {
@@ -786,9 +792,10 @@ class YouGottaPoint extends Scene{
 
 	load():void{
 		socket.emit('Point', correction);
+
 		this.bg = loadImage('assets/YouGottaPoint.jpeg');
 		this.timer = 10;
-		this.round = 1;
+		this.round = 0;
 	}
 
 	update():void {
@@ -823,7 +830,6 @@ class DiceOfLuck extends Scene{
 	private bg: Image;
 
 	unload():void{
-		console.log("out dice");
 		scenes.changeScene(new DiceMoveVote());
 	}
 
@@ -842,6 +848,7 @@ class DiceOfLuck extends Scene{
 		image(this.bg,0,0);
 	}
 }
+//Scene manager
 class SceneManager{
 	currScene: Scene;
 	private static instance: SceneManager;
@@ -919,13 +926,6 @@ function setup(){
 	//Url Handeling
 	socket.on('url',function(data){
 		url = data;
-	});
-	//DB Handeling
-	socket.on('HandsTask', function(data){
-		scenes.currScene.task = data;
-	});
-	socket.on('PointTask', function(data){
-		scenes.currScene.task = data;
 	});
 }
 

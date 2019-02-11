@@ -91,6 +91,7 @@
 	});
 
 	socket.on('DeadPlayer', function(data){
+		clearAll();
 		if (socket.id == data) {
 			overlay();
 			dead = true;
@@ -98,7 +99,7 @@
 	});
 
 	socket.on('NewRound', function(){
-		console.log("New round starts!");
+		clearAll();
 		for (var i = 0; i < allow_once.length; i++) {
 			allow_once[i] = true;
 		}
@@ -158,6 +159,20 @@
 	});
 
 	socket.on('HandsTask', function(data){
+		if(allow_once[4]){
+			clearAll();
+			$('#task').empty();
+			if(role == "ZLODEJ"){
+				$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
+			}else {
+				$('#task').append(data);
+			}
+			$('#HandsPointTask').removeClass('d-none');
+			allow_once[1] = true;
+		}
+	});
+
+	socket.on('PointTask', function(data){
 		if(allow_once[4]){
 			clearAll();
 			$('#task').empty();

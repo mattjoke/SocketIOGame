@@ -282,7 +282,7 @@ var DeadMoveHands = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DeadMoveHands.prototype.unload = function () {
-        scenes.changeScene(new Vote());
+        scenes.changeScene(new HandsOfTruth());
     };
     DeadMoveHands.prototype.load = function () {
         this.bg = loadImage('assets/Full.jpeg');
@@ -571,8 +571,8 @@ var Conclusion = /** @class */ (function (_super) {
     }
     Conclusion.prototype.unload = function () {
         //pick random events or launch endgame
-        answers = null;
-        picked = null;
+        answers = [];
+        picked = [];
         switch (this.picked_role) {
             case "DETEKTÍV":
                 roles_count[0]--;
@@ -627,10 +627,16 @@ var Conclusion = /** @class */ (function (_super) {
     };
     Conclusion.prototype.load = function () {
         background(0);
-        if (answers.length == 0 && picked.length == 0) {
-            this.unload();
-        }
         this.bg = loadImage("assets/Dead.jpeg");
+        this.timer = 30;
+        if (picked.length == 0) {
+            var pick = random(players);
+            while (pick.name == "Host") {
+                pick = random(players);
+            }
+            picked.push([pick.name, 1, [pick.id]]);
+            console.log(picked);
+        }
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
             var isThere = false;
@@ -646,7 +652,6 @@ var Conclusion = /** @class */ (function (_super) {
                 picked.push([answer[0], 1, [answer[1]]]);
             }
         }
-        this.timer = 30;
         this.redraw();
     };
     Conclusion.prototype.update = function () {
@@ -751,14 +756,13 @@ var YouGottaPoint = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     YouGottaPoint.prototype.unload = function () {
-        console.log("Som tu");
-        //scenes.changeScene(new PointMoveVote());
+        scenes.changeScene(new PointMoveVote());
     };
     YouGottaPoint.prototype.load = function () {
         socket.emit('Point', correction);
         this.bg = loadImage('assets/YouGottaPoint.jpeg');
         this.timer = 10;
-        this.round = 1;
+        this.round = 0;
     };
     YouGottaPoint.prototype.update = function () {
         this.redraw();
@@ -793,7 +797,6 @@ var DiceOfLuck = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DiceOfLuck.prototype.unload = function () {
-        console.log("out dice");
         scenes.changeScene(new DiceMoveVote());
     };
     DiceOfLuck.prototype.load = function () {
@@ -881,13 +884,6 @@ function setup() {
     //Url Handeling
     socket.on('url', function (data) {
         url = data;
-    });
-    //DB Handeling
-    socket.on('HandsTask', function (data) {
-        scenes.currScene.task = data;
-    });
-    socket.on('PointTask', function (data) {
-        scenes.currScene.task = data;
     });
 }
 function draw() {

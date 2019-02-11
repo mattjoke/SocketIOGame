@@ -157,12 +157,12 @@ io.on('connection',function(socket){
 	socket.on('Hands', function(room){
 		let db = JSON.parse(fs.readFileSync('./db/database.json', 'utf8'));
 		let random = db[Math.floor(Math.random() * db.length)];
-		io.sockets.in(room).emit('HandsTask', random.otazka);
+		socket.broadcast.to(room).emit('HandsTask', random.otazka);
 	});
 	socket.on('Point', function(room){
 		let db = JSON.parse(fs.readFileSync('./db/database.json','utf8'));
 		let random = db[Math.floor(Math.random() * db.length)];
-		io.sockets.in(room).emit('PointTask', random.otazka);
+		socket.broadcast.to(room).emit('PointTask', random.otazka);
 	});
 	//Tasks
 	socket.on("TextTask", function (room){
