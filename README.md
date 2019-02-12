@@ -21,6 +21,6 @@ Done:
 * Add You've gotta point
 * Decrease chance of generating same room
 * Design overhaul - started 15.1.2019 Ended 31.1.2019
-* Add animations
+* Addeed transition animations
 * Fixed minor bugs
 * Fixed major bug
