@@ -1,7 +1,7 @@
 //$(document).ready(function(){
 
 	let socket = io();
-	let allow_once = [true,true,true, true, true];
+	let allow_once = [true,true,true, true, true]; //Handle more than one call
 	let dead = false;
 	let role;
 
@@ -12,6 +12,7 @@
 		$('#roleTask').addClass('d-none');
 		$('#roleContent').addClass('d-none');
 		$('#answers_pick').addClass('d-none');
+		$('#thanks').addClass('d-none');
 	}
 
 	function overlay(){
@@ -28,7 +29,7 @@
 		         'right': 0,
 		         'background': 'black url(./Game/assets/RIP.png) no-repeat center center fixed',
 		         'width': '100%',
-		         'z-index': 1
+		         'z-index': 1000
 		      });
 		    $('.rip').css({
 		    	'font-size': '84px',
@@ -39,10 +40,10 @@
 		        'margin-top' : -$('.overlay').outerHeight()/2
 		    });
 		    $('.rip_title').css({
-		    	'font-size': '64px',
+		    	'font-size': '30px',
 		        'position' : 'absolute',
-		        'left' : '35vw',
-		        'top' : '45vh',
+		        'left' : '45vw',
+		        'top' : '47vh',
 		        'margin-left' : -$('.overlay').innerWidth()/2,
 		        'margin-top' : -$('.overlay').outerHeight()/2
 		    });
@@ -63,6 +64,7 @@
 	});
 
 	$('#join').click( function(){
+		$('.nick').removeClass('d-none');
 		room = $('#code').val().toUpperCase();
 		nick = $('#name').val();
 		socket.emit('joinRoom',{
@@ -215,7 +217,7 @@
 
 			for(let i = 0; i < data.length;i++){
 				if (data[i].name != nick && data[i].name != "Host"){
-					$("#answers_pick").append('<button class="btn btn-secondary">'+data[i].name+'</button>');
+					$("#answers_pick").append('<button class="btn btn-secondary btn-lg mb-1">'+data[i].name+'</button><br>');
 				}
 			}
 
@@ -240,6 +242,8 @@
 
 			$('#lobby').addClass('d-none');
 			$('#Voting').addClass('d-none');
+
+			$('#thanks').removeClass('d-none');
 			allow_once[2] = false;
 		}
 	});

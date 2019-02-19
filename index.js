@@ -13,6 +13,12 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', function(req, res) {
     res.redirect('index.html');
 });
+app.get('/game', function(req, res){
+	res.redirect('/Host');
+});
+app.get('/play', function(req, res){
+	res.redirect('/Client');
+});
 
 let web = "localhost:3000";
 

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no">
+	<title>Ludum - hra plná zábavy</title>
+	<link rel="stylesheet" href="../scripts/bootstrap.min.css">
+	<link rel="stylesheet" href="../scripts/bootstrap-switch.min.css">
+	<link rel="stylesheet" href="../scripts/style.css">
+</head>
+<body>
+
+	<div class="start jumbotron text-center">
+		<h1 class="display-3">Vitajte!</h1>
+		<div class="row">
+			<div class="col-2 mx-auto">
+				<label>Prezývka</label>
+				<input type="text" id="name" value="MattJoke"class="form-control"><br>
+				<label>Kód miestnosti</label>
+				<input type="text" id="code" class="text-uppercase form-control" autocomplete="off"><br>
+				<hr class="my-2">
+			</div>
+		</div>
+
+		<p class="lead mt-3">
+			<a class="btn btn-primary btn-lg" id="join">Pripojiť sa</a>
+		</p>
+	</div>
+
+
+	<div class="nick text-center d-none">
+		<nav class="navbar static-top navbar-dark center text-light bg-dark" style="z-index: 1;">
+			<p class="display-4" id="nick"></p>
+		</nav>
+	</div>
+
+	<div id="lobby" class="d-none text-center">
+		<p id="info" class="lead">Kľudne sa usaďte a pripravte sa na hru</p>
+
+		<div id="quest" class="d-none">
+			<div class="mx-auto">
+				<p id="otazka"></p>
+			</div>
+		</div>
+	</div>
+
+	<div id="HandsPointTask" class="text-center d-none">
+		<h3>Tvoja úloha znie</h3>
+		<p id="task"></p>
+	</div>
+
+	<div id="Voting" class="text-center d-none">
+		<h3>Kto si myslíš, že je zlodej?</h3>
+		<p>Vyberte si odpoveď</p>
+		<div id="answers_pick">
+		</div>
+	</div>
+
+	<p id="thanks" class="text-center d-none">Ďakujem za tvoju odpoveď</p>
+
+	<div id="roleTask" class="text-center d-none">
+		<h4>Tvoja rola je</h4>
+		<p class="mx-auto">Ukáž rolu</p>
+
+		<div class="make-switch" data-off-text="Ukáž" data-on-text="Skry">
+    		<input type="checkbox" unchecked class="probeProbe" />
+		</div>
+	</div>
+
+	<div id="roleContent" class="text-center d-none">
+		<div id="role" class="text-center">
+		</div>
+		<p id="description" class="text-center mx-auto"></p>
+	</div>
+
+	<script src="../scripts/jquery-3.3.1.min.js"></script>
+	<script src="../scripts/js.cookie.js"></script>
+	<script src="../scripts/socket.io.slim.js"></script>
+	<script src="lobby.js"></script>
+
+	<div data-controls-modal="exampleModal" data-backdrop="static" data-keyboard="false" href="" style="z-index: 1001">
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		      </div>
+		      <div class="modal-body">
+		      Hra neexistuje, alebo ste zadali chybný kód.
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="location.reload(true);">Vrátiť sa späť</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+	<script src="../scripts/popper.min.js"></script>
+	<script src="../scripts/bootstrap.min.js"></script>
+	<script src="../scripts/bootstrap-switch.min.js"></script>
+	<script>
+		$('.probeProbe').bootstrapSwitch('state', false);
+	</script>
+</body>
+</html>
