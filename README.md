@@ -4,7 +4,7 @@ TODO:
 
 * Write a documentation
 * Dice of luck
-* add sound
+* add sound - Ping!
 * Add Endgame situation
 * Finish Maturita
 
@@ -24,3 +24,5 @@ Done:
 * Addeed transition animations
 * Fixed minor bugs
 * Fixed major bug
+* Added Design for Client and Host
+* Folder re-origanization
