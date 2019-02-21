@@ -4,3 +4,11 @@
 #join{
 	color: white;
 }
+
+body {
+	background-image: url("../Host/assets/Lobby-blur.jpeg");
+}
+
+.jumbotron{
+	background: rgba(255, 255, 255, 0.91);
+}

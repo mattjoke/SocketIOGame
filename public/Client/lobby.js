@@ -74,6 +74,7 @@
 		$('.start').addClass('d-none');
 		$('#nick').append(nick);
 		$('#lobby').removeClass('d-none');
+		$('*').css('background', 'transparent');
 	});
 
 	socket.on('EditUserName', function(username){
