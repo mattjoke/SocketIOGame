@@ -26,3 +26,4 @@ Done:
 * Fixed major bug
 * Added Design for Client and Host
 * Folder re-origanization
+* Fixed color bug on host
