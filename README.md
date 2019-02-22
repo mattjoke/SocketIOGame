@@ -7,8 +7,6 @@ TODO:
 * add sound - Ping!
 * Add Endgame situation
 * Finish Maturita
-* Fix minor visual bugs
-* Fix timing
 * Fix jittering
 * Responsive resolution support
 
@@ -31,3 +29,5 @@ Done:
 * Added Design for Client and Host
 * Folder re-origanization
 * Fixed color bug on host
+* Fix minor visual bugs
+* Fix timing
