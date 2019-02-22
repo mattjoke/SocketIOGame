@@ -8,6 +8,7 @@ TODO:
 * Add Endgame situation
 * Finish Maturita
 * Fix minor visual bugs
+* Fix timing
 
 Done:
 
