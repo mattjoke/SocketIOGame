@@ -16,6 +16,9 @@ var Scene = /** @class */ (function () {
     }
     return Scene;
 }());
+function chooseMinigame(last) {
+}
+//Camera movement
 var LobbyMoveRolechoose = /** @class */ (function (_super) {
     __extends(LobbyMoveRolechoose, _super);
     function LobbyMoveRolechoose() {
@@ -372,6 +375,7 @@ var DeadMoveDice = /** @class */ (function (_super) {
     };
     return DeadMoveDice;
 }(Scene));
+//Scenes with game
 var Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
     function Lobby() {
@@ -409,11 +413,32 @@ var Lobby = /** @class */ (function (_super) {
         //Draw connected players
         textSize(24);
         var step = height - height / 3;
-        for (var i = 0; i < players.length; i++) {
-            var player = players[i].name;
-            if (player != "Host") {
-                step += 32;
-                text(player, width / 20, step, 60, width);
+        if (players.length - 1 < 9) {
+            for (var i = 0; i < players.length; i++) {
+                var player = players[i].name;
+                if (player != "Host") {
+                    step += 32;
+                    text(player, width / 15, step, 60, width);
+                }
+            }
+        }
+        else {
+            var eight = 8;
+            var divisor = 15;
+            for (var i = 0; i < players.length; i++) {
+                var player = players[i].name;
+                if (player != "Host") {
+                    if (eight > 0) {
+                        step += 32;
+                        text(player, width / divisor, step, 60, width);
+                        eight--;
+                    }
+                    if (eight == 0) {
+                        step = height - height / 3;
+                        eight = 8;
+                        divisor -= (15 * .55);
+                    }
+                }
             }
         }
         //Draw roomcode
@@ -433,7 +458,6 @@ var Role_assign = /** @class */ (function (_super) {
     Role_assign.prototype.unload = function () {
         //Starts Game Loop
         var pick = round(random(0, 2));
-        console.log(pick);
         switch (pick) {
             case 0:
                 scenes.changeScene(new RolechooseMovePoint());
@@ -441,16 +465,13 @@ var Role_assign = /** @class */ (function (_super) {
             case 1:
                 scenes.changeScene(new RolechooseMoveHands());
                 break;
-            case 2:
-                scenes.changeScene(new RolechooseMoveDice());
-                break;
         }
     };
     Role_assign.prototype.update = function () {
         image(this.bg, 0, 0);
         fill(0);
         textSize(64);
-        text("Máte 30 sekúnd na pozretie si svojej roly", (width - textWidth("Máte 30 sekúnd na pozretie si svojej roly")) / 2, height / 4);
+        text("Máte 15 sekúnd na pozretie si svojej roly", (width - textWidth("Máte 15 sekúnd na pozretie si svojej roly")) / 2, height / 4);
         textSize(100);
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
@@ -464,7 +485,7 @@ var Role_assign = /** @class */ (function (_super) {
     };
     Role_assign.prototype.load = function () {
         this.bg = loadImage('assets/RoleChoose.jpeg');
-        this.timer = 30;
+        this.timer = 15;
         var count = floor((players.length - 1) / 2);
         if ((players.length - 1) <= 4) {
             count = 1;
@@ -556,7 +577,7 @@ var Vote = /** @class */ (function (_super) {
         }
         //Draw timer
         fill(0);
-        translate(width / 2.75, height - height / 4.5);
+        translate(width / 2.64 - textWidth(this.timer) / 2, height - height / 5);
         angleMode(DEGREES);
         rotate(17);
         textSize(96);
@@ -585,57 +606,50 @@ var Conclusion = /** @class */ (function (_super) {
                 break;
         }
         socket.emit("NewRound", correction);
-        switch (lastRandomEvent) {
-            case "Dice":
-                if (random() < 0.5) {
-                    lastRandomEvent = "Hands";
-                    scenes.changeScene(new DeadMoveHands());
-                }
-                else {
-                    lastRandomEvent = "Point";
-                    scenes.changeScene(new DeadMovePoint());
-                }
-                break;
-            case "Hands":
-                if (random() < 0.5) {
-                    lastRandomEvent = "Dice";
-                    scenes.changeScene(new DeadMoveDice());
-                }
-                else {
-                    lastRandomEvent = "Point";
-                    scenes.changeScene(new DeadMovePoint());
-                }
-                break;
-            case "Point":
-                if (random() < 0.5) {
-                    lastRandomEvent = "Hands";
-                    scenes.changeScene(new DeadMoveHands());
-                }
-                else {
-                    lastRandomEvent = "Dice";
-                    scenes.changeScene(new DeadMoveDice());
-                }
-                break;
+        console.log("Unload");
+        if (roles_count[2] == 2 && ((roles_count[0] + roles_count[1]) == roles_count[2])) {
+            console.log("DRAW");
+            scenes.changeScene(new Lobby());
         }
-        /*if ((roles_count[0]+roles_count[1]) == roles_count[2]) {
-            //EPIC FINALE -> TRUE ENDGAME
-        }else if (roles_count[2] < 1) {
-            //Finale - Innocents win!
-        } else {
-            scenes.changeScene(new HandsOfTruth());
-        }*/
+        else if (roles_count[2] == 0) {
+            scenes.changeScene(new Lobby());
+            console.log("Innocent wins!");
+        }
+        else {
+            switch (lastRandomEvent) {
+                case "Hands":
+                    if (random() < 0.8) {
+                        lastRandomEvent = "Point";
+                        scenes.changeScene(new DeadMovePoint());
+                    }
+                    else {
+                        lastRandomEvent = "Hands";
+                        scenes.changeScene(new DeadMoveHands());
+                    }
+                    break;
+                case "Point":
+                    if (random() < 0.8) {
+                        lastRandomEvent = "Hands";
+                        scenes.changeScene(new DeadMoveHands());
+                    }
+                    else {
+                        lastRandomEvent = "Point";
+                        scenes.changeScene(new DeadMovePoint());
+                    }
+                    break;
+            }
+        }
     };
     Conclusion.prototype.load = function () {
         background(0);
         this.bg = loadImage("assets/Dead.jpeg");
-        this.timer = 30;
+        this.timer = 10;
         if (picked.length == 0) {
             var pick = random(players);
             while (pick.name == "Host") {
                 pick = random(players);
             }
             picked.push([pick.name, 1, [pick.id]]);
-            console.log(picked);
         }
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
@@ -665,46 +679,51 @@ var Conclusion = /** @class */ (function (_super) {
         }
     };
     Conclusion.prototype.redraw = function () {
-        image(this.bg, 0, 0);
-        //Draw Title
-        fill(0);
-        textSize(72);
-        //Determine who is out
-        var pick = picked[0];
-        for (var i = 0; i < picked.length; i++) {
-            var tmp = picked[i];
-            if (pick[1] < tmp[1]) {
-                pick[1] = tmp;
-            }
-        }
-        var id = "";
-        for (var i = 0; i < players.length; i++) {
-            if (players[i].name == pick[0]) {
-                id = players[i].id;
-            }
-        }
-        //Draw player's name
-        textSize(56);
-        text(pick[0], width / 2 - textWidth(pick[0]) / 1.4, height / 6.45);
-        //Emits dead person to server
-        socket.emit('dead', {
-            room: correction,
-            id: id
-        });
-        //Draw picked's role
-        for (var i = 0; i < players.length; i++) {
-            if (players[i].name == pick[0]) {
-                this.picked_role = roles[i];
-                text(roles[i], width - textWidth(roles[i]) - width / 30, height - height / 3);
-            }
-        }
-        //Timer
-        if (frameCount % 60 == 0 && this.timer > 0) {
-            this.timer--;
-        }
-        if (this.timer == 0) {
-            this.removePerson(id);
+        if (players.length == 0 && answers.length == 0) {
             this.unload();
+        }
+        else {
+            image(this.bg, 0, 0);
+            //Draw Title
+            fill(0);
+            textSize(72);
+            //Determine who is out
+            var pick = picked[0];
+            for (var i = 0; i < picked.length; i++) {
+                var tmp = picked[i];
+                if (pick[1] < tmp[1]) {
+                    pick[1] = tmp;
+                }
+            }
+            //Draw player's name
+            textSize(56);
+            text(pick[0], width / 2 - textWidth(pick[0]) / 1.4, height / 6.45);
+            //Emits dead person to server
+            socket.emit('dead', {
+                room: correction,
+                id: id
+            });
+            //Draw picked's role
+            for (var i = 0; i < players.length; i++) {
+                if (players[i].name == pick[0]) {
+                    this.picked_role = roles[i];
+                    text(roles[i], width - textWidth(roles[i]) - width / 30, height - height / 3);
+                }
+            }
+            //Timer
+            if (frameCount % 60 == 0 && this.timer > 0) {
+                this.timer--;
+            }
+            if (this.timer == 0) {
+                var id = "";
+                for (var i = 0; i < players.length; i++) {
+                    if (players[i].name == pick[0]) {
+                        id = players[i].id;
+                    }
+                }
+                this.removePerson(id);
+                this.unload();
+            }
         }
     };
     return Conclusion;
@@ -730,7 +749,7 @@ var HandsOfTruth = /** @class */ (function (_super) {
         image(this.bg, 0, 0);
         fill(0);
         textSize(56);
-        text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2.1, height / 2 + 72);
+        text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 1.5, height / 2 + 72);
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
             if (this.timer == 0) {
@@ -771,7 +790,7 @@ var YouGottaPoint = /** @class */ (function (_super) {
         image(this.bg, 0, 0);
         fill(0);
         textSize(56);
-        text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 2.1, height / 2 + 72);
+        text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 1.5, height / 2 - 32);
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
             if (this.timer == 0) {
@@ -791,6 +810,30 @@ var YouGottaPoint = /** @class */ (function (_super) {
     };
     return YouGottaPoint;
 }(Scene));
+var InnocentWins = /** @class */ (function (_super) {
+    __extends(InnocentWins, _super);
+    function InnocentWins() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    InnocentWins.prototype.unload = function () {
+        scenes.changeScene(new PointMoveVote());
+    };
+    InnocentWins.prototype.load = function () {
+        this.bg = loadImage('assets/EndScene.png');
+    };
+    InnocentWins.prototype.update = function () {
+        this.redraw();
+    };
+    InnocentWins.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+        textSize(256);
+        text("Nevinní", (width - textWidth("Nevinní")) / 2 - 135, height / 2);
+        textSize(179);
+        text("vyhrali!", (width - textWidth("vyhrali!")) / 2, height / 2 + 130);
+    };
+    return InnocentWins;
+}(Scene));
+//Work in progress
 var DiceOfLuck = /** @class */ (function (_super) {
     __extends(DiceOfLuck, _super);
     function DiceOfLuck() {
@@ -813,6 +856,7 @@ var DiceOfLuck = /** @class */ (function (_super) {
     };
     return DiceOfLuck;
 }(Scene));
+//Scene manager
 var SceneManager = /** @class */ (function () {
     function SceneManager() {
     }

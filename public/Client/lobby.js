@@ -27,7 +27,7 @@
 		         'top': 0,
 		         'left': 0,
 		         'right': 0,
-		         'background': 'black url(./Game/assets/RIP.png) no-repeat center center fixed',
+		         'background': 'black url(../Host/assets/RIP.png) no-repeat center center fixed',
 		         'width': '100%',
 		         'z-index': 1000
 		      });
@@ -74,7 +74,8 @@
 		$('.start').addClass('d-none');
 		$('#nick').append(nick);
 		$('#lobby').removeClass('d-none');
-		$('*').css('background', 'transparent');
+
+		$('body').css('background', 'initial');
 	});
 
 	socket.on('EditUserName', function(username){
