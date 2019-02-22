@@ -10,6 +10,8 @@ TODO:
 * Fix minor visual bugs
 * Fix timing
 * Fix jittering
+* Responsive resolution support
+
 Done:
 
 * Room system
