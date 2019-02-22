@@ -7,6 +7,7 @@ TODO:
 * add sound - Ping!
 * Add Endgame situation
 * Finish Maturita
+* Fix minor visual bugs
 
 Done:
 
