@@ -9,7 +9,7 @@ TODO:
 * Finish Maturita
 * Fix minor visual bugs
 * Fix timing
-
+* Fix jittering
 Done:
 
 * Room system
