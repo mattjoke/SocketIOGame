@@ -216,7 +216,7 @@
 		}
 	}
 
-	socket.on('StartEnd', function(){
+	socket.on('StartEnd', function(room){
 		clearAll();
 
 		$('#duel').removeClass('d-none');
@@ -232,16 +232,11 @@
 
 	$('#Answer').bind('input', function(room){
 		if($('#Answer').val() == answer){
-			socket.emit('Ping', [
-				room,
-				role
-			]);
+			let to = $('#code').val().toUpperCase();
+			socket.emit('Ping', [to,role]);
 			$('#Answer').val('');
 			EndMinigame();
 		}
-	});
-
-	$(document).on('click', '#submit', function(){
 	});
 
 	socket.on('voting', function(data){
