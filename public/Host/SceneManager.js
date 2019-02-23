@@ -874,7 +874,7 @@ var EndInnocents = /** @class */ (function (_super) {
         textSize(40);
         textAlign(CENTER);
         fill(0);
-        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tMatej Hakoš\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
         this.move -= .5;
     };
     return EndInnocents;
@@ -912,7 +912,7 @@ var EndThief = /** @class */ (function (_super) {
         textSize(40);
         textAlign(CENTER);
         fill(0);
-        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nEngine\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tMatej Hakoš\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nEngine\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
         this.move -= .5;
     };
     return EndThief;
