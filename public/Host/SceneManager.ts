@@ -664,9 +664,8 @@ class Conclusion extends Scene{
 
 		socket.emit("NewRound", correction);
 
-		console.log("Unload");
-		if (roles_count[2] == 2 && ((roles_count[0]+roles_count[1]) == roles_count[2])) {
-			scenes.changeScene(new Lobby());
+		if ((roles_count[2] == 2 && ((roles_count[0]+roles_count[1]) == roles_count[2])) || (roles_count[2] == 1 && ((roles_count[0]+roles_count[1]) == roles_count[2])) ){
+			scenes.changeScene(new EndGameIntro());
 		}else if (roles_count[2] == 0) {
 			scenes.changeScene(new DeadMoveEndInnocents());
 		} else {
@@ -751,12 +750,17 @@ class Conclusion extends Scene{
 					pick[1] = tmp;
 				}
 			}
-			let id = "";
-			for (var i = 0; i < players.length; i++) {
-				if(players[i].name == pick[0]){
-					id = players[i].id;
+			try {
+				let id = "";
+				for (var i = 0; i < players.length; i++) {
+					if(players[i].name == pick[0]){
+						id = players[i].id;
+					}
 				}
+			} catch(e) {
+				this.unload();
 			}
+
 			//Draw player's name
 			textSize(56);
 			text(pick[0], width/2 - textWidth(pick[0])/1.4, height/6.45);
@@ -772,14 +776,13 @@ class Conclusion extends Scene{
 					text(roles[i],width-textWidth(roles[i])-width/30, height-height/3);
 				}
 			}
-			//Timer
-			if(frameCount % 60 == 0 && this.timer > 0){
-				this.timer--;
-			}
-			if (this.timer == 0) {
-				this.removePerson(id);
-				this.unload();
-			}
+		}
+		if(frameCount % 60 == 0 && this.timer > 0){
+			this.timer--;
+		}
+		if (this.timer == 0) {
+			this.removePerson(id);
+			this.unload();
 		}
 	}
 }
@@ -997,11 +1000,12 @@ class EndGame extends Scene{
 	private bg: Image;
 	private counter: number;
 
-	private InnCorr: number;
-	private ThiefCorr: number;
+	public InnCorr: number;
+	public ThiefCorr: number;
 
 	unload():void{
 		socket.emit('StopEndGame', correction);
+		console.log(this.InnCorr,this.ThiefCorr);
 		if(this.InnCorr > this.ThiefCorr){
 			scenes.changeScene(new EndInnocents());
 		}else{
@@ -1013,11 +1017,15 @@ class EndGame extends Scene{
 		socket.emit('StartEndGame', correction);
 
 		this.bg = loadImage('assets/EndScene.png');
-		this.counter = round(random(15,45));
+		this.counter = round(random(15,60));
 	}
 
 	update():void {
 		this.redraw();
+
+		textSize(256);
+		text(this.counter, (width-textWidth(this.counter))/2,height/2);
+
 		if(frameCount % 60 == 0 && this.counter > 0){
 			this.counter--;
 		}
@@ -1091,7 +1099,7 @@ let picked = [];
 let roomCode = "";
 let correction;
 let url = "";
-let lastRandomEvent = "Dice";
+let lastRandomEvent = "Hands";
 //SceneManager, canvas variables
 let width;
 let height;
@@ -1132,6 +1140,14 @@ function setup(){
 	//Url Handeling
 	socket.on('url',function(data){
 		url = data;
+	});
+	//Endgame handeling
+	socket.on('AddPoint', function(data){
+		if (data[1] == "ZLODEJ") {
+			scenes.currScene.ThiefCorr++;
+		}else{
+			scenes.currScene.InnCorr++;
+		}
 	});
 }
 

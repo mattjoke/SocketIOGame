@@ -195,7 +195,7 @@ io.on('connection',function(socket){
 		socket.broadcast.to(room).emit('StartEnd');
 	});
 	socket.on('StopEndGame', function(room){
-		socket.broadcast.to(room).emit('StopEnd');
+		socket.broadcast.to(room).emit('StopEnd', room);
 	});
 	socket.on('Ping', function(data){
 		socket.broadcast.to(data[0]).emit('AddPoint');

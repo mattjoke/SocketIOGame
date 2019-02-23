@@ -5,6 +5,7 @@
 	let dead = false;
 	let role;
 	let answer;
+	let run = false;
 
 	function clearAll(){
 		$('#duel').addClass('d-none');
@@ -193,37 +194,54 @@
 	});
 
 	function EndMinigame(){
-		let operations = ["+","-","x","/"];
+		if (run) {
+			$('#Answer').empty();
+			$('#question').empty();
 
-		let first = Math.floor(Math.random() * 30 - 10);
-		let second = Math.floor(Math.random() * 15);
-		let operation = operations[Math.floor(Math.random() * operations.length)];
+			let operations = ["+","-","x"];
 
-		switch(operation){
-			case '+': answer = first + second; break;
-			case '-': answer = first - second; break;
-			case 'x': answer = first * second; break;
-			case '/': answer = first / second; break;
+			let first = Math.floor(Math.random() * 30 - 10);
+			let second = Math.floor(Math.random() * 15);
+			let operation = operations[Math.floor(Math.random() * operations.length)];
+
+			switch(operation){
+				case '+': answer = first + second; break;
+				case '-': answer = first - second; break;
+				case 'x': answer = first * second; break;
+			}
+
+			$('#question').append('<p class="lead">'+first+' '+operation+' '+second+'</p>');
+		}else{
+			$('#duel').addClass('d-none');
 		}
-
-		$('#question').append('<p class="lead">'+first+' '+operation+' '+second+'</p>');
 	}
 
 	socket.on('StartEnd', function(){
 		clearAll();
-		$('#Answer').empty();
-		$('#question').empty();
+
 		$('#duel').removeClass('d-none');
 
+		run = true;
 		EndMinigame();
 	});
 
-	$(document).on('click', '#submit', function(){
-		answer = answer+"";
-		console.log($('#Answer').text());
-		if($('#Answer').text() == answer){
-			console.log(answer);
+	socket.on('StopEnd', function(){
+		run = false;
+		clearAll();
+	});
+
+	$('#Answer').bind('input', function(room){
+		if($('#Answer').val() == answer){
+			socket.emit('Ping', [
+				room,
+				role
+			]);
+			$('#Answer').val('');
+			EndMinigame();
 		}
+	});
+
+	$(document).on('click', '#submit', function(){
 	});
 
 	socket.on('voting', function(data){
