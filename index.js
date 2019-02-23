@@ -170,14 +170,6 @@ io.on('connection',function(socket){
 		let random = db[Math.floor(Math.random() * db.length)];
 		socket.broadcast.to(room).emit('PointTask', random.otazka);
 	});
-	//Tasks
-	socket.on("TextTask", function (room){
-		socket.broadcast.to(room).emit("task_text");
-	});
-
-	socket.on("TextTaskDone", function(data){
-		socket.broadcast.to(data.room).emit("task_text_done",data);
-	});
 	//New sets of tasks
 	//Roles
 	socket.on('roles', function(data){
@@ -197,7 +189,17 @@ io.on('connection',function(socket){
 	//Handle NewRound
 	socket.on('NewRound', function(data){
 		socket.broadcast.to(data).emit('NewRound');
-	})
+	});
+	//Handle EndGame
+	socket.on('StartEndGame', function(room){
+		socket.broadcast.to(room).emit('StartEnd');
+	});
+	socket.on('StopEndGame', function(room){
+		socket.broadcast.to(room).emit('StopEnd');
+	});
+	socket.on('Ping', function(data){
+		socket.broadcast.to(data[0]).emit('AddPoint');
+	});
 
 });
 

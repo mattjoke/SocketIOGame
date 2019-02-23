@@ -4,10 +4,6 @@ abstract class Scene{
 	abstract load():void;
 	abstract unload():void;
 }
-
-function chooseMinigame(last){
-
-}
 //Camera movement
 class LobbyMoveRolechoose extends Scene{
 
@@ -409,6 +405,42 @@ class DeadMoveDice extends Scene{
 		this.y = lerp(this.y, -this.targetY, 0.03);
 	}
 }
+class DeadMoveEndInnocents extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new EndInnocents());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2094;
+		this.y = -6;
+		this.targetX = 4014;
+		this.targetY = 6;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
 //Scenes with game
 class Lobby extends Scene{
 	private bg: Image;
@@ -634,11 +666,9 @@ class Conclusion extends Scene{
 
 		console.log("Unload");
 		if (roles_count[2] == 2 && ((roles_count[0]+roles_count[1]) == roles_count[2])) {
-			console.log("DRAW");
 			scenes.changeScene(new Lobby());
 		}else if (roles_count[2] == 0) {
-			scenes.changeScene(new Lobby());
-			console.log("Innocent wins!");
+			scenes.changeScene(new DeadMoveEndInnocents());
 		} else {
 			switch(lastRandomEvent){
 				case "Hands":
@@ -721,6 +751,12 @@ class Conclusion extends Scene{
 					pick[1] = tmp;
 				}
 			}
+			let id = "";
+			for (var i = 0; i < players.length; i++) {
+				if(players[i].name == pick[0]){
+					id = players[i].id;
+				}
+			}
 			//Draw player's name
 			textSize(56);
 			text(pick[0], width/2 - textWidth(pick[0])/1.4, height/6.45);
@@ -741,12 +777,6 @@ class Conclusion extends Scene{
 				this.timer--;
 			}
 			if (this.timer == 0) {
-				let id = "";
-				for (var i = 0; i < players.length; i++) {
-					if(players[i].name == pick[0]){
-						id = players[i].id;
-					}
-				}
 				this.removePerson(id);
 				this.unload();
 			}
@@ -841,33 +871,163 @@ class YouGottaPoint extends Scene{
 		}
 	}
 }
-class InnocentWins extends Scene{
+class EndInnocents extends Scene{
 
 	private bg: Image;
+	private textCol: color;
+	private move: number;
 
 	unload():void{
-		scenes.changeScene(new PointMoveVote());
+		scenes.changeScene(new Lobby());
 	}
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
+		this.textCol = color(252, 206, 58);
+		this.move = height + 50;
 	}
 
 	update():void {
 		this.redraw();
+		if(this.move < -650){
+			this.move = height + 50;
+		}
 	}
 
 	redraw():void{
 		image(this.bg, 0, 0);
 
 		//Draw win label
+		fill(this.textCol);
+		textAlign(LEFT);
+		this.textCol = lerpColor(this.textCol, color(0,0,0), 0.01);
 		textSize(256);
 		text("Nevinní", (width-textWidth("Nevinní"))/2-135, height/2);
 		textSize(179);
 		text("vyhrali!", (width-textWidth("vyhrali!"))/2, height/2+130);
 
 		//Draw movie rolling credits
-		text
+		textSize(40);
+		textAlign(CENTER);
+		fill(0);
+		text(
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tMatej Hakoš\n\nCelý kód je dostupný na GitHube\n<insert link>\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019",width-width/6.5, this.move);
+		this.move -= .5;
+	}
+}
+class EndThief extends Scene{
+
+	private bg: Image;
+	private textCol: color;
+	private move: number;
+
+	unload():void{
+		scenes.changeScene(new Lobby());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/EndScene.png');
+		this.textCol = color(252, 206, 58);
+		this.move = height + 50;
+	}
+
+	update():void {
+		this.redraw();
+		if(this.move < -650){
+			this.move = height + 50;
+		}
+	}
+
+	redraw():void{
+		image(this.bg, 0, 0);
+
+		//Draw win label
+		fill(this.textCol);
+		textAlign(LEFT);
+		this.textCol = lerpColor(this.textCol, color(0,0,0), 0.01);
+		textSize(256);
+		text("Zlodeji", (width-textWidth("Zlodeji"))/2-95, height/2);
+		textSize(179);
+		text("vyhrali!", (width-textWidth("vyhrali!"))/2, height/2+130);
+
+		//Draw movie rolling credits
+		textSize(40);
+		textAlign(CENTER);
+		fill(0);
+		text(
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nEngine\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tMatej Hakoš\n\nCelý kód je dostupný na GitHube\n<insert link>\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019",width-width/6.5, this.move);
+		this.move -= .5;
+	}
+}
+class EndGameIntro extends Scene{
+
+	private bg: Image;
+	private counter: number;
+
+	unload():void{
+		scenes.changeScene(new EndGame());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/EndScene.png');
+		this.counter = 15;
+	}
+
+	update():void {
+		this.redraw();
+		if(frameCount % 60 == 0 && this.counter > 0){
+			this.counter--;
+		}
+		if (this.counter == 0) {
+			this.unload();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,0,0);
+
+		textSize(128);
+		text("Je remíza!", (width-textWidth("Je remíza!"))/2, height/3);
+		textSize(64);
+		text("Je čas zmerať si sily v prestrelke.",(width-textWidth("Je čas zmerať si sily v prestrelke."))/2, height/2);
+	}
+}
+class EndGame extends Scene{
+
+	private bg: Image;
+	private counter: number;
+
+	private InnCorr: number;
+	private ThiefCorr: number;
+
+	unload():void{
+		socket.emit('StopEndGame', correction);
+		if(this.InnCorr > this.ThiefCorr){
+			scenes.changeScene(new EndInnocents());
+		}else{
+			scenes.changeScene(new EndThief());
+		}
+	}
+
+	load():void{
+		socket.emit('StartEndGame', correction);
+
+		this.bg = loadImage('assets/EndScene.png');
+		this.counter = round(random(15,45));
+	}
+
+	update():void {
+		this.redraw();
+		if(frameCount % 60 == 0 && this.counter > 0){
+			this.counter--;
+		}
+		if (this.counter == 0) {
+			this.unload();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,0,0);
 	}
 }
 //Work in progress

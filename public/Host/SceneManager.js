@@ -16,8 +16,6 @@ var Scene = /** @class */ (function () {
     }
     return Scene;
 }());
-function chooseMinigame(last) {
-}
 //Camera movement
 var LobbyMoveRolechoose = /** @class */ (function (_super) {
     __extends(LobbyMoveRolechoose, _super);
@@ -375,6 +373,38 @@ var DeadMoveDice = /** @class */ (function (_super) {
     };
     return DeadMoveDice;
 }(Scene));
+var DeadMoveEndInnocents = /** @class */ (function (_super) {
+    __extends(DeadMoveEndInnocents, _super);
+    function DeadMoveEndInnocents() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveEndInnocents.prototype.unload = function () {
+        scenes.changeScene(new EndInnocents());
+    };
+    DeadMoveEndInnocents.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 4014;
+        this.targetY = 6;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveEndInnocents.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveEndInnocents.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveEndInnocents;
+}(Scene));
 //Scenes with game
 var Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
@@ -608,12 +638,10 @@ var Conclusion = /** @class */ (function (_super) {
         socket.emit("NewRound", correction);
         console.log("Unload");
         if (roles_count[2] == 2 && ((roles_count[0] + roles_count[1]) == roles_count[2])) {
-            console.log("DRAW");
             scenes.changeScene(new Lobby());
         }
         else if (roles_count[2] == 0) {
-            scenes.changeScene(new Lobby());
-            console.log("Innocent wins!");
+            scenes.changeScene(new DeadMoveEndInnocents());
         }
         else {
             switch (lastRandomEvent) {
@@ -695,6 +723,12 @@ var Conclusion = /** @class */ (function (_super) {
                     pick[1] = tmp;
                 }
             }
+            var id = "";
+            for (var i = 0; i < players.length; i++) {
+                if (players[i].name == pick[0]) {
+                    id = players[i].id;
+                }
+            }
             //Draw player's name
             textSize(56);
             text(pick[0], width / 2 - textWidth(pick[0]) / 1.4, height / 6.45);
@@ -715,12 +749,6 @@ var Conclusion = /** @class */ (function (_super) {
                 this.timer--;
             }
             if (this.timer == 0) {
-                var id = "";
-                for (var i = 0; i < players.length; i++) {
-                    if (players[i].name == pick[0]) {
-                        id = players[i].id;
-                    }
-                }
                 this.removePerson(id);
                 this.unload();
             }
@@ -810,28 +838,144 @@ var YouGottaPoint = /** @class */ (function (_super) {
     };
     return YouGottaPoint;
 }(Scene));
-var InnocentWins = /** @class */ (function (_super) {
-    __extends(InnocentWins, _super);
-    function InnocentWins() {
+var EndInnocents = /** @class */ (function (_super) {
+    __extends(EndInnocents, _super);
+    function EndInnocents() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    InnocentWins.prototype.unload = function () {
-        scenes.changeScene(new PointMoveVote());
+    EndInnocents.prototype.unload = function () {
+        scenes.changeScene(new Lobby());
     };
-    InnocentWins.prototype.load = function () {
+    EndInnocents.prototype.load = function () {
         this.bg = loadImage('assets/EndScene.png');
+        this.textCol = color(252, 206, 58);
+        this.move = height + 50;
     };
-    InnocentWins.prototype.update = function () {
+    EndInnocents.prototype.update = function () {
         this.redraw();
+        if (this.move < -650) {
+            this.move = height + 50;
+        }
     };
-    InnocentWins.prototype.redraw = function () {
+    EndInnocents.prototype.redraw = function () {
         image(this.bg, 0, 0);
+        //Draw win label
+        fill(this.textCol);
+        textAlign(LEFT);
+        this.textCol = lerpColor(this.textCol, color(0, 0, 0), 0.01);
         textSize(256);
         text("Nevinní", (width - textWidth("Nevinní")) / 2 - 135, height / 2);
         textSize(179);
         text("vyhrali!", (width - textWidth("vyhrali!")) / 2, height / 2 + 130);
+        //Draw movie rolling credits
+        textSize(40);
+        textAlign(CENTER);
+        fill(0);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tMatej Hakoš\n\nCelý kód je dostupný na GitHube\n<insert link>\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
+        this.move -= .5;
     };
-    return InnocentWins;
+    return EndInnocents;
+}(Scene));
+var EndThief = /** @class */ (function (_super) {
+    __extends(EndThief, _super);
+    function EndThief() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EndThief.prototype.unload = function () {
+        scenes.changeScene(new Lobby());
+    };
+    EndThief.prototype.load = function () {
+        this.bg = loadImage('assets/EndScene.png');
+        this.textCol = color(252, 206, 58);
+        this.move = height + 50;
+    };
+    EndThief.prototype.update = function () {
+        this.redraw();
+        if (this.move < -650) {
+            this.move = height + 50;
+        }
+    };
+    EndThief.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+        //Draw win label
+        fill(this.textCol);
+        textAlign(LEFT);
+        this.textCol = lerpColor(this.textCol, color(0, 0, 0), 0.01);
+        textSize(256);
+        text("Zlodeji", (width - textWidth("Zlodeji")) / 2 - 95, height / 2);
+        textSize(179);
+        text("vyhrali!", (width - textWidth("vyhrali!")) / 2, height / 2 + 130);
+        //Draw movie rolling credits
+        textSize(40);
+        textAlign(CENTER);
+        fill(0);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nEngine\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tMatej Hakoš\n\nCelý kód je dostupný na GitHube\n<insert link>\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
+        this.move -= .5;
+    };
+    return EndThief;
+}(Scene));
+var EndGameIntro = /** @class */ (function (_super) {
+    __extends(EndGameIntro, _super);
+    function EndGameIntro() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EndGameIntro.prototype.unload = function () {
+        scenes.changeScene(new EndGame());
+    };
+    EndGameIntro.prototype.load = function () {
+        this.bg = loadImage('assets/EndScene.png');
+        this.counter = 15;
+    };
+    EndGameIntro.prototype.update = function () {
+        this.redraw();
+        if (frameCount % 60 == 0 && this.counter > 0) {
+            this.counter--;
+        }
+        if (this.counter == 0) {
+            this.unload();
+        }
+    };
+    EndGameIntro.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+        textSize(128);
+        text("Je remíza!", (width - textWidth("Je remíza!")) / 2, height / 3);
+        textSize(64);
+        text("Je čas zmerať si sily v prestrelke.", (width - textWidth("Je čas zmerať si sily v prestrelke.")) / 2, height / 2);
+    };
+    return EndGameIntro;
+}(Scene));
+var EndGame = /** @class */ (function (_super) {
+    __extends(EndGame, _super);
+    function EndGame() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EndGame.prototype.unload = function () {
+        socket.emit('StopEndGame', correction);
+        if (this.InnCorr > this.ThiefCorr) {
+            scenes.changeScene(new EndInnocents());
+        }
+        else {
+            scenes.changeScene(new EndThief());
+        }
+    };
+    EndGame.prototype.load = function () {
+        socket.emit('StartEndGame', correction);
+        this.bg = loadImage('assets/EndScene.png');
+        this.counter = round(random(15, 45));
+    };
+    EndGame.prototype.update = function () {
+        this.redraw();
+        if (frameCount % 60 == 0 && this.counter > 0) {
+            this.counter--;
+        }
+        if (this.counter == 0) {
+            this.unload();
+        }
+    };
+    EndGame.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+    };
+    return EndGame;
 }(Scene));
 //Work in progress
 var DiceOfLuck = /** @class */ (function (_super) {

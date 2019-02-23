@@ -4,15 +4,17 @@
 	let allow_once = [true,true,true, true, true]; //Handle more than one call
 	let dead = false;
 	let role;
+	let answer;
 
 	function clearAll(){
+		$('#duel').addClass('d-none');
 		$('#lobby').addClass('d-none');
-		$('#HandsPointTask').addClass('d-none');
 		$('#Voting').addClass('d-none');
+		$('#thanks').addClass('d-none');
 		$('#roleTask').addClass('d-none');
 		$('#roleContent').addClass('d-none');
 		$('#answers_pick').addClass('d-none');
-		$('#thanks').addClass('d-none');
+		$('#HandsPointTask').addClass('d-none');
 	}
 
 	function overlay(){
@@ -190,26 +192,39 @@
 		}
 	});
 
-	socket.on("task_text", function(){
-		if (allow_once[0]) {
-			$('#lobby').addClass('d-none');
-			$('#textTask').removeClass('d-none');
-			allow_once[1] = false;
+	function EndMinigame(){
+		let operations = ["+","-","x","/"];
+
+		let first = Math.floor(Math.random() * 30 - 10);
+		let second = Math.floor(Math.random() * 15);
+		let operation = operations[Math.floor(Math.random() * operations.length)];
+
+		switch(operation){
+			case '+': answer = first + second; break;
+			case '-': answer = first - second; break;
+			case 'x': answer = first * second; break;
+			case '/': answer = first / second; break;
+		}
+
+		$('#question').append('<p class="lead">'+first+' '+operation+' '+second+'</p>');
+	}
+
+	socket.on('StartEnd', function(){
+		clearAll();
+		$('#Answer').empty();
+		$('#question').empty();
+		$('#duel').removeClass('d-none');
+
+		EndMinigame();
+	});
+
+	$(document).on('click', '#submit', function(){
+		answer = answer+"";
+		console.log($('#Answer').text());
+		if($('#Answer').text() == answer){
+			console.log(answer);
 		}
 	});
-
-	$('#meme_button').click(function(){
-		$('#textTask').addClass('d-none');
-		$('#nick').removeClass('d-none');
-		$('#lobby').removeClass('d-none');
-
-		socket.emit("TextTaskDone", {
-			room: room,
-			nick: nick,
-			answer: $('#meme_text').val()
-		});
-	});
-
 
 	socket.on('voting', function(data){
 		if (allow_once[1]){
