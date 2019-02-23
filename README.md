@@ -5,7 +5,6 @@ TODO:
 * Write a documentation
 * Dice of luck
 * add sound - Ping!
-* Add Endgame situation
 * Finish Maturita
 * Fix jittering
 * Responsive resolution support
@@ -31,3 +30,4 @@ Done:
 * Fixed color bug on host
 * Fix minor visual bugs
 * Fix timing
+* Added Endgame situation
