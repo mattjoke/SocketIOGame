@@ -434,7 +434,7 @@ var Lobby = /** @class */ (function (_super) {
     };
     Lobby.prototype.redraw = function () {
         //Draw BG and button
-        image(this.bg, 0, 0, 0, height);
+        image(this.bg, 0, 0, width, height);
         //Draw url address
         textSize(24);
         text("Zadajte túto adresu vo svojom prehlidači:", width - textWidth("Zadajte túto adresu vo svojom prehlidači:"), height - height / 2.5 - 64);

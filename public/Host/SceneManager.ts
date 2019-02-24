@@ -471,7 +471,7 @@ class Lobby extends Scene{
 
 	redraw():void{
 		//Draw BG and button
-		image(this.bg,0,0,0,height);
+		image(this.bg,0,0,width,height);
 
 		//Draw url address
 		textSize(24);
