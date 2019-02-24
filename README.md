@@ -7,7 +7,7 @@ TODO:
 * add sound - Ping!
 * Finish Maturita
 * Fix jittering
-* Responsive resolution support
+* Responsive resolution support - 1st attempt 24.2.2019
 
 Done:
 
@@ -31,3 +31,4 @@ Done:
 * Fix minor visual bugs
 * Fix timing
 * Added Endgame situation
+* Partially fixed resolution bug
