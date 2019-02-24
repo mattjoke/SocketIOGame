@@ -170,7 +170,7 @@
 			clearAll();
 			$('#task').empty();
 			if(role == "ZLODEJ"){
-				$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
+				$('#task').append("Dvihni ruku... <br>Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
 			}else {
 				$('#task').append(data);
 			}
@@ -184,7 +184,7 @@
 			clearAll();
 			$('#task').empty();
 			if(role == "ZLODEJ"){
-				$('#task').append("Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
+				$('#task').append("Ukáž na niekoho... <br>Si zlodej. Nemáš právo vedieť úlohu. Snaž sa zapadnúť tak, aby si ťa nikto nevšimol.");
 			}else {
 				$('#task').append(data);
 			}

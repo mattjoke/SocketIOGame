@@ -166,7 +166,7 @@ io.on('connection',function(socket){
 		socket.broadcast.to(room).emit('HandsTask', random.otazka);
 	});
 	socket.on('Point', function(room){
-		let db = JSON.parse(fs.readFileSync('./db/database.json','utf8'));
+		let db = JSON.parse(fs.readFileSync('./db/database1.json','utf8'));
 		let random = db[Math.floor(Math.random() * db.length)];
 		socket.broadcast.to(room).emit('PointTask', random.otazka);
 	});
