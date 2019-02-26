@@ -583,6 +583,8 @@ class Role_assign extends Scene{
 class Vote extends Scene{
 
 	private bg: Image;
+	private tick: Sound;
+	private ding: Sound;
 	private rCode: string;
 	private timer: number;
 
@@ -593,6 +595,8 @@ class Vote extends Scene{
 	load():void{
 		this.timer = 90;
 		this.bg = loadImage("assets/Výsluch.jpeg");
+		this.ding = loadSound("assets/ding.mp3");
+		this.tick = loadSound("assets/tick.mp3");
 		this.rCode = roomCode.substring(16);
 		socket.emit('vote',[this.rCode, players]);
 	}
@@ -604,8 +608,10 @@ class Vote extends Scene{
 		}
 		if(frameCount % 60 == 0 && this.timer > 0){
 			this.timer--;
+			this.tick.play();
 		}
 		if (this.timer == 0) {
+			this.ding.play();
 			this.unload();
 		}
 	}
@@ -789,6 +795,7 @@ class Conclusion extends Scene{
 class HandsOfTruth extends Scene{
 
 	private bg: Image;
+	private ding: Sound;
 	private round: number;
 	private timer: number;
 
@@ -799,10 +806,14 @@ class HandsOfTruth extends Scene{
 	load():void{
 		socket.emit('Hands', correction);
 		this.bg = loadImage("assets/handOfTruth.jpeg");
+		this.ding = loadSound("assets/ding.mp3");
 		this.timer = 10;
 		this.round = 0;
 	}
 	update():void {
+		if(frameCount % 60 == 0 && this.timer > 0){
+			this.timer--;
+		}
 		this.redraw();
 	}
 
@@ -812,26 +823,20 @@ class HandsOfTruth extends Scene{
 		fill(0);
 		textSize(56);
 		text("Na svojom zariadení si prečítajte úlohu.",(width-textWidth("Na svojom zariadení si prečítajte úlohu."))/1.5, height/2+72);
-		if(frameCount % 60 == 0 && this.timer > 0){
-			this.timer--;
-			if (this.timer == 0) {
-				this.round = 1;
-			}
-		}
-		if (this.round == 1) {
-			//Play GO! sound
+		if (this.timer == 0 && this.round == 0) {
+			this.ding.play();
 			this.timer = 5;
-			this.round = 2;
-		}else{
-			if (this.round == 2) {
-				this.unload();
-			}
+			this.round = 1;
+		}
+		if (this.timer == 0 && this.round == 1) {
+			this.unload();
 		}
 	}
 }
 class YouGottaPoint extends Scene{
 
 	private bg: Image;
+	private ding: Sound;
 	private round: number;
 	private timer: number;
 
@@ -843,11 +848,15 @@ class YouGottaPoint extends Scene{
 		socket.emit('Point', correction);
 
 		this.bg = loadImage('assets/YouGottaPoint.jpeg');
+		this.ding = loadSound("assets/ding.mp3");
 		this.timer = 10;
 		this.round = 0;
 	}
 
 	update():void {
+		if(frameCount % 60 == 0 && this.timer > 0){
+			this.timer--;
+		}
 		this.redraw();
 	}
 
@@ -857,20 +866,13 @@ class YouGottaPoint extends Scene{
 		fill(0);
 		textSize(56);
 		text("Na svojom zariadení si prečítajte úlohu.",(width-textWidth("Na svojom zariadení si prečítajte úlohu."))/1.5, height/2-32);
-		if(frameCount % 60 == 0 && this.timer > 0){
-			this.timer--;
-			if (this.timer == 0) {
-				this.round = 1;
-			}
-		}
-		if (this.round == 1) {
-			//Play GO! sound
+		if (this.timer == 0 && this.round == 0) {
+			this.ding.play();
 			this.timer = 5;
-			this.round = 2;
-		}else{
-			if (this.round == 2) {
-				this.unload();
-			}
+			this.round = 1;
+		}
+		if (this.timer == 0 && this.round == 1) {
+			this.unload();
 		}
 	}
 }

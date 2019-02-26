@@ -564,6 +564,8 @@ var Vote = /** @class */ (function (_super) {
     Vote.prototype.load = function () {
         this.timer = 90;
         this.bg = loadImage("assets/Výsluch.jpeg");
+        this.ding = loadSound("assets/ding.mp3");
+        this.tick = loadSound("assets/tick.mp3");
         this.rCode = roomCode.substring(16);
         socket.emit('vote', [this.rCode, players]);
     };
@@ -574,8 +576,10 @@ var Vote = /** @class */ (function (_super) {
         }
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
+            this.tick.play();
         }
         if (this.timer == 0) {
+            this.ding.play();
             this.unload();
         }
     };
@@ -770,10 +774,14 @@ var HandsOfTruth = /** @class */ (function (_super) {
     HandsOfTruth.prototype.load = function () {
         socket.emit('Hands', correction);
         this.bg = loadImage("assets/handOfTruth.jpeg");
+        this.ding = loadSound("assets/ding.mp3");
         this.timer = 10;
         this.round = 0;
     };
     HandsOfTruth.prototype.update = function () {
+        if (frameCount % 60 == 0 && this.timer > 0) {
+            this.timer--;
+        }
         this.redraw();
     };
     HandsOfTruth.prototype.redraw = function () {
@@ -781,21 +789,13 @@ var HandsOfTruth = /** @class */ (function (_super) {
         fill(0);
         textSize(56);
         text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 1.5, height / 2 + 72);
-        if (frameCount % 60 == 0 && this.timer > 0) {
-            this.timer--;
-            if (this.timer == 0) {
-                this.round = 1;
-            }
-        }
-        if (this.round == 1) {
-            //Play GO! sound
+        if (this.timer == 0 && this.round == 0) {
+            this.ding.play();
             this.timer = 5;
-            this.round = 2;
+            this.round = 1;
         }
-        else {
-            if (this.round == 2) {
-                this.unload();
-            }
+        if (this.timer == 0 && this.round == 1) {
+            this.unload();
         }
     };
     return HandsOfTruth;
@@ -811,10 +811,14 @@ var YouGottaPoint = /** @class */ (function (_super) {
     YouGottaPoint.prototype.load = function () {
         socket.emit('Point', correction);
         this.bg = loadImage('assets/YouGottaPoint.jpeg');
+        this.ding = loadSound("assets/ding.mp3");
         this.timer = 10;
         this.round = 0;
     };
     YouGottaPoint.prototype.update = function () {
+        if (frameCount % 60 == 0 && this.timer > 0) {
+            this.timer--;
+        }
         this.redraw();
     };
     YouGottaPoint.prototype.redraw = function () {
@@ -822,21 +826,13 @@ var YouGottaPoint = /** @class */ (function (_super) {
         fill(0);
         textSize(56);
         text("Na svojom zariadení si prečítajte úlohu.", (width - textWidth("Na svojom zariadení si prečítajte úlohu.")) / 1.5, height / 2 - 32);
-        if (frameCount % 60 == 0 && this.timer > 0) {
-            this.timer--;
-            if (this.timer == 0) {
-                this.round = 1;
-            }
-        }
-        if (this.round == 1) {
-            //Play GO! sound
+        if (this.timer == 0 && this.round == 0) {
+            this.ding.play();
             this.timer = 5;
-            this.round = 2;
+            this.round = 1;
         }
-        else {
-            if (this.round == 2) {
-                this.unload();
-            }
+        if (this.timer == 0 && this.round == 1) {
+            this.unload();
         }
     };
     return YouGottaPoint;
