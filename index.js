@@ -173,7 +173,9 @@ io.on('connection',function(socket){
 	//New sets of tasks
 	//Roles
 	socket.on('roles', function(data){
+		update(data[0], data[1]);
 		socket.broadcast.to(data[0]).emit('roles', data[1]);
+
 	});
 	//Voting
 	socket.on('vote', function(data){

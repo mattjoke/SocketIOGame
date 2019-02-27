@@ -69,7 +69,7 @@
 	$('#join').click( function(){
 		$('.nick').removeClass('d-none');
 		room = $('#code').val().toUpperCase();
-		nick = $('#name').val();
+		nick = $('#name').val().replace(/ /g, '');
 		socket.emit('joinRoom',{
 			code: room,
 			name: nick
@@ -114,49 +114,47 @@
 
 	function pickRandomThief(arr){
 		let help = [];
-		let role = arr[0];
-		let players = arr[1];
-		for (var i = 0; i < role.length; i++) {
-			if (role[i] == "ZLODEJ") {
+		for (var i = 0; i < arr.length; i++) {
+			if (arr[i].role == "ZLODEJ") {
 				help.push(i);
 			}
 		}
-		return "<br><h6>"+players[help[Math.floor(Math.random()*help.length)]].name+"</h6>";
+		return "<br><h6>"+arr[help[Math.floor(Math.random()*help.length)]].name+"</h6>";
 	}
 
 	socket.on('roles', function(data){
-		let roles = data[0];
-		let players = data[1];
-		for (let i = 0; i < roles.length;i++){
-			if(socket.id == players[i].id){
-				$('#role').append('<h3>'+roles[i]+'</h3>');
-				switch (roles[i]) {
+		let players = data;
+		for (let i = 0; i < players.length;i++){
+			let player = players[i];
+			if(socket.id == player.id){
+				$('#role').append('<h3>'+player.role+'</h3>');
+				switch (player.role) {
 					case "DETEKTÍV":
 						$('#description').empty();
-						$('#description').append("Tvojou úlohou je presvedčit ostatných, že tento človek je zlodej:"+pickRandomThief(data));
-						role = roles[i];
+						$('#description').append("Tvojou úlohou je presvedčit ostatných, že tento človek je zlodej:"+pickRandomThief(players));
+						role = player.role;
 						break;
 					case "NEVINNÝ":
 						$('#description').empty();
 						$('#description').append("Tvojou úlohou je pomôcť detektívovi nájsť zločincov.");
-						role = roles[i];
+						role = player.role;
 						break;
 					case "ZLODEJ":
 						$('#description').empty();
 						$('#description').append("Tvojou úlohou je presvedčit ostatných, že nie si zlodej.");
 						let partners = [];
-						for (var j = 0; j < roles.length; j++) {
-							if (roles[j] == "ZLODEJ" && socket.id != players[j].id){
-								$('#description').push(players[j]);
+						for (var j = 0; j < players.length; j++) {
+							if (players[j].role == "ZLODEJ" && socket.id != players[j].id){
+								partners.push(players[j].name);
 							}
 						}
 						if (partners.length > 0) {
-							$('#description').append("Tvoji parťáci sú: ");
+							$('#description').append("<br>Tvoji parťáci sú: ");
 							for (var k = 0; k < partners.length; k++) {
 								$('#description').append("<strong>"+partners[k]+"</strong>");
 							}
 						}
-						role = roles[i];
+						role = player.role;
 						break;
 				}
 			}

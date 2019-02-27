@@ -511,12 +511,12 @@ var Role_assign = /** @class */ (function (_super) {
         }
     };
     Role_assign.prototype.redraw = function () {
-        socket.emit('roles', [correction, [roles, players]]);
+        socket.emit('roles', [correction, players]);
     };
     Role_assign.prototype.load = function () {
         this.bg = loadImage('assets/RoleChoose.jpeg');
         this.timer = 15;
-        var count = floor((players.length - 1) / 2);
+        var count = floor((players.length - 1) / 3);
         if ((players.length - 1) <= 4) {
             count = 1;
         }
@@ -548,6 +548,11 @@ var Role_assign = /** @class */ (function (_super) {
                     roles_count[2]++;
                     break;
             }
+        }
+        for (var i = 0; i < players.length; i++) {
+            var player = players[i];
+            player.role = roles[i];
+            players[i] = player;
         }
         this.redraw();
     };
@@ -680,7 +685,7 @@ var Conclusion = /** @class */ (function (_super) {
             while (pick.name == "Host") {
                 pick = random(players);
             }
-            picked.push([pick.name, 1, [pick.id]]);
+            picked.push([pick.name, 0]);
         }
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
@@ -689,12 +694,12 @@ var Conclusion = /** @class */ (function (_super) {
                 var pick = picked[j];
                 if (pick[0] == answer[0]) {
                     pick[1]++;
-                    pick[2].push(answer[1]);
                     isThere = true;
+                    console.log(picked);
                 }
             }
             if (!isThere) {
-                picked.push([answer[0], 1, [answer[1]]]);
+                picked.push([answer[0], 1]);
             }
         }
         this.redraw();
@@ -870,7 +875,7 @@ var EndInnocents = /** @class */ (function (_super) {
         textSize(40);
         textAlign(CENTER);
         fill(0);
-        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
         this.move -= .5;
     };
     return EndInnocents;
@@ -908,7 +913,7 @@ var EndThief = /** @class */ (function (_super) {
         textSize(40);
         textAlign(CENTER);
         fill(0);
-        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nEngine\t\tMatej Hakoš\nDizajn\t\tMatej Hakoš\nAnimácie\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
         this.move -= .5;
     };
     return EndThief;
@@ -961,6 +966,8 @@ var EndGame = /** @class */ (function (_super) {
     EndGame.prototype.load = function () {
         socket.emit('StartEndGame', correction);
         this.bg = loadImage('assets/EndScene.png');
+        this.tick = loadSound('assets/tick.mp3');
+        this.ding = loadSound('assets/ding.mp3');
         this.counter = round(random(15, 60));
         this.ThiefCorr = 0;
         this.InnCorr = 0;
@@ -969,10 +976,14 @@ var EndGame = /** @class */ (function (_super) {
         this.redraw();
         textSize(256);
         text(this.counter, (width - textWidth(this.counter)) / 2, height / 2);
+        textSize(128);
+        text(this.InnCorr + ":" + this.ThiefCorr, (width - textWidth(this.counter)) / 2, height - height / 3);
         if (frameCount % 60 == 0 && this.counter > 0) {
             this.counter--;
+            this.tick.play();
         }
         if (this.counter == 0) {
+            this.ding.play();
             this.unload();
         }
     };
@@ -1039,6 +1050,7 @@ var roomCode = "";
 var correction;
 var url = "";
 var lastRandomEvent = "Hands";
+var pause = false;
 //SceneManager, canvas variables
 var width;
 var height;
@@ -1088,5 +1100,23 @@ function setup() {
     });
 }
 function draw() {
-    scenes.update();
+    if (pause) {
+        fill(0, 0, 0, 150);
+        image(scenes.currScene.bg, 0, 0, width, height);
+        rect(0, 0, width, height);
+        textSize(128);
+        fill(255);
+        text("Pozastavené", (width - textWidth("Pozastavené")) / 2, height / 2);
+        textSize(64);
+        text("Stlačte Esc pre pokračovanie", (width - textWidth("Stlačte Esc pre pokračovanie")) / 2, height / 2 + 72);
+    }
+    else {
+        scenes.update();
+    }
+}
+function keyPressed() {
+    if (keyCode === ESCAPE) {
+        pause = !pause;
+        fill(0);
+    }
 }
