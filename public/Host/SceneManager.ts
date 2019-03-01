@@ -441,6 +441,78 @@ class DeadMoveEndInnocents extends Scene{
 		this.y = lerp(this.y, -this.targetY, 0.03);
 	}
 }
+class DeadMoveEndThiefs extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new EndThief());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2094;
+		this.y = -6;
+		this.targetX = 4014;
+		this.targetY = 6;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
+class DeadMoveEndGame extends Scene{
+
+	private bg: Image;
+	private x: number;
+	private y: number;
+	private targetX: number;
+	private targetY: number;
+
+	unload():void{
+		scenes.changeScene(new EndGameIntro());
+	}
+
+	load():void{
+		this.bg = loadImage('assets/Full.jpeg');
+		this.x = -2094;
+		this.y = -6;
+		this.targetX = 4014;
+		this.targetY = 6;
+
+		while(this.bg == undefined);
+	}
+
+	update():void {
+		if ((this.targetX+this.x) < 1 && (this.targetY+this.y)<1) {
+			this.unload();
+		}else{
+			this.redraw();
+		}
+	}
+
+	redraw():void{
+		image(this.bg,this.x,this.y);
+		this.x = lerp(this.x, -this.targetX, 0.03);
+		this.y = lerp(this.y, -this.targetY, 0.03);
+	}
+}
 //Scenes with game
 class Lobby extends Scene{
 	private bg: Image;
@@ -661,8 +733,9 @@ class Vote extends Scene{
 class Conclusion extends Scene{
 
 	private bg: Image;
-	private picked_role: string;
 	private timer: number;
+	private picked_id: string;
+	private picked_role: string;
 
 	unload():void{
 		//pick random events or launch endgame
@@ -710,93 +783,82 @@ class Conclusion extends Scene{
 		this.bg = loadImage("assets/Dead.jpeg");
 		this.timer = 10;
 
-		if (picked.length == 0) {
-			let pick = random(players);
-			while (pick.name == "Host"){
-				pick = random(players);
-			}
-			picked.push([pick.name, 0]);
-		}
-
 		for (var i = 0; i < answers.length; i++) {
 			let answer = answers[i];
+			answer = answer[0];
 			let isThere = false;
-			for (var j = 0; j <	picked.length; j++) {
-				let pick = picked[j];
-				if( pick[0] == answer[0]){
-					pick[1]++;
+			for (var j = 0; j < picked.length; j++) {
+				let help = picked[j];
+				if (answer == help[0]) {
+					help[1] += 1;
 					isThere = true;
-					console.log(picked);
 				}
 			}
 			if (!isThere) {
-				picked.push([answer[0], 1]);
+				picked.push([answer, 1]);
 			}
 		}
+
+		if (picked.length < 1) {
+			let pick = random(players);
+			while(pick.name == "HOST"){
+				pick = random(players[0]);
+			}
+			picked.push([pick.name, 1]);
+		}
+
+		//Determine who is out
+		let tmp = picked[0];
+		for (var i = 1; i < picked.length; i++) {
+			tmp2 = picked[i];
+			if(tmp[1] < tmp2[1]){
+				tmp = tmp2;
+			}
+		}
+		picked = [];
+		picked = tmp;
+		//Determine out's role and gather ID
+		for (var i = 0; i < players.length; i++) {
+			if(players[i].name == picked[0]){
+				this.picked_role = players[i].role;
+				this.picked_id = players[i].id;
+			}
+		}
+
+		//Emits dead person to server
+		socket.emit('dead', {
+			room: correction,
+			id: this.picked_id
+		});
 
 		this.redraw();
 	}
 	update():void {
 		this.redraw();
-	}
-	removePerson(id:string):void{
-		for (var i = 0; i < players.length; i++) {
-			if(players[i].id == id){
-				players.splice(i, 1);
-			}
-		}
-	}
-	redraw():void{
-		if(players.length == 0 && answers.length == 0){
-			this.unload();
-		}else{
-			image(this.bg,0,0);
-			//Draw Title
-			fill(0);
-			textSize(72);
-
-			//Determine who is out
-			let pick = picked[0];
-			for (var i = 0; i < picked.length; i++) {
-				let tmp = picked[i];
-				if(pick[1] < tmp[1]){
-					pick[1] = tmp;
-				}
-			}
-			try {
-				let id = "";
-				for (var i = 0; i < players.length; i++) {
-					if(players[i].name == pick[0]){
-						id = players[i].id;
-					}
-				}
-			} catch(e) {
-				this.unload();
-			}
-
-			//Draw player's name
-			textSize(56);
-			text(pick[0], width/2 - textWidth(pick[0])/1.4, height/6.45);
-			//Emits dead person to server
-			socket.emit('dead', {
-				room: correction,
-				id: id
-			});
-			//Draw picked's role
-			for (var i = 0; i < players.length; i++) {
-				if(players[i].name == pick[0]){
-					this.picked_role = roles[i];
-					text(roles[i],width-textWidth(roles[i])-width/30, height-height/3);
-				}
-			}
-		}
 		if(frameCount % 60 == 0 && this.timer > 0){
 			this.timer--;
 		}
 		if (this.timer == 0) {
-			this.removePerson(id);
+			for (var i = 0; i < players.length; i++) {
+				if(players[i].id == this.picked_id){
+					players.splice(i, 1);
+				}
+			}
 			this.unload();
 		}
+	}
+	redraw():void{
+		image(this.bg,0,0);
+		//Draw Title
+		fill(0);
+		textSize(72);
+
+		//Draw player's name
+		textSize(56);
+		text(picked[0], width/2 - textWidth(picked[0])/1.4, height/6.45);
+
+		//Draw picked's role
+		text(this.picked_role,width-textWidth(this.picked_role)-width/30, height-height/3);
 	}
 }
 class HandsOfTruth extends Scene{
@@ -974,6 +1036,7 @@ class EndThief extends Scene{
 class EndGameIntro extends Scene{
 
 	private bg: Image;
+	private textCol:color;
 	private counter: number;
 
 	unload():void{
@@ -983,6 +1046,7 @@ class EndGameIntro extends Scene{
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
 		this.counter = 15;
+		this.textCol = color(252, 206, 58);
 	}
 
 	update():void {
@@ -998,8 +1062,31 @@ class EndGameIntro extends Scene{
 	redraw():void{
 		image(this.bg,0,0);
 
+		fill(0);
 		textSize(128);
 		text("Je remíza!", (width-textWidth("Je remíza!"))/2, height/3);
+
+		let inc = 75;
+		textSize(32);
+		text("Zlodeji", (width-textWidth("Zlodeji"))/3, height - height/4);
+		text("Nevinní", (width-textWidth("Nevinní"))/1.5, height - height/4);
+		for (var i = 0; i < players.length; i++) {
+			if (players[i].role == "HOST") {
+				continue;
+			}
+			if (players[i].role != "HOST" && players[i].role == "ZLODEJ") {
+				text(players[i].name, (width-textWidth(players[i].name))/3, height - height/2.4 + inc);
+			}
+			if (players[i].role != "HOST" && (players[i].role == "NEVINNÝ" || players[i].role == "DETEKTÍV")) {
+				text(players[i].name, (width-textWidth(players[i].name))/1.5, height - height/2.4 + inc);
+			}
+			if (i % 2==0) {
+				inc += 75;
+			}
+		}
+
+		fill(this.textCol);
+		this.textCol = lerpColor(this.textCol, color(0,0,0), 0.01);
 		textSize(64);
 		text("Je čas zmerať si sily v prestrelke.",(width-textWidth("Je čas zmerať si sily v prestrelke."))/2, height/2);
 	}
@@ -1016,7 +1103,6 @@ class EndGame extends Scene{
 
 	unload():void{
 		socket.emit('StopEndGame', correction);
-		console.log(this.InnCorr,this.ThiefCorr);
 		if(this.InnCorr > this.ThiefCorr){
 			scenes.changeScene(new EndInnocents());
 		}else{
@@ -1041,7 +1127,7 @@ class EndGame extends Scene{
 		textSize(256);
 		text(this.counter, (width-textWidth(this.counter))/2,height/2);
 		textSize(128);
-		text(this.InnCorr+":"+this.ThiefCorr, (width-textWidth(this.counter))/2,height-height/3);
+		text(this.InnCorr+":"+this.ThiefCorr, (width-textWidth(this.InnCorr+":"+this.ThiefCorr))/2,height-height/3);
 
 		if(frameCount % 60 == 0 && this.counter > 0){
 			this.counter--;

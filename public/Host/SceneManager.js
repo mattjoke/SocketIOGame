@@ -405,6 +405,70 @@ var DeadMoveEndInnocents = /** @class */ (function (_super) {
     };
     return DeadMoveEndInnocents;
 }(Scene));
+var DeadMoveEndThiefs = /** @class */ (function (_super) {
+    __extends(DeadMoveEndThiefs, _super);
+    function DeadMoveEndThiefs() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveEndThiefs.prototype.unload = function () {
+        scenes.changeScene(new EndThief());
+    };
+    DeadMoveEndThiefs.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 4014;
+        this.targetY = 6;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveEndThiefs.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveEndThiefs.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveEndThiefs;
+}(Scene));
+var DeadMoveEndGame = /** @class */ (function (_super) {
+    __extends(DeadMoveEndGame, _super);
+    function DeadMoveEndGame() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DeadMoveEndGame.prototype.unload = function () {
+        scenes.changeScene(new EndGameIntro());
+    };
+    DeadMoveEndGame.prototype.load = function () {
+        this.bg = loadImage('assets/Full.jpeg');
+        this.x = -2094;
+        this.y = -6;
+        this.targetX = 4014;
+        this.targetY = 6;
+        while (this.bg == undefined)
+            ;
+    };
+    DeadMoveEndGame.prototype.update = function () {
+        if ((this.targetX + this.x) < 1 && (this.targetY + this.y) < 1) {
+            this.unload();
+        }
+        else {
+            this.redraw();
+        }
+    };
+    DeadMoveEndGame.prototype.redraw = function () {
+        image(this.bg, this.x, this.y);
+        this.x = lerp(this.x, -this.targetX, 0.03);
+        this.y = lerp(this.y, -this.targetY, 0.03);
+    };
+    return DeadMoveEndGame;
+}(Scene));
 //Scenes with game
 var Lobby = /** @class */ (function (_super) {
     __extends(Lobby, _super);
@@ -680,91 +744,76 @@ var Conclusion = /** @class */ (function (_super) {
         background(0);
         this.bg = loadImage("assets/Dead.jpeg");
         this.timer = 10;
-        if (picked.length == 0) {
-            var pick = random(players);
-            while (pick.name == "Host") {
-                pick = random(players);
-            }
-            picked.push([pick.name, 0]);
-        }
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
+            answer = answer[0];
             var isThere = false;
             for (var j = 0; j < picked.length; j++) {
-                var pick = picked[j];
-                if (pick[0] == answer[0]) {
-                    pick[1]++;
+                var help = picked[j];
+                if (answer == help[0]) {
+                    help[1] += 1;
                     isThere = true;
-                    console.log(picked);
                 }
             }
             if (!isThere) {
-                picked.push([answer[0], 1]);
+                picked.push([answer, 1]);
             }
         }
+        if (picked.length < 1) {
+            var pick = random(players);
+            while (pick.name == "HOST") {
+                pick = random(players[0]);
+            }
+            picked.push([pick.name, 1]);
+        }
+        //Determine who is out
+        var tmp = picked[0];
+        for (var i = 1; i < picked.length; i++) {
+            tmp2 = picked[i];
+            if (tmp[1] < tmp2[1]) {
+                tmp = tmp2;
+            }
+        }
+        picked = [];
+        picked = tmp;
+        //Determine out's role and gather ID
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].name == picked[0]) {
+                this.picked_role = players[i].role;
+                this.picked_id = players[i].id;
+            }
+        }
+        //Emits dead person to server
+        socket.emit('dead', {
+            room: correction,
+            id: this.picked_id
+        });
         this.redraw();
     };
     Conclusion.prototype.update = function () {
         this.redraw();
-    };
-    Conclusion.prototype.removePerson = function (id) {
-        for (var i = 0; i < players.length; i++) {
-            if (players[i].id == id) {
-                players.splice(i, 1);
-            }
-        }
-    };
-    Conclusion.prototype.redraw = function () {
-        if (players.length == 0 && answers.length == 0) {
-            this.unload();
-        }
-        else {
-            image(this.bg, 0, 0);
-            //Draw Title
-            fill(0);
-            textSize(72);
-            //Determine who is out
-            var pick = picked[0];
-            for (var i = 0; i < picked.length; i++) {
-                var tmp = picked[i];
-                if (pick[1] < tmp[1]) {
-                    pick[1] = tmp;
-                }
-            }
-            try {
-                var id = "";
-                for (var i = 0; i < players.length; i++) {
-                    if (players[i].name == pick[0]) {
-                        id = players[i].id;
-                    }
-                }
-            }
-            catch (e) {
-                this.unload();
-            }
-            //Draw player's name
-            textSize(56);
-            text(pick[0], width / 2 - textWidth(pick[0]) / 1.4, height / 6.45);
-            //Emits dead person to server
-            socket.emit('dead', {
-                room: correction,
-                id: id
-            });
-            //Draw picked's role
-            for (var i = 0; i < players.length; i++) {
-                if (players[i].name == pick[0]) {
-                    this.picked_role = roles[i];
-                    text(roles[i], width - textWidth(roles[i]) - width / 30, height - height / 3);
-                }
-            }
-        }
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
         }
         if (this.timer == 0) {
-            this.removePerson(id);
+            for (var i = 0; i < players.length; i++) {
+                if (players[i].id == this.picked_id) {
+                    players.splice(i, 1);
+                }
+            }
             this.unload();
         }
+    };
+    Conclusion.prototype.redraw = function () {
+        image(this.bg, 0, 0);
+        //Draw Title
+        fill(0);
+        textSize(72);
+        //Draw player's name
+        textSize(56);
+        text(picked[0], width / 2 - textWidth(picked[0]) / 1.4, height / 6.45);
+        //Draw picked's role
+        text(this.picked_role, width - textWidth(this.picked_role) - width / 30, height - height / 3);
     };
     return Conclusion;
 }(Scene));
@@ -929,6 +978,7 @@ var EndGameIntro = /** @class */ (function (_super) {
     EndGameIntro.prototype.load = function () {
         this.bg = loadImage('assets/EndScene.png');
         this.counter = 15;
+        this.textCol = color(252, 206, 58);
     };
     EndGameIntro.prototype.update = function () {
         this.redraw();
@@ -941,8 +991,29 @@ var EndGameIntro = /** @class */ (function (_super) {
     };
     EndGameIntro.prototype.redraw = function () {
         image(this.bg, 0, 0);
+        fill(0);
         textSize(128);
         text("Je remíza!", (width - textWidth("Je remíza!")) / 2, height / 3);
+        var inc = 75;
+        textSize(32);
+        text("Zlodeji", (width - textWidth("Zlodeji")) / 3, height - height / 4);
+        text("Nevinní", (width - textWidth("Nevinní")) / 1.5, height - height / 4);
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].role == "HOST") {
+                continue;
+            }
+            if (players[i].role != "HOST" && players[i].role == "ZLODEJ") {
+                text(players[i].name, (width - textWidth(players[i].name)) / 3, height - height / 2.4 + inc);
+            }
+            if (players[i].role != "HOST" && (players[i].role == "NEVINNÝ" || players[i].role == "DETEKTÍV")) {
+                text(players[i].name, (width - textWidth(players[i].name)) / 1.5, height - height / 2.4 + inc);
+            }
+            if (i % 2 == 0) {
+                inc += 75;
+            }
+        }
+        fill(this.textCol);
+        this.textCol = lerpColor(this.textCol, color(0, 0, 0), 0.01);
         textSize(64);
         text("Je čas zmerať si sily v prestrelke.", (width - textWidth("Je čas zmerať si sily v prestrelke.")) / 2, height / 2);
     };
@@ -955,7 +1026,6 @@ var EndGame = /** @class */ (function (_super) {
     }
     EndGame.prototype.unload = function () {
         socket.emit('StopEndGame', correction);
-        console.log(this.InnCorr, this.ThiefCorr);
         if (this.InnCorr > this.ThiefCorr) {
             scenes.changeScene(new EndInnocents());
         }
@@ -977,7 +1047,7 @@ var EndGame = /** @class */ (function (_super) {
         textSize(256);
         text(this.counter, (width - textWidth(this.counter)) / 2, height / 2);
         textSize(128);
-        text(this.InnCorr + ":" + this.ThiefCorr, (width - textWidth(this.counter)) / 2, height - height / 3);
+        text(this.InnCorr + ":" + this.ThiefCorr, (width - textWidth(this.InnCorr + ":" + this.ThiefCorr)) / 2, height - height / 3);
         if (frameCount % 60 == 0 && this.counter > 0) {
             this.counter--;
             this.tick.play();
