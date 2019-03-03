@@ -3,22 +3,60 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Main Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ludum - web hra plná zábavy</title>
 	<link rel="stylesheet" href="scripts/bootstrap.min.css">
-	<script src="scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8" async defer></script>
-	<script src="scripts/bootstrap.min.js" type="text/javascript" charset="utf-8" async defer></script>
+	<link rel="stylesheet" href="scripts/styles.css">
+	<script src="scripts/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="scripts/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
 </head>
 <body>
-	<div class="row">
-		<div class="col-6 mx-auto">
-			<h1 class="display-1">LUDUM - vo výstavbe</h1>
+
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="/"><img src="favicon.ico"><p class="lead my-auto">Ludum</p></a>
+			
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon"></span>
+			</button>
+		  
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			  <ul class="navbar-nav mr-auto">
+				<li class="nav-item">
+				  <a class="nav-link" href="#">Čo to je?</a>
+				</li>
+				<li class="nav-item">
+						<a class="nav-link" href="#">Technológie</a>
+				</li>
+				<li class="nav-item">
+				  <a class="nav-link" href="#">Kód</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Pripravujeme</a>
+				</li>	  
+			  </ul>
+			</div>
+		  </nav>
+
+	<div class="row mt-6" id="title">
+		<div class="text-center mx-auto">
+			<p class="display-1">LUDUM</p>
+			<p class="display-4">web hra plná zábavy</p>
+			<p class="lead">Pripojiť sa do miestnosti</p>
+			<input class="btn btn-large" type="button" onclick="window.location.href = '../play'" value="Pripojiť"></input>
+			
+			<div id="host">
+				<p class="lead mt-2">Hostuj hru</p>
+				<div class="alert alert-info ml-1 mr-1" role="alert">
+					Pre najlepší zážitok odporúčame hru hrať na počítači alebo tablete.
+				</div>
+				<input class="btn btn-large" type="button" onclick="window.location.href = '../game'" value="Hostovať hru"></input>
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-6 mx-auto">
-			<button class="btn btn-large" onclick="window.location.href = '../play'">Play</button>
-			<button class="btn btn-large" onclick="window.location.href = '../game'">Game</button>
-		</div>
-	</div>
+
+	<nav class="navbar fixed-bottom navbar-dark bg-primary" id="footer">
+		<p class="text-center my-auto" id="create">Chcete vytvoriť miestnosť?</p>
+		<a class="navbar-brand" href="/Host">Vytvoriť hru</a>
+	</nav>
 </body>
 </html>

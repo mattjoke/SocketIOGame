@@ -7,6 +7,33 @@
 	let answer;
 	let run = false;
 
+	function getCookie(name) {
+		let dc = document.cookie;
+		let prefix = name + "=";
+		let begin = dc.indexOf("; " + prefix);
+		let end;
+		if (begin == -1) {
+			begin = dc.indexOf(prefix);
+			if (begin != 0) return null;
+		}
+		else
+		{
+			begin += 2;
+			end = document.cookie.indexOf(";", begin);
+			if (end == -1) {
+			end = dc.length;
+			}
+		}
+		end = document.cookie.indexOf(";", begin);
+		return decodeURI(dc.substring(begin + prefix.length, end));
+	}
+
+	let cookie = getCookie("nick");
+
+	if(cookie != null){
+		$('#name').val(cookie);
+	}
+
 	function clearAll(){
 		$('#duel').addClass('d-none');
 		$('#lobby').addClass('d-none');
@@ -78,6 +105,10 @@
 		$('#nick').append(nick);
 		$('#lobby').removeClass('d-none');
 
+		if(cookie == null){
+			document.cookie = "nick="+nick;
+		}
+
 		$('body').css('background', 'initial');
 	});
 
@@ -107,14 +138,14 @@
 
 	socket.on('NewRound', function(){
 		clearAll();
-		for (var i = 0; i < allow_once.length; i++) {
+		for (let i = 0; i < allow_once.length; i++) {
 			allow_once[i] = true;
 		}
 	});
 
 	function pickRandomThief(arr){
 		let help = [];
-		for (var i = 0; i < arr.length; i++) {
+		for (let i = 0; i < arr.length; i++) {
 			if (arr[i].role == "ZLODEJ") {
 				help.push(i);
 			}
@@ -143,14 +174,14 @@
 						$('#description').empty();
 						$('#description').append("Tvojou úlohou je presvedčit ostatných, že nie si zlodej.");
 						let partners = [];
-						for (var j = 0; j < players.length; j++) {
+						for (let j = 0; j < players.length; j++) {
 							if (players[j].role == "ZLODEJ" && socket.id != players[j].id){
 								partners.push(players[j].name);
 							}
 						}
 						if (partners.length > 0) {
 							$('#description').append("<br>Tvoji parťáci sú: ");
-							for (var k = 0; k < partners.length; k++) {
+							for (let k = 0; k < partners.length; k++) {
 								$('#description').append("<strong>"+partners[k]+"</strong>");
 							}
 						}

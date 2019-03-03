@@ -12,3 +12,14 @@ body {
 .jumbotron{
 	background: rgba(255, 255, 255, 0.91);
 }
+
+#inputs{
+	width: 250px;
+	margin-left: 41.5vw;
+}
+
+@media screen and (max-width: 1750px){
+    #inputs{
+		margin: auto;
+	}
+}
