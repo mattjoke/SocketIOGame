@@ -7,6 +7,7 @@
 
 #title{
     margin-top: 25vh;
+    margin-bottom: 32vh;
 }
 #host{
     display: none;
@@ -14,12 +15,20 @@
 
 #footer{
     float: left;
+    height: 61px;
+    width: 100vw;
+    right: 0;
 }
 
+#create{
+    color:rgb(255, 255, 255);
+    font-size: 1.5em;
+}
 
 @media screen and  (max-width: 1000px){
     #title{
         margin-top: 50px;
+        margin-bottom: 50px;
     }
     #host{
         display: block;
