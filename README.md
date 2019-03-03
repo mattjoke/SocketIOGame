@@ -4,7 +4,6 @@ TODO:
 
 * Write a documentation
 * Dice of luck
-* add sound - Ping!
 * Finish Maturita
 * Fix jittering
 * Responsive resolution support - 1st attempt 24.2.2019
@@ -32,3 +31,4 @@ Done:
 * Fix timing
 * Added Endgame situation
 * Partially fixed resolution bug
+* Added sound - Ping! nad Tick!
