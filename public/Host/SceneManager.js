@@ -996,17 +996,17 @@ var EndGameIntro = /** @class */ (function (_super) {
         text("Je remíza!", (width - textWidth("Je remíza!")) / 2, height / 3);
         var inc = 75;
         textSize(32);
-        text("Zlodeji", (width - textWidth("Zlodeji")) / 3, height - height / 4);
-        text("Nevinní", (width - textWidth("Nevinní")) / 1.5, height - height / 4);
+        text("Zlodeji", (width - textWidth("Zlodeji")) / 3, height - height / 2.8);
+        text("Nevinní", (width - textWidth("Nevinní")) / 1.5, height - height / 2.8);
         for (var i = 0; i < players.length; i++) {
             if (players[i].role == "HOST") {
                 continue;
             }
             if (players[i].role != "HOST" && players[i].role == "ZLODEJ") {
-                text(players[i].name, (width - textWidth(players[i].name)) / 3, height - height / 2.4 + inc);
+                text(players[i].name, (width - textWidth(players[i].name)) / 3, height - height / 3 + inc);
             }
             if (players[i].role != "HOST" && (players[i].role == "NEVINNÝ" || players[i].role == "DETEKTÍV")) {
-                text(players[i].name, (width - textWidth(players[i].name)) / 1.5, height - height / 2.4 + inc);
+                text(players[i].name, (width - textWidth(players[i].name)) / 1.5, height - height / 3 + inc);
             }
             if (i % 2 == 0) {
                 inc += 75;

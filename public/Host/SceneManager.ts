@@ -1068,17 +1068,17 @@ class EndGameIntro extends Scene{
 
 		let inc = 75;
 		textSize(32);
-		text("Zlodeji", (width-textWidth("Zlodeji"))/3, height - height/4);
-		text("Nevinní", (width-textWidth("Nevinní"))/1.5, height - height/4);
+		text("Zlodeji", (width-textWidth("Zlodeji"))/3, height - height/2.8);
+		text("Nevinní", (width-textWidth("Nevinní"))/1.5, height - height/2.8);
 		for (var i = 0; i < players.length; i++) {
 			if (players[i].role == "HOST") {
 				continue;
 			}
 			if (players[i].role != "HOST" && players[i].role == "ZLODEJ") {
-				text(players[i].name, (width-textWidth(players[i].name))/3, height - height/2.4 + inc);
+				text(players[i].name, (width-textWidth(players[i].name))/3, height - height/3 + inc);
 			}
 			if (players[i].role != "HOST" && (players[i].role == "NEVINNÝ" || players[i].role == "DETEKTÍV")) {
-				text(players[i].name, (width-textWidth(players[i].name))/1.5, height - height/2.4 + inc);
+				text(players[i].name, (width-textWidth(players[i].name))/1.5, height - height/3 + inc);
 			}
 			if (i % 2==0) {
 				inc += 75;
@@ -1086,7 +1086,7 @@ class EndGameIntro extends Scene{
 		}
 
 		fill(this.textCol);
-		this.textCol = lerpColor(this.textCol, color(0,0,0), 0.01);
+		this. textCol = lerpColor(this.textCol, color(0,0,0), 0.01);
 		textSize(64);
 		text("Je čas zmerať si sily v prestrelke.",(width-textWidth("Je čas zmerať si sily v prestrelke."))/2, height/2);
 	}
