@@ -7,7 +7,6 @@ TODO:
 * Finish Maturita
 * Fix jittering
 * Responsive resolution support - 1st attempt 24.2.2019
-* Add Fisrt website
 
 Done:
 
@@ -33,3 +32,4 @@ Done:
 * Added Endgame situation
 * Partially fixed resolution bug
 * Added sound - Ping! nad Tick!
+* Added first web page
