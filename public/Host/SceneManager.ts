@@ -848,17 +848,21 @@ class Conclusion extends Scene{
 		}
 	}
 	redraw():void{
-		image(this.bg,0,0);
-		//Draw Title
-		fill(0);
-		textSize(72);
-
-		//Draw player's name
-		textSize(56);
-		text(picked[0], width/2 - textWidth(picked[0])/1.4, height/6.45);
-
-		//Draw picked's role
-		text(this.picked_role,width-textWidth(this.picked_role)-width/30, height-height/3);
+		try{
+			image(this.bg,0,0);
+			//Draw Title
+			fill(0);
+			textSize(72);
+	
+			//Draw player's name
+			textSize(56);
+			text(picked[0], width/2 - textWidth(picked[0])/1.4, height/6.45);
+	
+			//Draw picked's role
+			text(this.picked_role,width-textWidth(this.picked_role)-width/30, height-height/3);
+		}catch(error){
+			this.unload;
+		}
 	}
 }
 class HandsOfTruth extends Scene{
