@@ -694,6 +694,11 @@ var Conclusion = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Conclusion.prototype.unload = function () {
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].id == this.picked_id) {
+                players.splice(i, 1);
+            }
+        }
         //pick random events or launch endgame
         answers = [];
         picked = [];
@@ -744,6 +749,9 @@ var Conclusion = /** @class */ (function (_super) {
         background(0);
         this.bg = loadImage("assets/Dead.jpeg");
         this.timer = 10;
+        this.picked_id = -1;
+        this.picked_name = "";
+        this.picked_role = "";
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
             answer = answer[0];
@@ -761,8 +769,8 @@ var Conclusion = /** @class */ (function (_super) {
         }
         if (picked.length < 1) {
             var pick = random(players);
-            while (pick.name == "HOST") {
-                pick = random(players[0]);
+            while (pick.name == "Host") {
+                pick = random(players);
             }
             picked.push([pick.name, 1]);
         }
@@ -778,9 +786,12 @@ var Conclusion = /** @class */ (function (_super) {
         picked = tmp;
         //Determine out's role and gather ID
         for (var i = 0; i < players.length; i++) {
-            if (players[i].name == picked[0]) {
+            if (players[i].name === picked[0]) {
+                console.log(players);
                 this.picked_role = players[i].role;
                 this.picked_id = players[i].id;
+                this.picked_name = players[i].name;
+                console.log(players);
             }
         }
         //Emits dead person to server
@@ -791,17 +802,14 @@ var Conclusion = /** @class */ (function (_super) {
         this.redraw();
     };
     Conclusion.prototype.update = function () {
-        this.redraw();
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
-        }
-        if (this.timer == 0) {
-            for (var i = 0; i < players.length; i++) {
-                if (players[i].id == this.picked_id) {
-                    players.splice(i, 1);
-                }
+            if (this.timer == 0) {
+                this.unload();
             }
-            this.unload();
+            else {
+                this.redraw();
+            }
         }
     };
     Conclusion.prototype.redraw = function () {
@@ -812,12 +820,14 @@ var Conclusion = /** @class */ (function (_super) {
             textSize(72);
             //Draw player's name
             textSize(56);
-            text(picked[0], width / 2 - textWidth(picked[0]) / 1.4, height / 6.45);
+            text(this.picked_name, width / 2 - textWidth(this.picked_name) / 1.4, height / 6.45);
             //Draw picked's role
             text(this.picked_role, width - textWidth(this.picked_role) - width / 30, height - height / 3);
         }
         catch (error) {
-            this.unload;
+            console.log("ERRRRRROOORRRR!");
+            console.log(error);
+            console.log(picked, players);
         }
     };
     return Conclusion;

@@ -1,4 +1,4 @@
-//$(document).ready(function(){
+$(document).ready(function(){
 
 	let socket = io();
 	let allow_once = [true,true,true, true, true]; //Handle more than one call
@@ -6,6 +6,7 @@
 	let role;
 	let answer;
 	let run = false;
+
 
 	function getCookie(c_name) {
 		if (document.cookie.length > 0) {
@@ -91,20 +92,30 @@
 		$('.nick').removeClass('d-none');
 		room = $('#code').val().toUpperCase();
 		nick = $('#name').val().replace(/ /g, '');
-		socket.emit('joinRoom',{
-			code: room,
-			name: nick
-		});
-		$('.start').addClass('d-none');
-		$('#nick').append(nick);
-		$('#lobby').removeClass('d-none');
-
-		if(cookie == null){
-			document.cookie = "nick="+nick;
+		
+		if(nick.length > 20){
+			$('#exampleModal').modal({backdrop: 'static', keyboard: false});
+			$(".modal-body").empty();
+			$(".modal-body").append("V súčasnosti hra podporuje prezývky o dĺžke maximálne 20 znakov.");			
+			$("#exampleModalLabel").append("Prezývka je príliš dlhá");
+			$("#exampleModal").modal("show");
+		}else{
+			socket.emit('joinRoom',{
+				code: room,
+				name: nick
+			});
+			$('.start').addClass('d-none');
+			$('#nick').append(nick);
+			$('#lobby').removeClass('d-none');
+	
+			if(cookie == null){
+				document.cookie = "nick="+nick;
+			}
+	
+			$('body').css('background', 'initial');
 		}
-
-		$('body').css('background', 'initial');
 	});
+
 
 	socket.on('EditUserName', function(username){
 		nick = username;
@@ -117,6 +128,9 @@
 		if (error == "Odpojené!") {
 			$(".modal-body").empty();
 			$(".modal-body").append("Hra skončila");
+		}else{
+			$(".modal-body").empty();
+			$(".modal-body").append("Hra neexistuje, alebo ste zadali chybný kód.");
 		}
 		$("#exampleModalLabel").append(error);
 		$("#exampleModal").modal("show");
@@ -300,4 +314,4 @@
 			allow_once[2] = false;
 		}
 	});
-//});
+});

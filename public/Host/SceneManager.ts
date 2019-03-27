@@ -734,10 +734,17 @@ class Conclusion extends Scene{
 
 	private bg: Image;
 	private timer: number;
+
 	private picked_id: string;
 	private picked_role: string;
+	private picked_name: string;
 
 	unload():void{
+		for (var i = 0; i < players.length; i++) {
+			if(players[i].id == this.picked_id){
+				players.splice(i, 1);
+			}
+		}
 		//pick random events or launch endgame
 		answers = [];
 		picked = [];
@@ -782,6 +789,9 @@ class Conclusion extends Scene{
 
 		this.bg = loadImage("assets/Dead.jpeg");
 		this.timer = 10;
+		this.picked_id = -1;
+		this.picked_name = "";
+		this.picked_role = "";
 
 		for (var i = 0; i < answers.length; i++) {
 			let answer = answers[i];
@@ -801,8 +811,8 @@ class Conclusion extends Scene{
 
 		if (picked.length < 1) {
 			let pick = random(players);
-			while(pick.name == "HOST"){
-				pick = random(players[0]);
+			while(pick.name == "Host"){
+				pick = random(players);
 			}
 			picked.push([pick.name, 1]);
 		}
@@ -819,9 +829,12 @@ class Conclusion extends Scene{
 		picked = tmp;
 		//Determine out's role and gather ID
 		for (var i = 0; i < players.length; i++) {
-			if(players[i].name == picked[0]){
+			if(players[i].name === picked[0]){
+				console.log(players);
 				this.picked_role = players[i].role;
 				this.picked_id = players[i].id;
+				this.picked_name = players[i].name;
+				console.log(players);
 			}
 		}
 
@@ -834,17 +847,13 @@ class Conclusion extends Scene{
 		this.redraw();
 	}
 	update():void {
-		this.redraw();
 		if(frameCount % 60 == 0 && this.timer > 0){
 			this.timer--;
-		}
-		if (this.timer == 0) {
-			for (var i = 0; i < players.length; i++) {
-				if(players[i].id == this.picked_id){
-					players.splice(i, 1);
-				}
+			if (this.timer == 0) {
+				this.unload();
+			}else{
+				this.redraw();
 			}
-			this.unload();
 		}
 	}
 	redraw():void{
@@ -856,12 +865,14 @@ class Conclusion extends Scene{
 	
 			//Draw player's name
 			textSize(56);
-			text(picked[0], width/2 - textWidth(picked[0])/1.4, height/6.45);
+			text(this.picked_name, width/2 - textWidth(this.picked_name)/1.4, height/6.45);
 	
 			//Draw picked's role
 			text(this.picked_role,width-textWidth(this.picked_role)-width/30, height-height/3);
 		}catch(error){
-			this.unload;
+			console.log("ERRRRRROOORRRR!");
+			console.log(error);
+			console.log(picked, players);
 		}
 	}
 }

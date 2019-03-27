@@ -16,8 +16,12 @@
 #footer{
     float: left;
     height: 61px;
-    width: 100vw;
+    width: 100%;
     right: 0;
+}
+
+.title{
+    padding-top: 15vh;
 }
 
 #create{
