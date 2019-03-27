@@ -963,6 +963,7 @@ class YouGottaPoint extends Scene{
 class EndInnocents extends Scene{
 
 	private bg: Image;
+	private upjs: Image;
 	private textCol: color;
 	private move: number;
 
@@ -972,13 +973,14 @@ class EndInnocents extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
+		this.upjs = loadImage('assets/upjs.png');
 		this.textCol = color(252, 206, 58);
 		this.move = height + 50;
 	}
 
 	update():void {
 		this.redraw();
-		if(this.move < -650){
+		if(this.move < -1170){
 			this.move = height + 50;
 		}
 	}
@@ -1000,13 +1002,17 @@ class EndInnocents extends Scene{
 		textAlign(CENTER);
 		fill(0);
 		text(
-			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019",width-width/6.5, this.move);
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019",width-width/6.5, this.move);
 		this.move -= .5;
+
+		//Draw UPJS logo
+		image(this.upjs, width-width/3.5, this.move + 650);
 	}
 }
 class EndThief extends Scene{
 
 	private bg: Image;
+	private upjs: Image;
 	private textCol: color;
 	private move: number;
 
@@ -1016,13 +1022,14 @@ class EndThief extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
+		this.upjs = loadImage('assets/upjs.png');
 		this.textCol = color(252, 206, 58);
 		this.move = height + 50;
 	}
 
 	update():void {
 		this.redraw();
-		if(this.move < -650){
+		if(this.move < -1170){
 			this.move = height + 50;
 		}
 	}
@@ -1044,8 +1051,11 @@ class EndThief extends Scene{
 		textAlign(CENTER);
 		fill(0);
 		text(
-			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019",width-width/6.5, this.move);
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019",width-width/6.5, this.move);
 		this.move -= .5;
+
+		//Draw UPJS logo
+		image(this.upjs, width-width/3.5, this.move + 650);
 	}
 }
 class EndGameIntro extends Scene{
@@ -1274,6 +1284,8 @@ function setup(){
 
 function draw(){
 	if (pause) {
+		textAlign(LEFT);
+
 		fill(0,0,0,150);
 		image(scenes.currScene.bg, 0, 0, width, height);
 		rect(0,0,width,height);
