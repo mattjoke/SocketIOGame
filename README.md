@@ -4,7 +4,7 @@ TODO:
 
 * Dice of luck
 * Finish Maturita
-* Responsive resolution support - 1st attempt 1.4.2019
+* Responsive resolution support - 3rd attempt 1.4.2019
 
 Done:
 
