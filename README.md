@@ -2,11 +2,9 @@
 
 TODO:
 
-* Write a documentation
 * Dice of luck
 * Finish Maturita
-* Fix jittering
-* Responsive resolution support - 1st attempt 24.2.2019
+* Responsive resolution support - 3rd attempt 1.4.2019
 
 Done:
 
@@ -33,3 +31,4 @@ Done:
 * Partially fixed resolution bug
 * Added sound - Ping! nad Tick!
 * Added first web page
+* Documetation done (only in Slovak language)
