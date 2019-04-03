@@ -667,7 +667,10 @@ class Vote extends Scene{
 	private rCode: string;
 	private timer: number;
 
+	private song: Sound;
+
 	unload():void{
+		this.song.stop();
 		scenes.changeScene(new VoteMoveDead());
 	}
 
@@ -676,6 +679,7 @@ class Vote extends Scene{
 		this.bg = loadImage("assets/Výsluch.jpeg");
 		this.ding = loadSound("assets/ding.mp3");
 		this.tick = loadSound("assets/tick.mp3");
+		this.song = loadSound('assets/sounds/Vote.mp3');
 		this.rCode = roomCode.substring(16);
 		socket.emit('vote',[this.rCode, players]);
 	}
@@ -692,6 +696,10 @@ class Vote extends Scene{
 		if (this.timer == 0) {
 			this.ding.play();
 			this.unload();
+		}
+		if(this.song.isLoaded()&&!this.song.isPlaying()){
+			this.song.setVolume(0.1);
+			this.song.play();
 		}
 	}
 
@@ -967,6 +975,10 @@ class EndInnocents extends Scene{
 	private textCol: color;
 	private move: number;
 
+	private song_fadeIn: Sound;
+	private song: Sound;
+	private once: boolean;
+
 	unload():void{
 		scenes.changeScene(new Lobby());
 	}
@@ -976,12 +988,25 @@ class EndInnocents extends Scene{
 		this.upjs = loadImage('assets/upjs.png');
 		this.textCol = color(252, 206, 58);
 		this.move = height + 50;
+
+		this.song = loadSound('assets/sounds/End.mp3');
+		this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
+		this.once = true;
 	}
 
 	update():void {
 		this.redraw();
 		if(this.move < -1170){
 			this.move = height + 50;
+		}
+
+		if((this.song_fadeIn.isLoaded()&&this.song.isLoaded())&&!this.song.isPlaying()){
+			if(this.once){
+				this.song_fadeIn.play();
+				this.once = false;
+			}else{
+				this.song.play();
+			}
 		}
 	}
 
@@ -1016,6 +1041,10 @@ class EndThief extends Scene{
 	private textCol: color;
 	private move: number;
 
+	private song_fadeIn: Sound;
+	private song: Sound;
+	private once: boolean;
+
 	unload():void{
 		scenes.changeScene(new Lobby());
 	}
@@ -1023,11 +1052,25 @@ class EndThief extends Scene{
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
 		this.upjs = loadImage('assets/upjs.png');
+		this.song = loadSound('assets/sounds/End.mp3');
+		this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
+
 		this.textCol = color(252, 206, 58);
 		this.move = height + 50;
+		this.once = true;
 	}
 
 	update():void {
+
+		if((this.song_fadeIn.isLoaded()&&this.song.isLoaded())&&!this.song.isPlaying()){
+			if(this.once){
+				this.song_fadeIn.play();
+				this.once = false;
+			}else{
+				this.song.play();
+			}
+		}
+
 		this.redraw();
 		if(this.move < -1170){
 			this.move = height + 50;
@@ -1072,6 +1115,7 @@ class EndGameIntro extends Scene{
 		this.bg = loadImage('assets/EndScene.png');
 		this.counter = 15;
 		this.textCol = color(252, 206, 58);
+		
 	}
 
 	update():void {
@@ -1122,11 +1166,14 @@ class EndGame extends Scene{
 	private tick: Sound;
 	private ding: Sound;
 	private counter: number;
+	private song: Sound;
 
 	public InnCorr: number;
 	public ThiefCorr: number;
 
 	unload():void{
+		this.song.stop();
+
 		socket.emit('StopEndGame', correction);
 		if(this.InnCorr > this.ThiefCorr){
 			scenes.changeScene(new EndInnocents());
@@ -1144,6 +1191,7 @@ class EndGame extends Scene{
 		this.counter = round(random(15,60));
 		this.ThiefCorr = 0;
 		this.InnCorr = 0;
+		this.song = loadSound('assets/sounds/EndGame.mp3');
 	}
 
 	update():void {
@@ -1162,6 +1210,11 @@ class EndGame extends Scene{
 			this.ding.play();
 			this.unload();
 		}
+
+		if(this.song.isLoaded()&&!this.song.isPlaying()){
+			this.song.play();
+		}
+
 	}
 
 	redraw():void{
@@ -1303,5 +1356,9 @@ function keyPressed(){
 	if(keyCode === ESCAPE){
 		pause = !pause;
 		fill(0);
+		try {
+			scenes.currScene.song.pause();
+			scenes.currScene.song_fadeIn.pause();
+		} catch (e){}
 	}
 }

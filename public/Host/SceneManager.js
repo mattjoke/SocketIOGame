@@ -628,6 +628,7 @@ var Vote = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Vote.prototype.unload = function () {
+        this.song.stop();
         scenes.changeScene(new VoteMoveDead());
     };
     Vote.prototype.load = function () {
@@ -635,6 +636,7 @@ var Vote = /** @class */ (function (_super) {
         this.bg = loadImage("assets/Výsluch.jpeg");
         this.ding = loadSound("assets/ding.mp3");
         this.tick = loadSound("assets/tick.mp3");
+        this.song = loadSound('assets/sounds/Vote.mp3');
         this.rCode = roomCode.substring(16);
         socket.emit('vote', [this.rCode, players]);
     };
@@ -650,6 +652,10 @@ var Vote = /** @class */ (function (_super) {
         if (this.timer == 0) {
             this.ding.play();
             this.unload();
+        }
+        if (this.song.isLoaded() && !this.song.isPlaying()) {
+            this.song.setVolume(0.1);
+            this.song.play();
         }
     };
     Vote.prototype.redraw = function () {
@@ -919,11 +925,23 @@ var EndInnocents = /** @class */ (function (_super) {
         this.upjs = loadImage('assets/upjs.png');
         this.textCol = color(252, 206, 58);
         this.move = height + 50;
+        this.song = loadSound('assets/sounds/End.mp3');
+        this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
+        this.once = true;
     };
     EndInnocents.prototype.update = function () {
         this.redraw();
         if (this.move < -1170) {
             this.move = height + 50;
+        }
+        if ((this.song_fadeIn.isLoaded() && this.song.isLoaded()) && !this.song.isPlaying()) {
+            if (this.once) {
+                this.song_fadeIn.play();
+                this.once = false;
+            }
+            else {
+                this.song.play();
+            }
         }
     };
     EndInnocents.prototype.redraw = function () {
@@ -958,10 +976,22 @@ var EndThief = /** @class */ (function (_super) {
     EndThief.prototype.load = function () {
         this.bg = loadImage('assets/EndScene.png');
         this.upjs = loadImage('assets/upjs.png');
+        this.song = loadSound('assets/sounds/End.mp3');
+        this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
         this.textCol = color(252, 206, 58);
         this.move = height + 50;
+        this.once = true;
     };
     EndThief.prototype.update = function () {
+        if ((this.song_fadeIn.isLoaded() && this.song.isLoaded()) && !this.song.isPlaying()) {
+            if (this.once) {
+                this.song_fadeIn.play();
+                this.once = false;
+            }
+            else {
+                this.song.play();
+            }
+        }
         this.redraw();
         if (this.move < -1170) {
             this.move = height + 50;
@@ -1046,6 +1076,7 @@ var EndGame = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     EndGame.prototype.unload = function () {
+        this.song.stop();
         socket.emit('StopEndGame', correction);
         if (this.InnCorr > this.ThiefCorr) {
             scenes.changeScene(new EndInnocents());
@@ -1062,6 +1093,7 @@ var EndGame = /** @class */ (function (_super) {
         this.counter = round(random(15, 60));
         this.ThiefCorr = 0;
         this.InnCorr = 0;
+        this.song = loadSound('assets/sounds/EndGame.mp3');
     };
     EndGame.prototype.update = function () {
         this.redraw();
@@ -1076,6 +1108,9 @@ var EndGame = /** @class */ (function (_super) {
         if (this.counter == 0) {
             this.ding.play();
             this.unload();
+        }
+        if (this.song.isLoaded() && !this.song.isPlaying()) {
+            this.song.play();
         }
     };
     EndGame.prototype.redraw = function () {
@@ -1210,5 +1245,10 @@ function keyPressed() {
     if (keyCode === ESCAPE) {
         pause = !pause;
         fill(0);
+        try {
+            scenes.currScene.song.pause();
+            scenes.currScene.song_fadeIn.pause();
+        }
+        catch (e) { }
     }
 }
