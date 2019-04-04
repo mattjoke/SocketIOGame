@@ -742,12 +742,16 @@ class Conclusion extends Scene{
 
 	private bg: Image;
 	private timer: number;
+	private song: Sound;
+	private once: boolean;
 
 	private picked_id: string;
 	private picked_role: string;
 	private picked_name: string;
 
 	unload():void{
+		this.song.stop();
+
 		for (var i = 0; i < players.length; i++) {
 			if(players[i].id == this.picked_id){
 				players.splice(i, 1);
@@ -795,11 +799,13 @@ class Conclusion extends Scene{
 	load():void{
 		background(0);
 
+		this.song = loadSound('assets/sounds/Melancholy.mp3');
 		this.bg = loadImage("assets/Dead.jpeg");
 		this.timer = 10;
 		this.picked_id = -1;
 		this.picked_name = "";
 		this.picked_role = "";
+		this.once = true;
 
 		for (var i = 0; i < answers.length; i++) {
 			let answer = answers[i];
@@ -838,11 +844,9 @@ class Conclusion extends Scene{
 		//Determine out's role and gather ID
 		for (var i = 0; i < players.length; i++) {
 			if(players[i].name === picked[0]){
-				console.log(players);
 				this.picked_role = players[i].role;
 				this.picked_id = players[i].id;
 				this.picked_name = players[i].name;
-				console.log(players);
 			}
 		}
 
@@ -855,6 +859,13 @@ class Conclusion extends Scene{
 		this.redraw();
 	}
 	update():void {
+		if(this.song.isLoaded()&&!this.song.isPlaying()){
+			if(this.once){
+				this.song.play();
+				this.once = false;
+			}
+		}
+
 		if(frameCount % 60 == 0 && this.timer > 0){
 			this.timer--;
 			if (this.timer == 0) {
@@ -879,8 +890,6 @@ class Conclusion extends Scene{
 			text(this.picked_role,width-textWidth(this.picked_role)-width/30, height-height/3);
 		}catch(error){
 			console.log("ERRRRRROOORRRR!");
-			console.log(error);
-			console.log(picked, players);
 		}
 	}
 }
@@ -971,7 +980,7 @@ class YouGottaPoint extends Scene{
 class EndInnocents extends Scene{
 
 	private bg: Image;
-	private upjs: Image;
+	private soc: Image;
 	private textCol: color;
 	private move: number;
 
@@ -985,7 +994,7 @@ class EndInnocents extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
-		this.upjs = loadImage('assets/upjs.png');
+		this.soc = loadImage('assets/soc.jpg');
 		this.textCol = color(252, 206, 58);
 		this.move = height + 50;
 
@@ -1002,6 +1011,7 @@ class EndInnocents extends Scene{
 
 		if((this.song_fadeIn.isLoaded()&&this.song.isLoaded())&&!this.song.isPlaying()){
 			if(this.once){
+				this.song_fadeIn.setVolume(0.5,6);
 				this.song_fadeIn.play();
 				this.once = false;
 			}else{
@@ -1027,17 +1037,17 @@ class EndInnocents extends Scene{
 		textAlign(CENTER);
 		fill(0);
 		text(
-			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019",width-width/6.5, this.move);
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnnosť\n2018/2019",width-width/6.5, this.move);
 		this.move -= .5;
 
 		//Draw UPJS logo
-		image(this.upjs, width-width/3.5, this.move + 650);
+		image(this.soc, width-width/3.5, this.move + 650);
 	}
 }
 class EndThief extends Scene{
 
 	private bg: Image;
-	private upjs: Image;
+	private soc: Image;
 	private textCol: color;
 	private move: number;
 
@@ -1051,7 +1061,7 @@ class EndThief extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
-		this.upjs = loadImage('assets/upjs.png');
+		this.soc = loadImage('assets/soc.jpg');
 		this.song = loadSound('assets/sounds/End.mp3');
 		this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
 
@@ -1064,6 +1074,7 @@ class EndThief extends Scene{
 
 		if((this.song_fadeIn.isLoaded()&&this.song.isLoaded())&&!this.song.isPlaying()){
 			if(this.once){
+				this.song_fadeIn.setVolume(0.5,6);
 				this.song_fadeIn.play();
 				this.once = false;
 			}else{
@@ -1094,11 +1105,11 @@ class EndThief extends Scene{
 		textAlign(CENTER);
 		fill(0);
 		text(
-			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019",width-width/6.5, this.move);
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019",width-width/6.5, this.move);
 		this.move -= .5;
 
 		//Draw UPJS logo
-		image(this.upjs, width-width/3.5, this.move + 650);
+		image(this.soc, width-width/3.5, this.move + 650);
 	}
 }
 class EndGameIntro extends Scene{

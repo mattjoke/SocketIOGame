@@ -700,6 +700,7 @@ var Conclusion = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Conclusion.prototype.unload = function () {
+        this.song.stop();
         for (var i = 0; i < players.length; i++) {
             if (players[i].id == this.picked_id) {
                 players.splice(i, 1);
@@ -753,11 +754,13 @@ var Conclusion = /** @class */ (function (_super) {
     };
     Conclusion.prototype.load = function () {
         background(0);
+        this.song = loadSound('assets/sounds/Melancholy.mp3');
         this.bg = loadImage("assets/Dead.jpeg");
         this.timer = 10;
         this.picked_id = -1;
         this.picked_name = "";
         this.picked_role = "";
+        this.once = true;
         for (var i = 0; i < answers.length; i++) {
             var answer = answers[i];
             answer = answer[0];
@@ -793,11 +796,9 @@ var Conclusion = /** @class */ (function (_super) {
         //Determine out's role and gather ID
         for (var i = 0; i < players.length; i++) {
             if (players[i].name === picked[0]) {
-                console.log(players);
                 this.picked_role = players[i].role;
                 this.picked_id = players[i].id;
                 this.picked_name = players[i].name;
-                console.log(players);
             }
         }
         //Emits dead person to server
@@ -808,6 +809,12 @@ var Conclusion = /** @class */ (function (_super) {
         this.redraw();
     };
     Conclusion.prototype.update = function () {
+        if (this.song.isLoaded() && !this.song.isPlaying()) {
+            if (this.once) {
+                this.song.play();
+                this.once = false;
+            }
+        }
         if (frameCount % 60 == 0 && this.timer > 0) {
             this.timer--;
             if (this.timer == 0) {
@@ -832,8 +839,6 @@ var Conclusion = /** @class */ (function (_super) {
         }
         catch (error) {
             console.log("ERRRRRROOORRRR!");
-            console.log(error);
-            console.log(picked, players);
         }
     };
     return Conclusion;
@@ -922,7 +927,7 @@ var EndInnocents = /** @class */ (function (_super) {
     };
     EndInnocents.prototype.load = function () {
         this.bg = loadImage('assets/EndScene.png');
-        this.upjs = loadImage('assets/upjs.png');
+        this.soc = loadImage('assets/soc.jpg');
         this.textCol = color(252, 206, 58);
         this.move = height + 50;
         this.song = loadSound('assets/sounds/End.mp3');
@@ -936,6 +941,7 @@ var EndInnocents = /** @class */ (function (_super) {
         }
         if ((this.song_fadeIn.isLoaded() && this.song.isLoaded()) && !this.song.isPlaying()) {
             if (this.once) {
+                this.song_fadeIn.setVolume(0.5, 6);
                 this.song_fadeIn.play();
                 this.once = false;
             }
@@ -958,10 +964,10 @@ var EndInnocents = /** @class */ (function (_super) {
         textSize(40);
         textAlign(CENTER);
         fill(0);
-        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019", width - width / 6.5, this.move);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnnosť\n2018/2019", width - width / 6.5, this.move);
         this.move -= .5;
         //Draw UPJS logo
-        image(this.upjs, width - width / 3.5, this.move + 650);
+        image(this.soc, width - width / 3.5, this.move + 650);
     };
     return EndInnocents;
 }(Scene));
@@ -975,7 +981,7 @@ var EndThief = /** @class */ (function (_super) {
     };
     EndThief.prototype.load = function () {
         this.bg = loadImage('assets/EndScene.png');
-        this.upjs = loadImage('assets/upjs.png');
+        this.soc = loadImage('assets/soc.jpg');
         this.song = loadSound('assets/sounds/End.mp3');
         this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
         this.textCol = color(252, 206, 58);
@@ -985,6 +991,7 @@ var EndThief = /** @class */ (function (_super) {
     EndThief.prototype.update = function () {
         if ((this.song_fadeIn.isLoaded() && this.song.isLoaded()) && !this.song.isPlaying()) {
             if (this.once) {
+                this.song_fadeIn.setVolume(0.5, 6);
                 this.song_fadeIn.play();
                 this.once = false;
             }
@@ -1011,10 +1018,10 @@ var EndThief = /** @class */ (function (_super) {
         textSize(40);
         textAlign(CENTER);
         fill(0);
-        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019", width - width / 6.5, this.move);
+        text("Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019", width - width / 6.5, this.move);
         this.move -= .5;
         //Draw UPJS logo
-        image(this.upjs, width - width / 3.5, this.move + 650);
+        image(this.soc, width - width / 3.5, this.move + 650);
     };
     return EndThief;
 }(Scene));
