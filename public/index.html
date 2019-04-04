@@ -12,94 +12,177 @@
 </head>
 <body>
 
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="/"><img src="favicon.ico"><p class="lead my-auto">Ludum</p></a>
-			
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			  <span class="navbar-toggler-icon"></span>
-			</button>
-		  
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			  <ul class="navbar-nav mr-auto">
-				<li class="nav-item">
-				  <a class="nav-link" href="#information">Čo to je?</a>
-				</li>
-				<li class="nav-item">
-						<a class="nav-link" href="#howto">Ako hrať</a>
-				</li>
-				<li class="nav-item">
-				  <a class="nav-link" href="#">Technológie</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Pripravujeme</a>
-				</li>	 
-			  </ul>
-			</div>
-		  </nav>
-
-	<div class="row" id="title">
-		<div class="text-center mx-auto">
-			<p class="display-1">LUDUM</p>
-			<p class="display-4">web hra plná zábavy</p>
-			<p class="lead">Pripojiť sa do miestnosti</p>
-			<input class="btn btn-large" type="button" onclick="window.location.href = '../play'" value="Pripojiť"></input>
-			
-			<div id="host">
-				<p class="lead mt-2">Hostuj hru</p>
-				<div class="alert alert-info" role="alert">
-					Pre najlepší zážitok odporúčame hru hrať na počítači alebo tablete.
-				</div>
-				<input class="btn btn-large" type="button" onclick="window.location.href = '../game'" value="Hostovať hru"></input>
-			</div>
-		</div>
-	</div>
-
-	<nav class="navbar navbar-dark bg-primary" id="footer">
-		<p class="text-center my-auto" id="create">Chcete vytvoriť miestnosť?</p>
-		<a class="navbar-brand" href="/Host">Vytvoriť hru</a>
-	</nav>
-
-	<div class="row text-center bg-dark text-light pb-5" id="information">
-		<div class="title">
-			<p class="display-5">
-				"...Dňa 14. februára bol ukradnutý diamant z národného múzea, jeho cena je viac ako 1 000 000 eur..."
-			</p>
-		</div>
-		<div class="subtitle lead pl-5">
-			<blockquote class="blockquote">
-				<p class="mb-0">"...Dňa 14. februára bol ukradnutý diamant z národného múzea, jeho cena je viac ako 1 000 000 eur..."</p>
-				<footer class="blockquote-footer text-light">Spravodajstvo novín
-					<cite title="Dobrý deň">Dobrý deň</cite>
-				</footer>
-				<p>Pomôžte Detektívovi Ludumovi nájsť zlodeja. Ale pozor! Zlodejom môže byť hocikto!</p>
-			</blockquote>
-			<br>
-			<p>Ludum je lokálne online multiplayerová hra, ktorej cieľom je spojiť slovné hry a moderné technológie. <br> Táto hra vznikla ako práca pre Stredoškolskú odbornú činnosť v školskom roku 2018/2019.</p>
-		</div>
-	</div>
-	
-	<div class="row text-center bg-light pb-5" id="howto">
-			<div class="title">
-				<p class="display-2">
-					Ako hrať
-				</p>
-			</div>
-			<div class="subtitle lead pl-3">
-				<p>Potrebné veci:</p>
-				<ul class="list-group">
-					<li class="list-group-item">Mobilný telefón pre každého hráča</li>
-					<li class="list-group-item">Počítač/tablet</li>
-					<li class="list-group-item">Minimálne 2 kamarátov</li>
-				</ul>
-				<br>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="/"><img src="favicon.ico"><p class="lead my-auto">Ludum</p></a>
 				
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+				</button>
+			
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+					<a class="nav-link" href="#information">Čo to je?</a>
+					</li>
+					<li class="nav-item">
+							<a class="nav-link" href="#akohrať">Ako hrať</a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link" href="#technológie">Technológie</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#pripravujeme">Pripravujeme</a>
+					</li>	 
+				</ul>
+				</div>
+			</nav>
+
+		<div class="row" id="title">
+			<div class="text-center mx-auto">
+				<p class="display-1">LUDUM</p>
+				<p class="display-4">web hra plná zábavy</p>
+				<p class="lead">Pripojiť sa do miestnosti</p>
+				<input class="btn btn-large" type="button" onclick="window.location.href = '../play'" value="Pripojiť"></input>
+				
+				<div id="host">
+					<p class="lead mt-2">Hostuj hru</p>
+					<div class="alert alert-info" role="alert">
+						Pre najlepší zážitok odporúčame hru hrať na počítači alebo tablete.
+					</div>
+					<input class="btn btn-large" type="button" onclick="window.location.href = '../game'" value="Hostovať hru"></input>
+				</div>
 			</div>
 		</div>
+
+		<nav class="navbar navbar-dark bg-primary" id="footer">
+			<p class="text-center my-auto" id="create">Chcete vytvoriť miestnosť?</p>
+			<a class="navbar-brand" href="/Host">Vytvoriť hru</a>
+		</nav>
 
 		
-		<!--Added progress bar-->
-		<div class="progress">
-				<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+		<div class='scrolltop'>
+			<div class='scroll icon'><i class="fa fa-4x fa-angle-up"></i></div>
 		</div>
+
+		<div class="row bg-dark text-light">
+			<div class="container text-center  pb-5" id="information">
+					<div class="title-special m-xs-1">
+						<p class="display-5">
+							"...Dňa 14. februára bol ukradnutý diamant z národného múzea, jeho cena je viac ako 1 000 000 eur..."
+						</p>
+						<footer class="blockquote-footer text-light">Spravodajstvo novín
+							<cite title="Dobrý deň">Dobrý deň</cite>
+						</footer>
+					</div>
+					<div class="subtitle lead pl-4">
+						<blockquote class="blockquote">
+							<br>
+							<p>Pomôžte Detektívovi Ludumovi nájsť zlodeja. Ale pozor! Zlodejom môže byť hocikto!</p>
+						</blockquote>
+						<br>
+						<img src="Host/assets/Stopa.png" alt="" class="img">
+						<br>
+						<br>
+						<p>Ludum je lokálne online multiplayerová hra, ktorej cieľom je spojiť slovné hry a moderné technológie. <br> Táto hra vznikla ako práca pre Stredoškolskú odbornú činnosť v školskom roku 2018/2019.</p>
+					</div>
+				</div>
+		</div>
+		
+		<div class="row bg-light text-dark">
+			<div class="container text-center pb-5" id="akohrať">
+					<p class="display-2">
+						Ako hrať
+					</p>
+				<div class="subtitle lead pl-3">
+					<p>Potrebné veci</p>
+					<ul class="list-group">
+						<li class="list-group-item">Minimálne 2 kamarátov - čím viac, tým lepšie</li>
+						<li class="list-group-item">Mobilný telefón pre každého hráča</li>
+						<li class="list-group-item">Počítač/tablet</li>
+					</ul>
+					<br>
+
+					<p class="display-4">Pravidlá hry</p>
+					<p>Cieľom hry je zistiť, kto z vašich spoluhráčov je zlodej. Musíte ich pozorovať a podľa ich správania ich usvedčiť.</p>
+					<p>Na začiatku hry sa každému hráčovi vygeneruje rola: DETEKTÍV, ZLODEJ alebo NEVINNÝ.</p>
+
+					<div class="row role_info">
+							<table class="table table-borderless">
+									<thead>
+										<tr>
+											<th>Rola</th>
+											<th>Úloha roly</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<th scope="row">Detektív</th>
+											<td>Úlohou detekíva je zistiť, kto je zlodej. Na začiatku hry dostane meno jedného zo zlodejov.</td>
+										</tr>
+										<tr>
+											<th scope="row">Zlodej</th>
+											<td>Úlohou zlodeja je zapadnúť do davu tak, aby nikto nezistil, že je zlodej.</td>
+										</tr>
+										<tr>
+												<th scope="row">Nevinný</th>
+												<td>Nevinný má za úlohu pomáhať detektívovi, no na začiatku hry <strong>nedostane</strong> meno ako detektív.</td>
+											</tr>
+									</tbody>
+								</table>
+					</div>
+					<p>Po úspešnom vygenerovaní sa pokračuje ďalej v hre.</p>
+					<p>Je tu však jeden háčik, nikto netuší, kto má akú rolu okrem zlodejov. Tí vedia, kto je spolu s nimi zlodej.</p>
+					<p>Určite sa však pýtate, ako detektív zistí, kto je zlodej. Zistí to v hernom kole.</p>
+					
+					<p class="display-4">Herné kolo</p>
+					<p>Herné kolo sa skladá z troch častí: Minihra, Hlasovanie a Vyhodnotenie hlasovania.</p>
+					<p>V Minihre sa každému hráčovi vygeneruje úloha a po zaznení zvončeka je potrebné vykonať, čo tá úloha od hráča žiada. Nevýhodu majú zlodeji, tým sa táto úloha nevygeneruje - musia improvizovať.</p>
+					<p>Po minihre nastáva hlasovanie, kde hráči prednesú svoje podozrenia a zvolia si, kto je podľa nich zlodej.</p>
+					<p>Hlasy od hráčov sa spočítajú a vo vyhodnotení sa vyhodí ten hráč, kto má najviac hlasov.</p>
+					<p>Hra končí ak Nevinní a Detektív úspešne odhalili zlodejov.</p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row bg-dark  text-light">
+			<div class="container text-center  pb-5" id="technológie">
+					<p class="display-3">
+						Technológie
+					</p>
+				<div class="subtitle lead pl-3">
+					<div class="row logos">
+						<p>Všetky tieto technológie boli použité pri tvorbe tohto projektu.</p>
+						<table class="table table-borderless">
+							<tbody>
+								<tr>
+									<img src="Host/assets/logos/web.jpeg" alt=""><img src="Host/assets/logos/jquery.png" alt="">
+								</tr>
+								<tr>
+									<img src="Host/assets/logos/github.png" alt=""><img src="Host/assets/logos/node.png" alt=""><img src="Host/assets/logos/socket.png" alt=""><img src="Host/assets/logos/p5.png" alt="">
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row bg-light  text-dark"></div>
+			<div class="container text-center pb-5" id="technológie">
+					<p class="display-3">
+						Pripravujeme
+					</p>
+				<div class="subtitle lead pl-3">
+					<div class="row logos">
+						<p>Čoskoro prestavíme novú hru</p>
+						<img src="Host/assets/DiceOfLuck.jpeg" alt="">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<nav class="navbar navbar-dark bg-dark text-center" id="footer">
+			<p id="create">Vytvoril Matej Hakoš &copy; 2019</p>
+		</nav>
 	</body>
 </html>

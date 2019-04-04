@@ -1,3 +1,7 @@
+html{
+    scroll-behavior: smooth;
+}
+
 .nav-item{
     margin-top: 1px;
 }
@@ -22,6 +26,8 @@
 
 .title{
     padding-top: 15vh;
+    font-size: 36px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #create{
@@ -40,4 +46,25 @@
     #footer{
         display: none;
     }
+}
+
+.img{
+    height: 250 px;
+
+}
+
+th{
+    width: 25%;
+}
+.title-special{
+    padding: 0 1em;
+    padding-top: 15vh;
+    font-size: 36px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.logos img{
+    width: auto;
+    height: 200px;
+    margin: 3px;
 }
