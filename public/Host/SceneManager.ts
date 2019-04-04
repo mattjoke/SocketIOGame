@@ -861,6 +861,7 @@ class Conclusion extends Scene{
 	update():void {
 		if(this.song.isLoaded()&&!this.song.isPlaying()){
 			if(this.once){
+				this.song.setVolume(0.5,5);
 				this.song.play();
 				this.once = false;
 			}
