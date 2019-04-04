@@ -46,6 +46,9 @@ html{
     #footer{
         display: none;
     }
+    .logos img {
+        height: 150px;
+    }
 }
 
 .img{
@@ -64,7 +67,9 @@ th{
 }
 
 .logos img{
-    width: auto;
     height: 200px;
+    width: auto;
     margin: 3px;
+    max-width: 90%;
+    max-height: 60%;
 }

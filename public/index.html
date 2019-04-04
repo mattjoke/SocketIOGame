@@ -24,8 +24,15 @@
 					<li class="nav-item">
 					<a class="nav-link" href="#information">Čo to je?</a>
 					</li>
-					<li class="nav-item">
-							<a class="nav-link" href="#akohrať">Ako hrať</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Ako hrať?
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a class="dropdown-item" href="#potrebne">Potrebné veci</a>
+							<a class="dropdown-item" href="#pravidla">Pravidlá hry</a>
+							<a class="dropdown-item" href="#herne_kolo">Herné kolo</a>
+						</div>
 					</li>
 					<li class="nav-item">
 					<a class="nav-link" href="#technológie">Technológie</a>
@@ -89,11 +96,11 @@
 		</div>
 		
 		<div class="row bg-light text-dark">
-			<div class="container text-center pb-5" id="akohrať">
+			<div class="container text-center pb-5" id="potrebne">
 					<p class="display-2">
 						Ako hrať
 					</p>
-				<div class="subtitle lead pl-3">
+				<div class="subtitle lead pl-3" >
 					<p>Potrebné veci</p>
 					<ul class="list-group">
 						<li class="list-group-item">Minimálne 2 kamarátov - čím viac, tým lepšie</li>
@@ -102,7 +109,7 @@
 					</ul>
 					<br>
 
-					<p class="display-4">Pravidlá hry</p>
+					<p class="display-4" id="pravidla">Pravidlá hry</p>
 					<p>Cieľom hry je zistiť, kto z vašich spoluhráčov je zlodej. Musíte ich pozorovať a podľa ich správania ich usvedčiť.</p>
 					<p>Na začiatku hry sa každému hráčovi vygeneruje rola: DETEKTÍV, ZLODEJ alebo NEVINNÝ.</p>
 
@@ -134,7 +141,7 @@
 					<p>Je tu však jeden háčik, nikto netuší, kto má akú rolu okrem zlodejov. Tí vedia, kto je spolu s nimi zlodej.</p>
 					<p>Určite sa však pýtate, ako detektív zistí, kto je zlodej. Zistí to v hernom kole.</p>
 					
-					<p class="display-4">Herné kolo</p>
+					<p class="display-4" id="herne_kolo">Herné kolo</p>
 					<p>Herné kolo sa skladá z troch častí: Minihra, Hlasovanie a Vyhodnotenie hlasovania.</p>
 					<p>V Minihre sa každému hráčovi vygeneruje úloha a po zaznení zvončeka je potrebné vykonať, čo tá úloha od hráča žiada. Nevýhodu majú zlodeji, tým sa táto úloha nevygeneruje - musia improvizovať.</p>
 					<p>Po minihre nastáva hlasovanie, kde hráči prednesú svoje podozrenia a zvolia si, kto je podľa nich zlodej.</p>
@@ -169,7 +176,7 @@
 		
 		<div class="row bg-light  text-dark"></div>
 			<div class="container text-center pb-5" id="technológie">
-					<p class="display-3">
+					<p class="display-4">
 						Pripravujeme
 					</p>
 				<div class="subtitle lead pl-3">
@@ -181,7 +188,7 @@
 			</div>
 		</div>
 
-		<nav class="navbar navbar-dark bg-dark text-center" id="footer">
+		<nav class="navbar navbar-dark bg-dark text-center">
 			<p id="create">Vytvoril Matej Hakoš &copy; 2019</p>
 		</nav>
 	</body>

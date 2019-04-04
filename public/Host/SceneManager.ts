@@ -1295,10 +1295,16 @@ let correction;
 let url = "";
 let lastRandomEvent = "Hands";
 let pause = false;
+let font;
 //SceneManager, canvas variables
 let width;
 let height;
 let scenes;
+
+function preload(){
+	font = loadFont('assets/Pixelate.ttf');
+	textFont(font);
+}
 
 function setup(){
 	//Creating canvas

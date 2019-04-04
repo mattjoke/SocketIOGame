@@ -1184,10 +1184,15 @@ var correction;
 var url = "";
 var lastRandomEvent = "Hands";
 var pause = false;
+var font;
 //SceneManager, canvas variables
 var width;
 var height;
 var scenes;
+function preload() {
+    font = loadFont('assets/Pixelate.ttf');
+    textFont(font);
+}
 function setup() {
     //Creating canvas
     width = window.innerWidth;
