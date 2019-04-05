@@ -687,6 +687,7 @@ class Vote extends Scene{
 	update():void {
 		this.redraw();
 		if (players.length-1 == answers.length) {
+			this.song.stop();
 			this.unload();
 		}
 		if(frameCount % 60 == 0 && this.timer > 0){
@@ -695,6 +696,7 @@ class Vote extends Scene{
 		}
 		if (this.timer == 0) {
 			this.ding.play();
+			this.song.stop();
 			this.unload();
 		}
 		if(this.song.isLoaded()&&!this.song.isPlaying()){
@@ -861,7 +863,7 @@ class Conclusion extends Scene{
 	update():void {
 		if(this.song.isLoaded()&&!this.song.isPlaying()){
 			if(this.once){
-				this.song.setVolume(0.5,5);
+				this.song.setVolume(0.1,5);
 				this.song.play();
 				this.once = false;
 			}

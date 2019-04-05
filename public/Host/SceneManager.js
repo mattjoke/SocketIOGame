@@ -643,6 +643,7 @@ var Vote = /** @class */ (function (_super) {
     Vote.prototype.update = function () {
         this.redraw();
         if (players.length - 1 == answers.length) {
+            this.song.stop();
             this.unload();
         }
         if (frameCount % 60 == 0 && this.timer > 0) {
@@ -651,6 +652,7 @@ var Vote = /** @class */ (function (_super) {
         }
         if (this.timer == 0) {
             this.ding.play();
+            this.song.stop();
             this.unload();
         }
         if (this.song.isLoaded() && !this.song.isPlaying()) {
@@ -811,7 +813,7 @@ var Conclusion = /** @class */ (function (_super) {
     Conclusion.prototype.update = function () {
         if (this.song.isLoaded() && !this.song.isPlaying()) {
             if (this.once) {
-                this.song.setVolume(0.5, 5);
+                this.song.setVolume(0.1, 5);
                 this.song.play();
                 this.once = false;
             }
