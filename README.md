@@ -32,3 +32,4 @@ Done:
 * Added sound - Ping! nad Tick!
 * Added first web page
 * Documetation done (only in Slovak language)
+* Added music (Soundcloud link: https://soundcloud.com/matej-hako/sets/ludum-soundtrack)
