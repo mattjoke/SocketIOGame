@@ -997,7 +997,7 @@ class EndInnocents extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
-		this.soc = loadImage('assets/soc.jpg');
+		this.soc = loadImage('assets/upjs.png');
 		this.textCol = color(252, 206, 58);
 		this.move = height + 50;
 
@@ -1040,7 +1040,7 @@ class EndInnocents extends Scene{
 		textAlign(CENTER);
 		fill(0);
 		text(
-			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnnosť\n2018/2019",width-width/6.5, this.move);
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019",width-width/6.5, this.move);
 		this.move -= .5;
 
 		//Draw UPJS logo
@@ -1064,7 +1064,7 @@ class EndThief extends Scene{
 
 	load():void{
 		this.bg = loadImage('assets/EndScene.png');
-		this.soc = loadImage('assets/soc.jpg');
+		this.soc = loadImage('assets/upjs.png');
 		this.song = loadSound('assets/sounds/End.mp3');
 		this.song_fadeIn = loadSound('assets/sounds/End-FadeIn.mp3');
 
@@ -1108,7 +1108,7 @@ class EndThief extends Scene{
 		textAlign(CENTER);
 		fill(0);
 		text(
-			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nStredoškolskú odbornú činnosť\n2018/2019",width-width/6.5, this.move);
+			"Prípady detektíva LUDUMA\nKto ukradol diamant?\n\nAutor\t\tMatej Hakoš\nFavicon\t\tNick Roach\n\nCelý kód je dostupný na GitHube\nhttps://bit.ly/2SpIqVe\n\nVytvorené ako súťažná práca pre\nsúťaž IHRA\n2018/2019",width-width/6.5, this.move);
 		this.move -= .5;
 
 		//Draw UPJS logo
