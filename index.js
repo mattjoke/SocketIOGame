@@ -18,7 +18,7 @@ app.get('/play', function(req, res){
 });
 
 server.listen(port, function(){
-	console.log('App running'+ port);
+	console.log('App running:'+ port);
 });
 
 let rooms = []; //keeps all rooms
