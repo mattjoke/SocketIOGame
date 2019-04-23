@@ -1,13 +1,9 @@
 let express = require('express');
-let path = require('path');
-let ngrok = require('ngrok');
 let app = express();
 let fs = require('fs');
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
 let port = process.env.PORT || 3000;
-
-let ngrok_active = false; //Choice if Ngrok should be used (default false)
 
 app.use(express.static(__dirname + '/public'));
 
@@ -22,7 +18,7 @@ app.get('/play', function(req, res){
 });
 
 server.listen(port, function(){
-	console.log('App running');
+	console.log('App running'+ port);
 });
 
 let rooms = []; //keeps all rooms
@@ -83,7 +79,7 @@ io.on('connection',function(socket){
 		rooms.push(newRoom);
 		update(code, newRoom.People);
 		socket.emit("code",code);
-		socket.emit('url', web);
+		socket.emit('url', "https://ludum-hra.herokuapp.com");
 	});
 
 	function destroyRoom(code) {
