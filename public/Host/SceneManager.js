@@ -23,6 +23,7 @@ var LobbyMoveRolechoose = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     LobbyMoveRolechoose.prototype.unload = function () {
+        stopMusic();
         scenes.changeScene(new Role_assign());
     };
     LobbyMoveRolechoose.prototype.load = function () {
@@ -56,6 +57,7 @@ var RolechooseMovePoint = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     RolechooseMovePoint.prototype.unload = function () {
+        stopMusic();
         scenes.changeScene(new YouGottaPoint());
     };
     RolechooseMovePoint.prototype.load = function () {
@@ -89,6 +91,7 @@ var RolechooseMoveHands = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     RolechooseMoveHands.prototype.unload = function () {
+        stopMusic();
         scenes.changeScene(new HandsOfTruth());
     };
     RolechooseMoveHands.prototype.load = function () {
@@ -121,6 +124,7 @@ var RolechooseMoveDice = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     RolechooseMoveDice.prototype.unload = function () {
+        stopMusic();
         scenes.changeScene(new DiceOfLuck());
     };
     RolechooseMoveDice.prototype.load = function () {
@@ -153,6 +157,7 @@ var DiceMoveVote = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     DiceMoveVote.prototype.unload = function () {
+        stopMusic();
         scenes.changeScene(new Vote());
     };
     DiceMoveVote.prototype.load = function () {
@@ -1192,6 +1197,13 @@ var font;
 var width;
 var height;
 var scenes;
+function stopMusic() {
+    try {
+        scenes.currScene.song.stop();
+        scenes.currScene.song_fadeIn.stop();
+    }
+    catch (e) { }
+}
 function preload() {
     font = loadFont('assets/Pixelate.ttf');
     textFont(font);
