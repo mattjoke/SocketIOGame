@@ -5,7 +5,7 @@ let app = express();
 let fs = require('fs');
 let server = require('http').createServer(app);
 let io = require('socket.io').listen(server);
-let port = Number(process.env.PORT || 3000);
+let port = process.env.PORT || 3000;
 
 let ngrok_active = false; //Choice if Ngrok should be used (default false)
 
