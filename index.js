@@ -21,27 +21,13 @@ app.get('/play', function(req, res){
 	res.redirect('/Client');
 });
 
-let web = "localhost:3000";
-
-if (ngrok_active){
-	(async function() {
-		try {
-			const url = await ngrok.connect(3000);
-			await console.log("Connected to:"+url);
-			web = url;
-		} catch(e) {
-			console.log("Error: "+e);
-		}
-	})();
-}
-
-console.log('Server is running on: ' + web);
+server.listen(port, function(){
+	console.log('App running');
+});
 
 let rooms = []; //keeps all rooms
 
 io.on('connection',function(socket){
-
-	console.log("Someone has connected: "+socket.id);
 
 	//Based on user name -> changes it
 	function isUserAlreadyInRoom(name,id){
@@ -97,7 +83,6 @@ io.on('connection',function(socket){
 		rooms.push(newRoom);
 		update(code, newRoom.People);
 		socket.emit("code",code);
-		console.log('Crreating room');
 		socket.emit('url', web);
 	});
 
@@ -235,5 +220,3 @@ class Room {
   		return this.code;
   	}
 }
-
-server.listen(port);
