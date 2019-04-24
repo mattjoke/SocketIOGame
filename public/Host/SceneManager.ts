@@ -14,7 +14,6 @@ class LobbyMoveRolechoose extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new Role_assign());
 	}
 
@@ -52,7 +51,6 @@ class RolechooseMovePoint extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new YouGottaPoint());
 	}
 
@@ -90,7 +88,6 @@ class RolechooseMoveHands extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new HandsOfTruth());
 	}
 
@@ -127,7 +124,6 @@ class RolechooseMoveDice extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new DiceOfLuck());
 	}
 
@@ -164,7 +160,6 @@ class DiceMoveVote extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new Vote());
 	}
 
@@ -203,7 +198,6 @@ class PointMoveVote extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new Vote());
 	}
 
@@ -240,7 +234,6 @@ class HandsMoveVote extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new Vote());
 	}
 
@@ -277,7 +270,6 @@ class VoteMoveDead extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new Conclusion());
 	}
 
@@ -314,7 +306,6 @@ class DeadMoveHands extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new HandsOfTruth());
 	}
 
@@ -351,7 +342,6 @@ class DeadMovePoint extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new YouGottaPoint());
 	}
 
@@ -388,7 +378,6 @@ class DeadMoveDice extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new DiceOfLuck());
 	}
 
@@ -425,7 +414,6 @@ class DeadMoveEndInnocents extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new EndInnocents());
 	}
 
@@ -462,7 +450,6 @@ class DeadMoveEndThiefs extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new EndThief());
 	}
 
@@ -499,7 +486,6 @@ class DeadMoveEndGame extends Scene{
 	private targetY: number;
 
 	unload():void{
-		stopMusic();
 		scenes.changeScene(new EndGameIntro());
 	}
 
@@ -532,6 +518,7 @@ class Lobby extends Scene{
 	private bg: Image;
 
 	unload():void{
+		stopMusic();
 		//Changing scene to next one
 		scenes.changeScene(new LobbyMoveRolechoose());
 	}
@@ -609,6 +596,7 @@ class Role_assign extends Scene{
 	private bg: Image;
 
 	unload():void{
+		stopMusic();
 		//Starts Game Loop
 		let pick = round(random(0,2));
 		switch(pick){
@@ -684,6 +672,7 @@ class Vote extends Scene{
 	private song: Sound;
 
 	unload():void{
+		stopMusic();
 		this.song.stop();
 		scenes.changeScene(new VoteMoveDead());
 	}
@@ -766,6 +755,7 @@ class Conclusion extends Scene{
 	private picked_name: string;
 
 	unload():void{
+		stopMusic();
 		this.song.stop();
 
 		for (var i = 0; i < players.length; i++) {
@@ -918,6 +908,7 @@ class HandsOfTruth extends Scene{
 	private timer: number;
 
 	unload():void{
+		stopMusic();
 		scenes.changeScene(new HandsMoveVote());
 	}
 
@@ -959,6 +950,7 @@ class YouGottaPoint extends Scene{
 	private timer: number;
 
 	unload():void{
+		stopMusic();
 		scenes.changeScene(new PointMoveVote());
 	}
 
@@ -1006,6 +998,7 @@ class EndInnocents extends Scene{
 	private once: boolean;
 
 	unload():void{
+		stopMusic();
 		scenes.changeScene(new Lobby());
 	}
 
@@ -1073,6 +1066,7 @@ class EndThief extends Scene{
 	private once: boolean;
 
 	unload():void{
+		stopMusic();
 		scenes.changeScene(new Lobby());
 	}
 
@@ -1136,6 +1130,7 @@ class EndGameIntro extends Scene{
 	private counter: number;
 
 	unload():void{
+		stopMusic();
 		scenes.changeScene(new EndGame());
 	}
 
@@ -1200,6 +1195,7 @@ class EndGame extends Scene{
 	public ThiefCorr: number;
 
 	unload():void{
+		stopMusic();
 		this.song.stop();
 
 		socket.emit('StopEndGame', correction);
