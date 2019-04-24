@@ -1,5 +1,7 @@
 # "Simple" SocketIOGame
 
+## HOORAAY! Game is finally live: https://ludum-hra.herokuapp.com (only slovak)
+
 TODO:
 
 * Dice of luck
